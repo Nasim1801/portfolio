@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://nasim1801.github.io/portfolio/sitemap.xml
