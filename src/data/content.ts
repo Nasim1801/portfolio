@@ -101,7 +101,7 @@ export const content = {
     studio: 'https://pathlifestudio.com',
     email: 'n.mosayebee@gmail.com',
     cv: 'Nasim-Mosayebi-CV.pdf',
-    cvAvailable: false,
+    cvAvailable: true,
     pathlifeAppStore: 'https://apps.apple.com/gb/app/pathlife/id6769602618',
   },
   hero: {
