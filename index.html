@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f2e8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="London software engineer and PathLife Studio founder building mobile apps, full-stack products and applied AI systems."
+    />
+    <meta
+      property="og:title"
+      content="Nasim Mosayebi | Software Engineer & Founder of PathLife Studio"
+    />
+    <meta
+      property="og:description"
+      content="I build apps people play with and learn from. Explore shipped mobile games, full-stack systems and applied AI work."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="Nasim Mosayebi portfolio" />
+    <meta property="og:image" content="%BASE_URL%og-cover.png" />
+    <meta
+      property="og:image:alt"
+      content="Nasim Mosayebi, Software Engineer and founder in London"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Nasim Mosayebi | Software Engineer & Founder of PathLife Studio"
+    />
+    <meta
+      name="twitter:description"
+      content="Mobile, full-stack and applied AI projects built and shipped in London."
+    />
+    <meta name="twitter:image" content="%BASE_URL%og-cover.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Nasim Mosayebi, Software Engineer and founder in London"
+    />
+    <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="%BASE_URL%fonts/unbounded-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script>
+      (() => {
+        const stored = localStorage.getItem('nm-theme');
+        const theme =
+          stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nasim Mosayebi",
+        "jobTitle": "Software Engineer",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "London",
+          "addressCountry": "GB"
+        },
+        "email": "mailto:n.mosayebee@gmail.com",
+        "sameAs": [
+          "https://github.com/Nasim1801",
+          "https://www.linkedin.com/in/nasim-mosayebi",
+          "https://pathlifestudio.com"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "PathLife Studio Ltd"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Brunel University London"
+        }
+      }
+    </script>
+    <title>Nasim Mosayebi | Software Engineer & Founder of PathLife Studio</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
