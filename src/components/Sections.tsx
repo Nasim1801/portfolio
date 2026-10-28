@@ -477,11 +477,14 @@ export function PhysioProject() {
         </div>
         <Reveal className={styles.physioMedia}>
           <PoseTracker />
-          <DeviceFrame
-            item={physio.media.screenshot}
-            frame="browser"
-            address="physio-ai / live feedback"
-          />
+          <div className={styles.physioGallery}>
+            <Gallery
+              media={physio.media.screenshots}
+              frame="browser"
+              projectName="Physio-AI"
+              address="physio-ai / live feedback"
+            />
+          </div>
         </Reveal>
         <div className={styles.pipeline} aria-label="Physio-AI machine learning pipeline">
           {physio.pipeline.map((step, index) => (

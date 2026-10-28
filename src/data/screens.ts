@@ -112,6 +112,51 @@ export const pawLifeScreens: ScreenshotAsset[] = [
   },
 ];
 
+export const physioAiScreens: ScreenshotAsset[] = [
+  {
+    src: 'assets/physio-ai/01-live-squat.webp',
+    fallbackSrc: 'assets/physio-ai/01-live-squat.png',
+    alt: 'Physio-AI live squat session showing tracked pose landmarks, eleven repetitions and 100% session accuracy',
+    width: 1179,
+    height: 529,
+  },
+  {
+    src: 'assets/physio-ai/02-live-standing.webp',
+    fallbackSrc: 'assets/physio-ai/02-live-standing.png',
+    alt: 'Physio-AI live session detecting the standing position before a squat',
+    width: 988,
+    height: 437,
+  },
+  {
+    src: 'assets/physio-ai/03-progress-dashboard.webp',
+    fallbackSrc: 'assets/physio-ai/03-progress-dashboard.png',
+    alt: 'Physio-AI progress dashboard showing session accuracy, rep volume and joint performance',
+    width: 902,
+    height: 508,
+  },
+  {
+    src: 'assets/physio-ai/04-session-history.webp',
+    fallbackSrc: 'assets/physio-ai/04-session-history.png',
+    alt: 'Physio-AI session history showing squat repetitions, accuracy and joint performance',
+    width: 1206,
+    height: 676,
+  },
+  {
+    src: 'assets/physio-ai/05-profile-settings.webp',
+    fallbackSrc: 'assets/physio-ai/05-profile-settings.png',
+    alt: 'Physio-AI profile and recovery progress screen with personal account details redacted',
+    width: 724,
+    height: 408,
+  },
+  {
+    src: 'assets/physio-ai/06-ai-feedback-panel.webp',
+    fallbackSrc: 'assets/physio-ai/06-ai-feedback-panel.png',
+    alt: 'Physio-AI session panel showing rep count, form score and live corrective feedback',
+    width: 360,
+    height: 674,
+  },
+];
+
 export const gameIcons = {
   pathlife: {
     src: 'assets/pathlife/icon.webp',

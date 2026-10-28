@@ -5,6 +5,7 @@ import {
   hospitalTestScreen,
   pathLifeScreens,
   pawLifeScreens,
+  physioAiScreens,
 } from './screens';
 
 export type FrameType = 'phone' | 'browser' | 'desktop' | 'terminal';
@@ -282,13 +283,7 @@ export const content = {
     role: 'Final-year project. I built the pose-tracking and classification system.',
     accuracy: 96.23,
     media: {
-      screenshot: {
-        src: 'assets/physio-ai/interface-01.webp',
-        alt: 'Physio-AI web interface showing live pose feedback',
-        width: 1600,
-        height: 1000,
-        available: false,
-      },
+      screenshots: physioAiScreens,
     },
     pipeline: [
       { title: 'Webcam', detail: 'Live video' },
