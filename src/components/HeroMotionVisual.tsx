@@ -20,10 +20,10 @@ export function HeroMotionVisual() {
         <PoseTracker compact />
       </motion.div>
       <motion.div className={styles.heroPhoneOne} {...mediaAnimation(0.1, 30, -5)}>
-        <DeviceFrame item={hero.visual.pathlife} frame="phone" compact priority />
+        <DeviceFrame item={hero.visual.sumlume} frame="phone" compact priority />
       </motion.div>
       <motion.div className={styles.heroPhoneTwo} {...mediaAnimation(0.2, 60, 5)}>
-        <DeviceFrame item={hero.visual.pawlife} frame="phone" compact priority />
+        <DeviceFrame item={hero.visual.pathlife} frame="phone" compact priority />
       </motion.div>
       <motion.div
         className={styles.accuracyChip}
@@ -31,8 +31,8 @@ export function HeroMotionVisual() {
         animate={reduceMotion ? undefined : { y: 0, scale: 1 }}
         transition={{ delay: 0.42, duration: 0.5 }}
       >
-        <span>ML result</span>
-        <strong>{hero.accuracy}</strong>
+        <span>Published products</span>
+        <strong>2 live on iOS</strong>
       </motion.div>
     </div>
   );

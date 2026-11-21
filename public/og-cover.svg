@@ -1,10 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f7f2e8"/>
-  <circle cx="1050" cy="82" r="220" fill="#dfe8d5"/>
-  <circle cx="1030" cy="560" r="270" fill="#f0dca8"/>
-  <rect x="72" y="72" width="104" height="104" rx="30" fill="#2a1e18"/>
-  <text x="124" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#efc568">NM</text>
-  <text x="72" y="295" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#2a1e18">Nasim Mosayebi</text>
-  <text x="72" y="375" font-family="Arial, sans-serif" font-size="38" fill="#4c4038">Software Engineer &amp; Founder</text>
-  <text x="72" y="465" font-family="monospace" font-size="24" font-weight="700" fill="#426244">MOBILE · FULL-STACK · APPLIED AI</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Nasim Mosayebi software engineering portfolio</title>
+  <desc id="description">Software Engineer and Mobile Developer in London. Native mobile, full-stack and applied AI work.</desc>
+  <rect width="1200" height="630" fill="#f4f6f2"/>
+  <path d="M780 0h420v630H650c104-77 147-169 130-276-17-103-9-221 0-354Z" fill="#deeee4"/>
+  <circle cx="1040" cy="152" r="160" fill="#2058c7" opacity=".92"/>
+  <circle cx="930" cy="480" r="118" fill="#d5a83c" opacity=".92"/>
+  <rect x="72" y="70" width="98" height="98" rx="28" fill="#17201b"/>
+  <text x="121" y="131" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f4f6f2">NM</text>
+  <text x="72" y="285" font-family="Arial, sans-serif" font-size="68" font-weight="800" fill="#17201b">Nasim Mosayebi</text>
+  <text x="72" y="363" font-family="Arial, sans-serif" font-size="38" font-weight="600" fill="#344039">Software Engineer · Mobile Developer</text>
+  <text x="72" y="434" font-family="Arial, sans-serif" font-size="27" fill="#59665f">Two live App Store products · Applied AI · London</text>
+  <rect x="72" y="493" width="535" height="66" rx="33" fill="#17201b"/>
+  <text x="339" y="536" text-anchor="middle" font-family="monospace" font-size="21" font-weight="700" fill="#ffffff">NATIVE MOBILE · FULL STACK · AI</text>
 </svg>

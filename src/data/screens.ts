@@ -157,7 +157,66 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
 ];
 
+export const sumlumeScreens: ScreenshotAsset[] = [
+  {
+    src: 'assets/sumlume/gameplay.webp',
+    smallSrc: 'assets/sumlume/gameplay-480.webp',
+    smallWidth: 480,
+    sizes: '(max-width: 700px) 70vw, 360px',
+    alt: 'Sumlume Classic game board showing colourful number tiles, score, combo, hint and undo controls',
+    width: 720,
+    height: 1560,
+  },
+  {
+    src: 'assets/sumlume/screenshot-1.webp',
+    alt: 'Sumlume App Store screenshot explaining that players match equal numbers or pairs that make ten',
+    width: 690,
+    height: 1496,
+  },
+  {
+    src: 'assets/sumlume/screenshot-5.webp',
+    alt: 'Sumlume daily challenge board with a dated puzzle and matching controls',
+    width: 690,
+    height: 1496,
+  },
+  {
+    src: 'assets/sumlume/screenshot-6.webp',
+    alt: 'Sumlume collection screen showing unlockable animal avatars and decorative frames',
+    width: 690,
+    height: 1496,
+  },
+  {
+    src: 'assets/sumlume/screenshot-8.webp',
+    alt: 'Sumlume statistics screen showing personal best and puzzle progress',
+    width: 690,
+    height: 1496,
+  },
+  {
+    src: 'assets/sumlume/screenshot-9.webp',
+    alt: 'Sumlume achievements screen showing milestone progress and unlockable rewards',
+    width: 690,
+    height: 1496,
+  },
+  {
+    src: 'assets/sumlume/screenshot-10.webp',
+    alt: 'Sumlume home screen showing Classic, Daily Challenge, leaderboards, statistics and achievements',
+    width: 690,
+    height: 1496,
+  },
+];
+
+export const sumlumeIcon: ScreenshotAsset = {
+  src: 'assets/sumlume/icon.webp',
+  smallSrc: 'assets/sumlume/icon-128.webp',
+  smallWidth: 128,
+  sizes: '82px',
+  alt: 'Sumlume app icon with glowing number tiles',
+  width: 512,
+  height: 512,
+};
+
 export const gameIcons = {
+  sumlume: sumlumeIcon,
   pathlife: {
     src: 'assets/pathlife/icon.webp',
     smallSrc: 'assets/pathlife/icon-192.webp',

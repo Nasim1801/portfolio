@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { content } from '../data/content';
 import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './Icons';
+import { assetUrl, homeUrl, pageUrl } from '../utils/links';
 import styles from '../styles/site.module.css';
 
 type Theme = 'light' | 'dark';
@@ -19,7 +20,7 @@ export function Header() {
     localStorage.setItem('nm-theme', nextTheme);
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', nextTheme === 'dark' ? '#171311' : '#f7f2e8');
+      ?.setAttribute('content', nextTheme === 'dark' ? '#101512' : '#f4f6f2');
   };
 
   useEffect(() => {
@@ -35,9 +36,12 @@ export function Header() {
 
   return (
     <header className={styles.header}>
-      <a className={styles.logo} href="#top">
+      <a className={styles.logo} href={pageUrl()}>
         <span>{content.identity.monogram}</span>
-        <strong>{content.identity.name}</strong>
+        <strong>
+          {content.identity.name}
+          <small>Software Engineer</small>
+        </strong>
       </a>
 
       <button
@@ -58,13 +62,21 @@ export function Header() {
         aria-label="Main navigation"
       >
         {content.nav.map((item) => (
-          <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+          <a key={item.href} href={homeUrl(item.href)} onClick={() => setMenuOpen(false)}>
             {item.label}
           </a>
         ))}
         <a
+          className={styles.navCv}
+          href={assetUrl(content.links.cv)}
+          download
+          onClick={() => setMenuOpen(false)}
+        >
+          Download CV
+        </a>
+        <a
           className={styles.hireButton}
-          href={content.navCta.href}
+          href={homeUrl(content.navCta.href)}
           onClick={() => setMenuOpen(false)}
         >
           {content.navCta.label}

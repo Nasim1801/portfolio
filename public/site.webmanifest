@@ -1,0 +1,16 @@
+{
+  "name": "Nasim Mosayebi Developer Portfolio",
+  "short_name": "Nasim Mosayebi",
+  "start_url": "/portfolio/",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#1f6a4a",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

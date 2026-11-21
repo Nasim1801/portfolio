@@ -1,45 +1,45 @@
 @font-face {
   font-family: 'Figtree';
   font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
+  font-weight: 400 800;
+  font-display: optional;
   src: url('/fonts/figtree-latin-variable.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
-  font-weight: 500 600;
-  font-display: swap;
+  font-weight: 500 700;
+  font-display: optional;
   src: url('/fonts/jetbrains-mono-latin-variable.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Unbounded';
   font-style: normal;
-  font-weight: 500 700;
-  font-display: swap;
+  font-weight: 500 800;
+  font-display: optional;
   src: url('/fonts/unbounded-latin-variable.woff2') format('woff2');
 }
 
 :root {
   color-scheme: light;
-  --paper: #f7f2e8;
-  --paper-elevated: #fffaf1;
-  --ink: #2a1e18;
-  --ink-soft: #65574d;
-  --line: #d9cfc0;
-  --gold: #b98221;
-  --gold-bright: #e5b94e;
-  --gold-soft: #f1dfb5;
-  --green: #416443;
-  --green-soft: #dde8d7;
-  --brown: #3a2921;
-  --dark-panel: #201915;
-  --dark-panel-soft: #2b211c;
-  --white: #fffdf8;
-  --shadow: 0 18px 60px rgba(59, 42, 31, 0.12);
-  --shadow-soft: 0 10px 30px rgba(59, 42, 31, 0.08);
+  --paper: #f4f6f2;
+  --paper-elevated: #ffffff;
+  --paper-soft: #e8ede8;
+  --ink: #17201b;
+  --ink-soft: #59665f;
+  --line: #d7dfd9;
+  --line-strong: #b9c5bd;
+  --brand: #1f6a4a;
+  --brand-strong: #145238;
+  --brand-soft: #deeee4;
+  --sumlume-blue: #2058c7;
+  --gold: #9d6a0f;
+  --gold-bright: #d5a83c;
+  --white: #ffffff;
+  --shadow: 0 24px 70px rgba(27, 45, 34, 0.14);
+  --shadow-soft: 0 12px 36px rgba(27, 45, 34, 0.09);
   --display: 'Unbounded', 'Arial Black', sans-serif;
   --body: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -47,22 +47,22 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #171311;
-  --paper-elevated: #211b18;
-  --ink: #f7eddf;
-  --ink-soft: #cbbeb0;
-  --line: #40362f;
-  --gold: #edc264;
-  --gold-bright: #f4cf79;
-  --gold-soft: #4a3a22;
-  --green: #8fb68c;
-  --green-soft: #263a2a;
-  --brown: #efe2d4;
-  --dark-panel: #0e0c0b;
-  --dark-panel-soft: #191512;
-  --white: #fff9f0;
-  --shadow: 0 20px 70px rgba(0, 0, 0, 0.34);
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.24);
+  --paper: #101512;
+  --paper-elevated: #18201b;
+  --paper-soft: #202a24;
+  --ink: #f1f5ef;
+  --ink-soft: #b8c4bc;
+  --line: #303d35;
+  --line-strong: #48594e;
+  --brand: #75c79b;
+  --brand-strong: #9ad9b5;
+  --brand-soft: #1d392a;
+  --sumlume-blue: #79a0ff;
+  --gold: #e0ba62;
+  --gold-bright: #f0ce80;
+  --white: #ffffff;
+  --shadow: 0 26px 80px rgba(0, 0, 0, 0.38);
+  --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.26);
 }
 
 * {
@@ -70,14 +70,16 @@
 }
 
 html {
+  min-width: 320px;
   overflow-x: clip;
   scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+  scroll-padding-top: 104px;
 }
 
 body {
-  margin: 0;
   min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
   overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
@@ -89,15 +91,15 @@ body {
 }
 
 button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button,
 input,
 textarea,
 select {
   font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -106,13 +108,14 @@ a {
 
 img,
 video,
-svg {
+svg,
+canvas {
   display: block;
   max-width: 100%;
 }
 
 ::selection {
-  background: var(--gold-soft);
+  background: var(--brand-soft);
   color: var(--ink);
 }
 
@@ -129,6 +132,7 @@ svg {
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

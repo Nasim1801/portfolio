@@ -2,5 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nasim1801.github.io/portfolio/</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://nasim1801.github.io/portfolio/projects/sumlume/</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://nasim1801.github.io/portfolio/projects/pathlife/</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://nasim1801.github.io/portfolio/projects/physio-ai/</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://nasim1801.github.io/portfolio/projects/pawlife/</loc>
+    <lastmod>2026-11-21</lastmod>
   </url>
 </urlset>

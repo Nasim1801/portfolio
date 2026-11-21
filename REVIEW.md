@@ -1,215 +1,156 @@
-# Portfolio review
+# Portfolio V2 review
 
-Reviewed as a London technical recruiter screening graduate and junior candidates, then as an engineering hiring manager looking for evidence of implementation skill.
+Reviewed on 21 November 2026 as a London technical recruiter screening graduate and junior candidates, then as an engineering hiring manager assessing implementation evidence.
 
 ## Before
 
 ### 30-second recruiter check
 
-#### Desktop, 1440px, without scrolling
+At 1440px, the previous homepage showed real work and strong visual craft, but the first screen did not make Nasim’s full target role, education and best evidence land as one clear story. The strongest projects were separated by several explanatory sections, the page was unusually long, and there were no dedicated project URLs for a hiring manager to share or revisit.
 
-- **Who, role and location:** Partly clear. “Nasim Mosayebi” is visible in the navigation and London appears in the availability badge. The target roles are present as small chips, but the hero headline does not say “software engineer” and the candidate’s name is not part of the main reading order.
-- **Strongest proof:** Clear. The hero names the live App Store release and 96.23% Physio-AI result, supported by real product screenshots.
-- **Contact or CV:** Contact is clear through “Get in touch” and social links. The CV is not visible above the fold or in the navigation.
+At 390px, the identity and availability were present but competed with a long headline and a dense visual composition. The CV action was less prominent than it should be for a job-search portfolio.
 
-#### Phone, 390px, without scrolling
+The existing site already had important strengths: real screenshots, a working CV, an App Store release, a specific 96.23% machine-learning result, good keyboard foundations and honest prototype wording.
 
-- **Who, role and location:** Incomplete. London and the target roles are visible, but only the “NM” monogram appears in the header. Nasim’s full name is absent from the first screen.
-- **Strongest proof:** Present in the paragraph, but it competes with a long six-line headline. The project visuals are below the fold.
-- **Contact or CV:** “Get in touch” is visible near the bottom of the first screen. There is no visible CV action and the social links fall below the fold.
+### Before scorecard
 
-### Recruiter view
+| Area                              | Score | Reasoning                                                                                                       |
+| --------------------------------- | ----: | --------------------------------------------------------------------------------------------------------------- |
+| First impression and clarity      |  7/10 | Strong work, but the role and proof hierarchy took too long to resolve.                                         |
+| Visual design and consistency     |  8/10 | Distinctive and crafted, with too many competing treatments and very long sections.                             |
+| Project presentation and evidence |  8/10 | Real screenshots and numbers were strong, but there were no dedicated case-study URLs.                          |
+| Technical credibility             |  7/10 | Good implementation detail, but architecture, responsibility and trade-offs were inconsistent between projects. |
+| Writing quality and tone          |  7/10 | Specific and human, but repetitive and too long for a first scan.                                               |
+| Contact and calls to action       |  8/10 | Contact details worked, but the CV needed more prominence.                                                      |
+| Mobile experience                 |  7/10 | Responsive, but the first screen and page length asked too much of a recruiter.                                 |
+| Accessibility                     |  8/10 | Good semantics and keyboard intent, with contrast and target-size issues remaining.                             |
+| Performance                       |  8/10 | WebP and lazy loading helped, but the hero motion bundle and oversized responsive assets added cost.            |
+| SEO and link sharing              |  7/10 | Root metadata existed, but project routes, route-specific metadata and sitemap entries did not.                 |
 
-The site looks crafted and credible, with better visual evidence than most graduate portfolios. The biggest screening risk is clarity. The first screen leads with a brand statement instead of the candidate’s name and target role, and the first detailed project appears only after a metrics strip, a four-card strengths section, the studio introduction and a shipping story. That delays the evidence recruiters came to see.
-
-### Hiring-manager view
-
-The project screenshots, implementation detail and honest explanation of the CO2 prototype are strong. The PathLife shipping story and Physio-AI pipeline show useful ownership. The main gaps are code or demo links for several projects, a missing Physio-AI recording or interface screenshot, a missing CV, and no explicit “My role” line on every individual project. Known missing media currently risks unnecessary failed asset requests.
-
-### Scorecard
-
-| Area                              | Score | Reasoning                                                                                                                                                         |
-| --------------------------------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| First impression and clarity      |  7/10 | Strong visual identity and proof, but the mobile first screen omits the full name and the role hierarchy is indirect.                                             |
-| Visual design and consistency     |  8/10 | Distinctive typography, framing and colour, with some oversized type, generous spacing and repeated decorative treatments.                                        |
-| Project presentation and evidence |  8/10 | Real screenshots and concrete outcomes are excellent, but important links and explicit role labels are inconsistent.                                              |
-| Technical credibility             |  7/10 | Architecture and implementation details are specific, but several projects lack accessible code or demo evidence.                                                 |
-| Writing quality and tone          |  7/10 | Professional and specific overall, with repeated claims and paragraphs that are too long for a first scan.                                                        |
-| Contact and calls to action       |  7/10 | Email and social links are clear, but the CV is missing and not available in the hero.                                                                            |
-| Mobile experience                 |  6/10 | Responsive and usable, but the first screen is text-heavy, omits the full name and pushes visual proof below the fold.                                            |
-| Accessibility                     |  7/10 | Good semantics, focus styles and reduced-motion support, but the lightbox does not trap or restore focus and the menu lacks Escape handling.                      |
-| Performance                       |  7/10 | WebP screenshots and lazy loading help, but app icons are large PNGs, hero images are lazy-loaded and missing assets can cause failed requests.                   |
-| SEO and link sharing              |  7/10 | Title, description, social tags and Person JSON-LD exist, but the social image is SVG, LinkedIn is missing from `sameAs`, and the final portfolio URL is unknown. |
-
-## Issues and fixes
+## Issues found and resolved
 
 ### Delete
 
-1. **Generic proof repeated before the projects**  
-   Location: `Strengths` section, `src/App.tsx` and `src/components/Sections.tsx`.  
-   Fix: remove the rendered strengths section. Its claims are already demonstrated in the project sections and experience timeline.
-2. **Redundant hero slogan**  
-   Location: Hero kicker in `src/data/content.ts`.  
-   Fix: replace “Founder who codes · Engineer who ships” with the three target role families.
-3. **Phantom Physio-AI video request**  
-   Location: `ProjectVideo` in `src/components/Media.tsx` and `PhysioProject` in `src/components/Sections.tsx`.  
-   Fix: remove the absent video path and show the real screenshot when supplied, otherwise show a deliberate placeholder beside the pose-tracking animation.
-4. **Duplicate visual rules and excess vertical space**  
-   Location: `src/styles/site.module.css`.  
-   Fix: remove duplicate declarations and tighten the section and project spacing scale.
+1. **Repeated proof and long pre-project narrative**
+   Location: former homepage section order in `src/components/Sections.tsx`.
+   Fix: removed repeated strengths and studio exposition from the recruiter path. Selected work now follows the hero and proof strip directly.
+2. **Weak or unavailable public actions**
+   Location: project links in `src/data/content.ts`.
+   Fix: removed the idea of exposing unverified private source links. Only verified App Store, product, demo and public GitHub links render.
+3. **Unavailable PawLife gallery slots**
+   Location: PawLife case study in `src/data/content.ts`.
+   Fix: unavailable minigames-list and share-card captures are not shown as evidence.
 
 ### Add
 
-1. **Full name in the hero reading order**  
-   Location: Hero, `src/components/Sections.tsx`.  
-   Fix: add “Nasim Mosayebi” above the main headline and keep it visible at phone widths.
-2. **Visible CV action**  
-   Location: Hero and Contact.  
-   Fix: add “Download CV” in both places. Until the PDF exists, render a clear non-broken `[TODO: add CV PDF]` state.
-3. **Explicit role on every main project**  
-   Location: PathLife, PawLife, Physio-AI, CO2 Tracker and Hospital sections.  
-   Fix: add a short “My role” statement using only supplied facts.
-4. **Code and demo evidence where missing**  
-   Location: project links in `src/data/content.ts`.  
-   Fix: add clearly marked placeholders for the missing PathLife, PawLife, Physio-AI and CO2 Tracker URLs. Do not create dead links.
-5. **Accessible missing-media state**  
-   Location: `src/data/screens.ts` and `src/components/Media.tsx`.  
-   Fix: mark known missing files in data and render “Screenshot coming soon” without requesting a non-existent URL.
-6. **Hiring intent in the studio section**  
-   Location: PathLife Studio introduction.  
-   Fix: explain that the studio demonstrates product ownership and shipping, then state clearly that Nasim is actively seeking a graduate or junior engineering role in London.
+1. **Sumlume as the lead product**
+   Location: `public/assets/sumlume/`, `src/data/screens.ts`, `src/data/content.ts`.
+   Fix: added the real icon and published screenshots, verified iOS status, honest Kotlin Android status and a full engineering case study.
+2. **Dedicated case-study pages**
+   Location: `src/components/CaseStudyPage.tsx`, `src/App.tsx`.
+   Fix: added shareable pages for Sumlume, PathLife, Physio-AI and PawLife with role, stack, architecture, decisions, evidence and next-project navigation.
+3. **Static search metadata for every route**
+   Location: `scripts/generate-static-routes.mjs`, `public/sitemap.xml`.
+   Fix: each case study now receives a unique title, description, canonical URL, social image and structured-data object in its generated HTML.
+4. **Complete verified professional history**
+   Location: `src/data/content.ts`.
+   Fix: added the previously omitted ATOZ Education Services role and aligned education, dates and language levels with the CV.
+5. **Reproducible browser QA**
+   Location: `scripts/qa-portfolio.ts`.
+   Fix: added a 40-case viewport/theme matrix plus keyboard interaction checks.
 
 ### Update
 
-1. **Hero clarity and length**  
-   Location: `content.hero` and Hero styles.  
-   Fix: lead with name and target roles, use a shorter headline, and compress the proof into one sentence.
-2. **Evidence order**  
-   Location: section order in `src/App.tsx`.  
-   Fix: show PathLife first, Physio-AI second, then PawLife and the team projects. Move the studio context after the individual work.
-3. **Studio incorporation date**  
-   Location: Studio and Experience data.  
-   Fix: change the founder date from “2026” to “August 2026” and the timeline to “Aug 2026 – now”.
-4. **Project copy for scanning**  
-   Location: `src/data/content.ts`.  
-   Fix: shorten long descriptions, separate role from outcome, and keep implementation details in concise rows.
-5. **Mobile hero composition**  
-   Location: Hero CSS.  
-   Fix: reduce headline scale and spacing so identity, role, location, proof and primary actions are visible sooner.
-6. **External-link security wording**  
-   Location: components rendering external links.  
-   Fix: use `target="_blank"` with `rel="noopener noreferrer"` consistently.
-7. **Social metadata**  
-   Location: `index.html` and `public/`.  
-   Fix: use an optimised PNG Open Graph image, make public-asset paths respect the Vite base path, and add LinkedIn to JSON-LD `sameAs`.
+1. **Hero recruiter clarity**
+   Location: Hero data and layout in `src/data/content.ts` and `src/components/Sections.tsx`.
+   Fix: the first screen now states name, London, target roles, two live App Store products, the Grade A Physio-AI result, contact and CV access.
+2. **Project order and depth**
+   Location: selected work in `src/data/content.ts`.
+   Fix: ordered the evidence as Sumlume, PathLife, Physio-AI and PawLife. The two live products now lead.
+3. **Founder positioning**
+   Location: About and Contact copy in `src/data/content.ts`.
+   Fix: PathLife Studio is presented as evidence of ownership and release experience while explicitly stating the search for a graduate or junior role in London.
+4. **Visual system**
+   Location: `src/styles/global.css` and `src/styles/site.module.css`.
+   Fix: consolidated spacing, type, surfaces, radii, frames and theme behaviour into one calmer editorial product system.
+5. **SEO identity**
+   Location: `index.html`, `public/og-cover.*`, `public/site.webmanifest`.
+   Fix: updated the site title, social cover, Person schema, natural search phrasing and install metadata.
 
 ### Fix
 
-1. **Missing CV file**  
-   Location: `public/Nasim-Mosayebi-CV.pdf`.  
-   Fix: avoid the current broken download until the PDF is supplied.
-2. **Missing Physio-AI screenshot and video**  
-   Location: `public/assets/physio-ai/`.  
-   Fix: show a no-request placeholder and keep the pose tracker labelled as an animation.
-3. **Missing PawLife screenshots**  
-   Location: `public/assets/pawlife/03-minigames-list.*` and `06-share-card.*`.  
-   Fix: show deliberate placeholders without 404 requests until real captures are supplied.
-4. **Missing profile photo**  
-   Location: `public/assets/me/photo.jpg`.  
-   Fix: omit the optional photo without requesting it.
-5. **Lightbox keyboard focus**  
-   Location: `Gallery`, `src/components/Media.tsx`.  
-   Fix: restore focus to the opening control, trap Tab within the modal, and keep Escape and arrow-key navigation.
-6. **Mobile menu keyboard handling**  
-   Location: `Header`, `src/components/Header.tsx`.  
-   Fix: close on Escape and return focus to the menu button.
-7. **Potential dark-mode accent contrast**  
-   Location: project accent text in `src/styles/site.module.css`.  
-   Fix: blend section accents with the current text colour for small labels and links.
-8. **Base-path-sensitive social and favicon assets**  
-   Location: `index.html`.  
-   Fix: use Vite’s `%BASE_URL%` token for public assets.
+1. **Dark-mode contrast failures**
+   Location: proof strip, project evidence, case facts and case-study panels in `src/styles/site.module.css`.
+   Fix: replaced theme-sensitive mixed surfaces with contrast-safe dark panels and accent blends. Lighthouse accessibility now scores 100.
+2. **Small carousel targets**
+   Location: mobile gallery dots in `src/styles/site.module.css`.
+   Fix: increased controls to 28px targets while retaining compact 10px visual dots.
+3. **Accessible-name mismatch**
+   Location: portfolio home link in `src/components/Header.tsx`.
+   Fix: the accessible name now comes from the visible Nasim Mosayebi label.
+4. **Duplicate section identifier**
+   Location: PawLife data in `src/data/content.ts`.
+   Fix: renamed the state-design section so the injected architecture section has a unique anchor.
+5. **GitHub Pages deep links**
+   Location: route generator and base-aware link helpers.
+   Fix: generated real route entry points and retained a 404 fallback without breaking the `/portfolio/` base path.
 
-## Recommended studio wording
+## Founder wording decision
 
-> PathLife Studio is how I prove I can own and ship products. I founded the London studio in August 2026 and build its games, web infrastructure and publishing systems. I am actively looking for a graduate or junior engineering role in London where I can contribute to a team and keep learning from experienced engineers.
+The site now uses this position consistently:
 
-This keeps the studio as evidence of delivery while making the employment goal explicit. It makes no claim about hours, visa status or a future availability date.
+> Through PathLife Studio I have taken mobile products from design and implementation through App Store release, support infrastructure and ongoing maintenance. I am now looking for a graduate or junior engineering role where I can contribute that ownership within an experienced team.
 
-## Questions for Nasim
-
-- Please supply `public/Nasim-Mosayebi-CV.pdf`.
-- What are the other two languages after English and Persian?
-- Is there public code for PathLife and PawLife? If not, should those projects say “Code available on request” instead of showing a TODO?
-- Is there a public PawLife demo URL?
-- Is there a public Physio-AI demo URL?
-- Please supply a real Physio-AI interface screenshot or recording if one can be shared.
-- Please supply the missing PawLife minigames-list and share-card screenshots if available.
-- Please supply the final deployed portfolio URL for canonical and Open Graph URL metadata.
-- Is `public/assets/me/photo.jpg` intended to be added, or should the portrait be removed permanently?
-- The App Store provider name differs from your name. Should the portfolio explain the publishing arrangement or your relationship to the provider?
-- Please confirm the LinkedIn profile opens correctly for you. LinkedIn returned its automated-access block during link validation, so it could not be verified by the test runner.
+This treats the studio as proof of delivery while making the job search explicit. It makes no unsupported statement about hours, visa status or availability dates.
 
 ## After
 
 ### 30-second recruiter check
 
-#### Desktop, 1440px, without scrolling
+- **Who, role and location:** immediately clear. Nasim Mosayebi, London, Software Engineer, Mobile Developer and Full-Stack Developer are all above the fold.
+- **Strongest proof:** immediately clear. Two live App Store products and Physio-AI at 96.23% accuracy are stated before any biography.
+- **Contact and CV:** immediately clear. The hero, navigation and contact panel all expose the working CV and contact routes.
 
-- **Who, role and location:** Clear. The hero now leads with Nasim Mosayebi, the three target role families and London availability.
-- **Strongest proof:** Clear. The first proof sentence names the live PathLife App Store release and Physio-AI's 96.23% model accuracy.
-- **Contact or CV:** Clear. Project, contact and CV actions sit together in the hero. The missing CV is shown as a deliberate TODO rather than a broken link.
+### After scorecard
 
-#### Phone, 390px, without scrolling
+| Area                              | Score | Reasoning                                                                                                     |
+| --------------------------------- | ----: | ------------------------------------------------------------------------------------------------------------- |
+| First impression and clarity      |  9/10 | Identity, target roles, location and strongest evidence resolve in one scan.                                  |
+| Visual design and consistency     |  9/10 | The system is calm, distinctive and consistent across homepage and case studies.                              |
+| Project presentation and evidence |  9/10 | Four major projects have real media, exact responsibility and shareable technical narratives.                 |
+| Technical credibility             |  9/10 | Native mobile, cross-platform, full-stack and applied-AI evidence is concrete and appropriately scoped.       |
+| Writing quality and tone          |  9/10 | Copy is concise, specific, British English and free of unsupported claims.                                    |
+| Contact and calls to action       | 10/10 | CV, email, LinkedIn and GitHub are visible, copyable and repeated at sensible decision points.                |
+| Mobile experience                 |  9/10 | The page is clear at 360px with no horizontal overflow and keyboard-friendly galleries.                       |
+| Accessibility                     | 10/10 | Lighthouse 100, visible focus, reduced motion, semantic landmarks, focus trapping and adequate touch targets. |
+| Performance                       |  8/10 | Case-study performance exceeds 90, but the long homepage measured 88 on the mobile Lighthouse profile.        |
+| SEO and link sharing              | 10/10 | Unique static metadata, canonical URLs, structured data, sitemap, robots and social art are present.          |
 
-- **Who, role and location:** Clear. The full name remains visible in the header and hero. The location and target roles are in the first reading sequence.
-- **Strongest proof:** Clear. The shorter headline and one-sentence proof are visible before the project composition.
-- **Contact or CV:** Clear. “View projects”, “Contact me” and the CV status are visible and keyboard accessible.
+## Verification
 
-### New scorecard
+- TypeScript production build: passed.
+- ESLint with zero warnings: passed.
+- Prettier check: passed.
+- Automated Chrome matrix: 40 route, viewport and theme combinations passed at 360, 768, 1280 and 1600 pixels.
+- Mobile menu: opens, closes on Escape and restores focus.
+- Lightbox: opens, supports arrow keys, traps focus and closes on Escape.
+- Browser console and page errors: none in the automated matrix.
+- Horizontal page overflow: none in the automated matrix.
+- App Store, PathLife Studio, GitHub and YouTube links: returned HTTP 200. LinkedIn returned its automated-access block (HTTP 999) and should be checked manually in a signed-in browser.
+- Homepage Lighthouse mobile: Performance 88, Accessibility 100, Best Practices 100, SEO 100.
+- Sumlume Lighthouse mobile: Performance 93, Accessibility 100, Best Practices 100, SEO 100.
 
-| Area                              | Score | Reasoning                                                                                                                                        |
-| --------------------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| First impression and clarity      |  9/10 | Name, roles, London and the two strongest proof points now land in one fast scan.                                                                |
-| Visual design and consistency     |  9/10 | The hierarchy is calmer, spacing is tighter and project media uses consistent phone, browser and desktop frames.                                 |
-| Project presentation and evidence |  9/10 | Real screenshots, explicit role statements, stacks and outcomes are easy to scan. A few real captures and public links still need Nasim's input. |
-| Technical credibility             |  9/10 | The shipping story, ML pipeline, full-stack flow and team-project contributions give a hiring manager concrete implementation evidence.          |
-| Writing quality and tone          |  9/10 | Copy is specific, concise and consistent with British English. Repeated generic claims were removed.                                             |
-| Contact and calls to action       |  8/10 | Email and social details are visible and copyable, with strong actions in the hero and contact panel. The CV PDF is still missing.               |
-| Mobile experience                 |  9/10 | The first screen is clearer, galleries are swipeable, targets are large enough and no horizontal page overflow occurs.                           |
-| Accessibility                     | 10/10 | Lighthouse accessibility is 100. Focus, modal keyboard controls, contrast, headings, menu Escape handling and reduced motion were verified.      |
-| Performance                       |  9/10 | Lighthouse mobile performance is 94 after self-hosting fonts, responsive media and deferring the Framer Motion hero enhancement.                 |
-| SEO and link sharing              |  9/10 | Lighthouse SEO is 100, with complete social tags, PNG sharing art, favicon and Person JSON-LD. Canonical URL awaits the final domain.            |
+The homepage performance score is the only measured target below 90. Its lab LCP was 3.8 seconds with zero total blocking time and 0.01 cumulative layout shift. The main remaining cost is the long client-rendered React page and its visual product evidence. This is documented rather than overstated.
 
-### Changes applied
+## Recruitment assessment
 
-- Rebuilt the hero hierarchy around name, target roles, London, the live App Store release and the 96.23% Physio-AI result.
-- Reordered the work so PathLife and Physio-AI appear first, then PawLife, studio context and team projects.
-- Added explicit role and outcome evidence to each project, connected the verified CO2 Tracker and Physio-AI repositories, restored the supplied CO2 demo link and kept unresolved URLs as non-clickable TODOs.
-- Removed the generic Strengths section, phantom Physio-AI video request, repeated copy and excess vertical spacing.
-- Added honest missing-asset and missing-CV states that do not make failed network requests.
-- Strengthened keyboard behaviour in the lightbox and mobile menu, corrected heading relationships, increased carousel targets and fixed dark-mode contrast.
-- Self-hosted the three fonts, added responsive 640px game screenshots and 192px app icons, prioritised above-the-fold media and moved Framer Motion into a deferred hero chunk.
-- Updated Open Graph and Twitter images, favicon paths, JSON-LD `sameAs` links and base-path-safe public assets.
+The portfolio now justifies a serious interview screen. The differentiator is not merely that Nasim has student projects. It is that he has released two mobile products, handled production and review work, built supporting infrastructure and can explain the systems behind the products. Physio-AI broadens the evidence beyond games, while the team projects show Java, Spring Boot, React, testing and Scrum contribution.
 
-### Verification
+The main hiring-manager weakness is limited public source evidence for the proprietary game work. The public Physio-AI and university repositories help, but a small sanitised code sample or technical article would strengthen the mobile-engineering case further.
 
-- Checked at 360px, 768px, 1280px and 1600px in light and dark mode.
-- No horizontal page overflow at the tested widths.
-- One `h1`, no heading-level jumps and all labelled sections resolve to a real heading.
-- Mobile menu closes on Escape and returns focus to its trigger.
-- Lightbox traps focus, supports Escape and arrow keys, and restores focus to the opening control.
-- Production console: no errors or warnings.
-- External links: App Store, PathLife Studio, CO2 demo and all listed public GitHub pages returned HTTP 200. LinkedIn blocked automated validation with its anti-bot response and needs a manual click check.
-- Formatting, ESLint, TypeScript and the production build all pass.
+## Questions for Nasim
 
-### Lighthouse mobile
-
-Recorded against the production build on 26 October 2026:
-
-| Category       | Score |
-| -------------- | ----: |
-| Performance    |    94 |
-| Accessibility  |   100 |
-| Best practices |   100 |
-| SEO            |   100 |
+1. Can you add or grant access to this property in Google Search Console so the sitemap can be submitted and indexing can be inspected?
+2. Do you want to publish a sanitised mobile code sample or architecture excerpt for Sumlume, PathLife or PawLife without exposing private project code?
+3. The current CV profile is more postgraduate-AI focused than the portfolio’s graduate software-engineering job search. Would you like the CV wording aligned in a separate document update?
+4. If you capture the PawLife minigames-list and share-card screens, they can be added to the existing gallery manifest without changing the case-study layout.
