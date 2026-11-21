@@ -119,6 +119,15 @@ After screenshots:
 - Browser overflow, missing images, alt text, heading count, insecure blank links, console errors and failed requests: none.
 - Mobile menu, constellation keyboard navigation, skill selection, lightbox, puzzle validation, pipeline tabs and pose range: verified.
 
+### Production release verification
+
+- V3 release commit: `1bb0966` (`Build interactive creative portfolio V3`).
+- GitHub Actions run: `44951132835`, build and deploy jobs passed.
+- Live homepage: `https://nasim1801.github.io/portfolio/`.
+- Live Engineering Lab: `https://nasim1801.github.io/portfolio/lab/`.
+- Live portfolio case study: `https://nasim1801.github.io/portfolio/projects/portfolio/`.
+- Production browser check: project constellation selection, make-10 validation, pose-depth range and pipeline stage selection passed with no browser console errors or warnings.
+
 ## Recruitment assessment
 
 The site now gives a recruiter a fast, unambiguous job-search story while giving a hiring manager something real to inspect. The interaction system supports the claim of front-end capability, the real screenshots support product ownership, and Physio-AI plus CO2 Tracker prevent the portfolio from reading as mobile-games-only.
@@ -127,8 +136,7 @@ PathLife Studio is positioned as evidence of ownership and delivery while the pa
 
 ## Remaining limitations and owner actions
 
-1. GitHub Pages deployment and the live production route check must complete after the V3 commit reaches `main`.
-2. LinkedIn blocks automated link validation. Check it manually in a signed-in browser after release.
-3. Search Console access is not available, so the sitemap cannot be submitted or indexing inspected from this repository.
-4. PawLife still has no minigames-list or share-card capture. The case study deliberately shows only the real screenshots currently available.
-5. Private game source code remains private. A sanitised mobile code sample could add hiring-manager evidence later without exposing commercial repositories.
+1. LinkedIn blocks automated link validation. Check it manually in a signed-in browser after release.
+2. Search Console access is not available, so the sitemap cannot be submitted or indexing inspected from this repository.
+3. PawLife still has no minigames-list or share-card capture. The case study deliberately shows only the real screenshots currently available.
+4. Private game source code remains private. A sanitised mobile code sample could add hiring-manager evidence later without exposing commercial repositories.
