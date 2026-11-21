@@ -1,0 +1,678 @@
+.labPage {
+  --lab-accent: #7c8cff;
+  --lab-mint: #54e0c7;
+  position: relative;
+  min-height: 100vh;
+  overflow: clip;
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 0.5px),
+      var(--line) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    var(--paper);
+}
+
+.labHero,
+.exhibit,
+.labClosing {
+  width: min(1440px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+.labHero {
+  min-height: 82vh;
+  padding: 150px 0 96px;
+  display: grid;
+  align-content: center;
+}
+
+.backLink {
+  width: max-content;
+  margin-bottom: clamp(48px, 8vh, 88px);
+  color: var(--ink-soft);
+  font: 650 0.73rem/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.backLink:hover {
+  color: var(--signal);
+}
+
+.labEyebrow,
+.labIndex,
+.noteLabel {
+  margin: 0;
+  color: var(--signal);
+  font: 700 0.7rem/1.4 var(--mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.labHero h1 {
+  max-width: 1100px;
+  margin: 22px 0 40px;
+  font: 650 clamp(4rem, 10vw, 9.6rem)/0.87 var(--display);
+  letter-spacing: -0.075em;
+}
+
+.labHero h1 em {
+  display: block;
+  color: transparent;
+  font-style: normal;
+  -webkit-text-stroke: 1px var(--ink-soft);
+}
+
+.labIntro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.75fr);
+  gap: clamp(40px, 8vw, 120px);
+  align-items: end;
+}
+
+.labIntro > p {
+  max-width: 780px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  line-height: 1.55;
+}
+
+.labIntro dl,
+.pipelineReadout dl {
+  margin: 0;
+}
+
+.labIntro dl > div {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.labIntro dt,
+.labIntro dd {
+  margin: 0;
+  font: 600 0.72rem/1.5 var(--mono);
+  letter-spacing: 0.03em;
+}
+
+.labIntro dt {
+  color: var(--ink-soft);
+}
+
+.labRail {
+  width: 100%;
+  padding: 13px 28px;
+  display: flex;
+  justify-content: space-between;
+  border-block: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper-elevated) 80%, transparent);
+  color: var(--ink-soft);
+  font: 600 0.62rem/1 var(--mono);
+  letter-spacing: 0.14em;
+}
+
+.exhibit {
+  padding: clamp(88px, 11vw, 170px) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.exhibitHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: clamp(44px, 7vw, 86px);
+}
+
+.exhibitHeader h2 {
+  max-width: 900px;
+  margin: 16px 0 0;
+  font: 620 clamp(2.2rem, 5vw, 5.8rem)/0.98 var(--display);
+  letter-spacing: -0.055em;
+}
+
+.liveChip,
+.simulationChip {
+  flex: none;
+  padding: 10px 13px;
+  border: 1px solid currentColor;
+  color: var(--lab-mint);
+  font: 700 0.64rem/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.liveChip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.simulationChip {
+  color: var(--lab-accent);
+}
+
+.puzzleLayout,
+.poseLabLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.7fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+
+.puzzlePanel {
+  position: relative;
+  padding: clamp(18px, 3.6vw, 48px);
+  border: 1px solid var(--line-strong);
+  background:
+    radial-gradient(
+      circle at 22% 0%,
+      color-mix(in srgb, var(--lab-accent) 14%, transparent),
+      transparent 38%
+    ),
+    var(--paper-elevated);
+  box-shadow: var(--shadow-large);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 28px) 0,
+    100% 28px,
+    100% 100%,
+    28px 100%,
+    0 calc(100% - 28px)
+  );
+}
+
+.puzzleTopline,
+.viewportMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 26px;
+  color: var(--ink-soft);
+  font: 600 0.65rem/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.puzzleTopline strong {
+  color: var(--lab-mint);
+}
+
+.puzzleGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(44px, 1fr));
+  gap: clamp(6px, 1.1vw, 14px);
+}
+
+.numberTile {
+  aspect-ratio: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--lab-accent) 38%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--paper-soft) 84%, var(--lab-accent));
+  color: var(--ink);
+  cursor: pointer;
+  font: 700 clamp(1.15rem, 3.2vw, 2.35rem)/1 var(--display);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.numberTile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lab-accent) 20%, transparent),
+    transparent 58%
+  );
+  opacity: 0.45;
+}
+
+.numberTile span {
+  position: relative;
+}
+
+.numberTile:hover:not(:disabled) {
+  z-index: 1;
+  transform: translateY(-4px) scale(1.025);
+  border-color: var(--lab-accent);
+}
+
+.numberTileSelected {
+  border-color: var(--lab-mint);
+  background: color-mix(in srgb, var(--lab-mint) 24%, var(--paper-elevated));
+  box-shadow:
+    inset 0 0 0 2px var(--lab-mint),
+    0 0 34px color-mix(in srgb, var(--lab-mint) 18%, transparent);
+}
+
+.numberTileCleared {
+  border-style: dashed;
+  background: transparent;
+  color: var(--line-strong);
+  opacity: 0.28;
+}
+
+.puzzleFooter {
+  min-height: 72px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.puzzleFooter p {
+  max-width: 580px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.puzzleFooter .success {
+  color: var(--lab-mint);
+}
+
+.puzzleFooter .error {
+  color: var(--warning);
+}
+
+.resetButton {
+  flex: none;
+  padding: 9px 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font: 650 0.72rem/1 var(--mono);
+  text-transform: uppercase;
+}
+
+.exhibitNotes {
+  padding-top: 10px;
+}
+
+.exhibitNotes ol {
+  padding: 0;
+  margin: 28px 0 36px;
+  list-style: none;
+}
+
+.exhibitNotes li {
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  border-top: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.exhibitNotes li span {
+  color: var(--lab-accent);
+  font: 700 0.65rem/1.5 var(--mono);
+}
+
+.exhibitNotes > p:not(.noteLabel),
+.pipelineReadout > p {
+  color: var(--ink-soft);
+}
+
+.exhibitNotes a,
+.pipelineReadout a,
+.labClosing a {
+  display: inline-block;
+  margin-top: 22px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--signal);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.poseExhibit {
+  --lab-accent: #9a7cff;
+  --lab-mint: #46d6a5;
+}
+
+.pipelineControls {
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-block: 1px solid var(--line);
+}
+
+.pipelineControls button {
+  min-height: 82px;
+  padding: 14px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: 650 0.75rem/1.35 var(--mono);
+  text-align: left;
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.pipelineControls button:last-child {
+  border-right: 0;
+}
+
+.pipelineControls button span {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--line-strong);
+  font-size: 0.6rem;
+}
+
+.pipelineControls button[aria-selected='true'] {
+  background: color-mix(in srgb, var(--lab-accent) 14%, transparent);
+  color: var(--ink);
+}
+
+.pipelineControls button[aria-selected='true'] span {
+  color: var(--lab-accent);
+}
+
+.poseViewport {
+  padding: clamp(14px, 2.3vw, 28px);
+  border: 1px solid var(--line-strong);
+  background: #070b15;
+  color: #dfe6f7;
+  box-shadow: var(--shadow-large);
+}
+
+.poseViewport svg {
+  width: 100%;
+  aspect-ratio: 520 / 546;
+  max-height: 620px;
+}
+
+.svgGrid {
+  fill: none;
+  stroke: rgba(127, 145, 177, 0.13);
+  stroke-width: 1;
+}
+
+.svgFloor {
+  stroke: rgba(223, 230, 247, 0.24);
+  stroke-width: 2;
+}
+
+.svgBone,
+.svgHead {
+  fill: none;
+  stroke: var(--lab-mint);
+  stroke-width: 6;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--lab-mint) 32%, transparent));
+  transition: all 180ms ease;
+}
+
+.svgLandmark,
+.svgActiveLandmark {
+  fill: #ffd26f;
+  stroke: #070b15;
+  stroke-width: 2;
+}
+
+.svgActiveLandmark {
+  fill: #fff0ad;
+  stroke: var(--lab-accent);
+  stroke-width: 4;
+}
+
+.rawFrame {
+  fill: rgba(197, 207, 229, 0.15);
+  stroke: rgba(197, 207, 229, 0.42);
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.angleLabel rect {
+  fill: #101729;
+  stroke: var(--lab-accent);
+}
+
+.angleLabel text {
+  fill: #fff;
+  font: 700 16px var(--mono);
+}
+
+.depthControl {
+  display: grid;
+  grid-template-columns: auto 1fr 48px;
+  gap: 16px;
+  align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid rgba(223, 230, 247, 0.15);
+  color: #b6c1d9;
+  font: 600 0.67rem/1 var(--mono);
+  text-transform: uppercase;
+}
+
+.depthControl input {
+  accent-color: var(--lab-mint);
+}
+
+.depthControl output {
+  color: var(--lab-mint);
+  text-align: right;
+}
+
+.pipelineReadout {
+  min-height: 540px;
+  padding: clamp(24px, 4vw, 50px);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line-strong);
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--lab-accent) 12%, transparent),
+    transparent 45%
+  );
+}
+
+.pipelineReadout > p:first-child {
+  margin: 0;
+  color: var(--lab-accent);
+  font: 700 0.66rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pipelineReadout h3 {
+  margin: 24px 0 12px;
+  font: 630 clamp(2rem, 4vw, 4rem)/1 var(--display);
+  letter-spacing: -0.05em;
+}
+
+.pipelineReadout > p:nth-of-type(2) {
+  min-height: 78px;
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.pipelineReadout dl {
+  margin: 32px 0;
+}
+
+.pipelineReadout dl div {
+  padding: 14px 0;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  border-top: 1px solid var(--line);
+}
+
+.pipelineReadout dt,
+.pipelineReadout dd {
+  margin: 0;
+  font: 600 0.72rem/1.45 var(--mono);
+}
+
+.pipelineReadout dt,
+.pipelineReadout small {
+  color: var(--ink-soft);
+}
+
+.pipelineReadout small {
+  margin-top: auto;
+  line-height: 1.6;
+}
+
+.labClosing {
+  min-height: 72vh;
+  padding: 120px 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.labClosing p {
+  color: var(--signal);
+  font: 700 0.7rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.labClosing h2 {
+  max-width: 920px;
+  margin: 22px auto;
+  font: 620 clamp(2.2rem, 5vw, 5.4rem)/1 var(--display);
+  letter-spacing: -0.055em;
+}
+
+@media (max-width: 900px) {
+  .labHero,
+  .exhibit,
+  .labClosing {
+    width: min(100% - 40px, 760px);
+  }
+
+  .labIntro,
+  .puzzleLayout,
+  .poseLabLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .pipelineReadout {
+    min-height: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .pipelineControls {
+    overflow-x: auto;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 600px) {
+  .labHero,
+  .exhibit,
+  .labClosing {
+    width: calc(100% - 32px);
+  }
+
+  .labHero {
+    min-height: auto;
+    padding: 112px 0 72px;
+  }
+
+  .labHero h1 {
+    font-size: clamp(2.45rem, 10.8vw, 3.5rem);
+    letter-spacing: -0.07em;
+  }
+
+  .labIntro {
+    gap: 36px;
+  }
+
+  .labRail {
+    padding-inline: 16px;
+  }
+
+  .labRail span:last-child {
+    display: none;
+  }
+
+  .exhibit {
+    padding: 82px 0;
+  }
+
+  .exhibitHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+
+  .exhibitHeader h2 {
+    font-size: 2.35rem;
+  }
+
+  .puzzlePanel {
+    padding: 13px;
+    clip-path: none;
+  }
+
+  .puzzleTopline {
+    font-size: 0.56rem;
+  }
+
+  .numberTile {
+    border-radius: 5px;
+    font-size: clamp(1rem, 7vw, 1.65rem);
+  }
+
+  .puzzleFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .poseViewport {
+    padding: 10px;
+  }
+
+  .viewportMeta {
+    font-size: 0.53rem;
+  }
+
+  .depthControl {
+    grid-template-columns: 1fr 42px;
+  }
+
+  .depthControl span {
+    grid-column: 1 / -1;
+  }
+
+  .pipelineReadout dl div {
+    grid-template-columns: 110px 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .numberTile {
+    transition: none;
+  }
+}

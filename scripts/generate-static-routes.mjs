@@ -8,6 +8,8 @@ const siteUrl = 'https://nasim1801.github.io/portfolio/';
 const routes = [
   {
     slug: 'sumlume',
+    path: 'projects/sumlume',
+    name: 'Sumlume',
     title: 'Sumlume Case Study | Nasim Mosayebi',
     description:
       'How Nasim Mosayebi built and released Sumlume, a native SwiftUI number puzzle for iPhone and iPad, with an Android version in Kotlin in development.',
@@ -16,6 +18,8 @@ const routes = [
   },
   {
     slug: 'pathlife',
+    path: 'projects/pathlife',
+    name: 'PathLife',
     title: 'PathLife Case Study | Nasim Mosayebi',
     description:
       'Engineering case study for PathLife, a live iOS life simulation with a React Native Android rebuild and supporting Node.js infrastructure.',
@@ -24,6 +28,8 @@ const routes = [
   },
   {
     slug: 'physio-ai',
+    path: 'projects/physio-ai',
+    name: 'Physio-AI',
     title: 'Physio-AI Case Study | Nasim Mosayebi',
     description:
       'A Grade A real-time physiotherapy system using MediaPipe Pose and a Random Forest classifier with 96.23% accuracy.',
@@ -32,11 +38,33 @@ const routes = [
   },
   {
     slug: 'pawlife',
+    path: 'projects/pawlife',
+    name: 'PawLife',
     title: 'PawLife Case Study | Nasim Mosayebi',
     description:
       'Engineering case study for PawLife, an in-development React Native pet-life simulation with a custom event engine and persistent progression.',
     image: 'assets/pawlife/01-home.webp',
     type: 'VideoGame',
+  },
+  {
+    slug: 'portfolio',
+    path: 'projects/portfolio',
+    name: 'This Portfolio',
+    title: 'Portfolio Design & Engineering Case Study | Nasim Mosayebi',
+    description:
+      'How Nasim Mosayebi designed and engineered an interactive React portfolio with accessible browser demonstrations, responsive project storytelling and static deployment.',
+    image: 'assets/portfolio/01-home.webp',
+    type: 'SoftwareApplication',
+  },
+  {
+    slug: 'lab',
+    path: 'lab',
+    name: 'Engineering Lab',
+    title: 'Engineering Lab | Nasim Mosayebi',
+    description:
+      'Playable React and interactive system demonstrations by London software engineer Nasim Mosayebi.',
+    image: 'og-cover.png',
+    type: 'WebPage',
   },
 ];
 
@@ -47,7 +75,7 @@ function replaceMeta(html, selector, value) {
 }
 
 for (const route of routes) {
-  const routeUrl = `${siteUrl}projects/${route.slug}/`;
+  const routeUrl = `${siteUrl}${route.path}/`;
   const imageUrl = `${siteUrl}${route.image}`;
   let html = source.replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`);
   html = replaceMeta(html, 'name="description"', route.description);
@@ -66,7 +94,7 @@ for (const route of routes) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': route.type,
-    name: route.title.replace(' Case Study | Nasim Mosayebi', ''),
+    name: route.name,
     url: routeUrl,
     image: imageUrl,
     description: route.description,
@@ -81,7 +109,7 @@ for (const route of routes) {
     `    <script id="static-page-schema" type="application/ld+json">${JSON.stringify(schema)}</script>\n  </head>`,
   );
 
-  const directory = resolve(outputDirectory, 'projects', route.slug);
+  const directory = resolve(outputDirectory, route.path);
   await mkdir(directory, { recursive: true });
   await writeFile(resolve(directory, 'index.html'), html);
 }

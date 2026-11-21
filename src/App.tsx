@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Header } from './components/Header';
 import { CaseStudyPage } from './components/CaseStudyPage';
+import { EngineeringLabPage } from './components/EngineeringLabPage';
 import {
   About,
   Contact,
@@ -106,6 +107,7 @@ export default function App() {
   const projectMatch = /^projects\/([^/]+)$/.exec(route);
   const study = projectMatch ? findCaseStudy(projectMatch[1]) : undefined;
   const knownHomeRoute = route === '' || route === 'index.html';
+  const labRoute = route === 'lab';
 
   return (
     <>
@@ -113,16 +115,20 @@ export default function App() {
         Skip to content
       </a>
       <Header />
-      {study ? (
-        <>
-          <PageMetadata study={study} />
-          <CaseStudyPage study={study} />
-        </>
-      ) : knownHomeRoute ? (
-        <HomePage />
-      ) : (
-        <NotFoundPage />
-      )}
+      <div className={styles.pageEnter} key={route}>
+        {study ? (
+          <>
+            <PageMetadata study={study} />
+            <CaseStudyPage study={study} />
+          </>
+        ) : labRoute ? (
+          <EngineeringLabPage />
+        ) : knownHomeRoute ? (
+          <HomePage />
+        ) : (
+          <NotFoundPage />
+        )}
+      </div>
       <Footer />
     </>
   );

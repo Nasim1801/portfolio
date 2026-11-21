@@ -215,6 +215,14 @@ export const sumlumeIcon: ScreenshotAsset = {
   height: 512,
 };
 
+export const portfolioScreen: ScreenshotAsset = {
+  src: 'assets/portfolio/01-home.webp',
+  fallbackSrc: 'assets/portfolio/01-home.png',
+  alt: 'Nasim Mosayebi portfolio homepage showing the interactive project signal field',
+  width: 1600,
+  height: 1000,
+};
+
 export const gameIcons = {
   sumlume: sumlumeIcon,
   pathlife: {

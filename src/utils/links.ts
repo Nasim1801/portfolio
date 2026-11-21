@@ -17,11 +17,3 @@ export function routePath() {
     ? pathname.slice(base.length).replace(/^\/+|\/+$/g, '')
     : pathname.replace(/^\/+|\/+$/g, '');
 }
-
-export function isExternalLink(href: string) {
-  return /^https?:\/\//.test(href);
-}
-
-export function isPlaceholderLink(href: string) {
-  return href.startsWith('[') && href.endsWith(']');
-}

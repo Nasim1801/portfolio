@@ -1,6 +1,6 @@
 # Nasim Mosayebi portfolio
 
-A production portfolio for a London software engineer and mobile developer. Built with Vite, React, TypeScript, CSS Modules and restrained Framer Motion. The output is fully static and deployed to GitHub Pages.
+A creative engineering portfolio for a London software engineer. Built with React, TypeScript, Vite, CSS Modules, SVG and Canvas. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
 
 ## Run locally
 
@@ -14,79 +14,68 @@ Production checks:
 ```bash
 npm run lint
 npm run format
+npm run test:lab
 npm run build
 npm run preview
+npm run qa
 ```
 
-The production preview is served from `/portfolio/`, matching the GitHub Pages base path.
+The production preview is served at `http://127.0.0.1:4173/portfolio/`. Keep it running before `npm run qa`.
 
 ## Edit content
 
-All portfolio copy, project details, experience, skills and links are in the typed data file:
+Verified portfolio copy, project facts, experience, links and the skill-to-project evidence map live in the typed data file:
 
 ```text
 src/data/content.ts
 ```
 
-Screenshot paths, dimensions and alt text are in:
+Screenshot paths, dimensions and alt text live in:
 
 ```text
 src/data/screens.ts
 ```
 
-## Project media
+Real media is stored under `public/assets/`. Add a full-size PNG to the relevant project folder and reference it in `src/data/screens.ts`. `npm run build` refreshes the optimised WebP versions. Never substitute mock screens for product evidence.
 
-Real product media lives under `public/assets/`:
+The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
 
-```text
-public/assets/sumlume/
-public/assets/pathlife/
-public/assets/pawlife/
-public/assets/physio-ai/
-public/assets/co2-tracker/
-public/assets/hospital/
-```
+## Main architecture
 
-Add the full-size PNG to the relevant folder and reference it in `src/data/screens.ts`. `npm run build` generates or refreshes WebP versions for the captured portfolio media. Do not use mock screens in place of real product evidence.
+- `src/components/ProjectConstellation.tsx`: pointer, touch and keyboard project field in the hero.
+- `src/components/lab/`: the playable make-10 board and interactive Physio-AI system visualisation.
+- `src/lab/sumlumeEngine.ts`: pure, independently tested matching rules.
+- `src/components/SkillAtlas.tsx`: selectable technology-to-project evidence map.
+- `src/components/CaseStudyPage.tsx`: shared technical case-study structure.
+- `src/styles/site.module.css`: core responsive visual system.
+- `src/styles/lab.module.css`: Engineering Lab interface and exhibit states.
 
-The CV download is:
-
-```text
-public/Nasim-Mosayebi-CV.pdf
-```
+The design audit, two explored directions and final rationale are in `DESIGN-V3.md`.
 
 ## Routes and SEO
 
-The build creates static HTML entry points with unique metadata for:
+The static build creates indexable HTML entry points for:
 
 ```text
 /portfolio/
+/portfolio/lab/
 /portfolio/projects/sumlume/
 /portfolio/projects/pathlife/
 /portfolio/projects/physio-ai/
 /portfolio/projects/pawlife/
+/portfolio/projects/portfolio/
 ```
 
-`scripts/generate-static-routes.mjs` creates those entry points and the GitHub Pages fallback. Update that script and `public/sitemap.xml` when adding an indexable case study.
+`scripts/generate-static-routes.mjs` generates route-specific titles, descriptions, canonical URLs, social metadata and structured data, plus the GitHub Pages fallback. Update that script and `public/sitemap.xml` when adding a route.
 
-## QA
+## Interaction and browser QA
 
-With the production preview running on port 4173:
-
-```bash
-npx tsx scripts/qa-portfolio.ts
-```
-
-This checks all major routes at 360, 768, 1280 and 1600 pixels in light and dark mode. It also checks overflow, images, titles, heading count, console errors, mobile navigation and lightbox keyboard controls.
+`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all seven routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, secure external links, console errors, the mobile menu, constellation keyboard controls, skill selection, lightbox controls, puzzle validation and Physio-AI controls.
 
 ## Deploy
 
-The workflow at `.github/workflows/deploy.yml` builds and deploys on every push to `main`. GitHub Pages must use **GitHub Actions** as its source.
+`.github/workflows/deploy.yml` builds and deploys on every push to `main`. GitHub Pages must use **GitHub Actions** as its source.
 
-Production URL:
-
-```text
-https://nasim1801.github.io/portfolio/
-```
+Production URL: [nasim1801.github.io/portfolio](https://nasim1801.github.io/portfolio/)
 
 No server or environment variables are required.

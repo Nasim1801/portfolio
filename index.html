@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f4f6f2" />
+    <meta name="theme-color" content="#080b12" />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="description"
@@ -11,7 +11,7 @@
     />
     <meta
       property="og:title"
-      content="Nasim Mosayebi | Software Engineer & Mobile Developer in London"
+      content="Nasim Mosayebi | Software Engineer & Founder of PathLife Studio"
     />
     <meta
       property="og:description"
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Nasim Mosayebi | Software Engineer & Mobile Developer in London"
+      content="Nasim Mosayebi | Software Engineer & Founder of PathLife Studio"
     />
     <meta
       name="twitter:description"
@@ -50,12 +50,22 @@
       type="font/woff2"
       crossorigin
     />
+    <link
+      rel="preload"
+      href="%BASE_URL%fonts/figtree-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <script>
       (() => {
         const stored = localStorage.getItem('nm-theme');
         const theme =
           stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.dataset.theme = theme;
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', theme === 'dark' ? '#080b12' : '#f1f3f7');
       })();
     </script>
     <script type="application/ld+json">
@@ -95,7 +105,7 @@
         ]
       }
     </script>
-    <title>Nasim Mosayebi | Software Engineer & Mobile Developer in London</title>
+    <title>Nasim Mosayebi | Software Engineer & Founder of PathLife Studio</title>
   </head>
   <body>
     <div id="root"></div>

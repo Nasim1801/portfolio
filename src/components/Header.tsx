@@ -6,11 +6,16 @@ import styles from '../styles/site.module.css';
 
 type Theme = 'light' | 'dark';
 
+function navHref(href: string) {
+  return href.startsWith('#') ? homeUrl(href) : pageUrl(href);
+}
+
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [theme, setTheme] = useState<Theme>(() =>
-    document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
+    document.documentElement.dataset.theme === 'light' ? 'light' : 'dark',
   );
 
   const toggleTheme = () => {
@@ -20,8 +25,15 @@ export function Header() {
     localStorage.setItem('nm-theme', nextTheme);
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', nextTheme === 'dark' ? '#101512' : '#f4f6f2');
+      ?.setAttribute('content', nextTheme === 'dark' ? '#080b12' : '#f1f3f7');
   };
+
+  useEffect(() => {
+    const updateScroll = () => setScrolled(window.scrollY > 24);
+    updateScroll();
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    return () => window.removeEventListener('scroll', updateScroll);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -35,51 +47,25 @@ export function Header() {
   }, [menuOpen]);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
       <a className={styles.logo} href={pageUrl()}>
-        <span>{content.identity.monogram}</span>
+        <span className={styles.logoMark} aria-hidden="true">
+          N<span>/</span>M
+        </span>
         <strong>
-          {content.identity.name}
-          <small>Software Engineer</small>
+          <span>Nasim</span>
+          <span>Mosayebi</span>
         </strong>
+        <small>
+          Software Engineer
+          <br />
+          London
+        </small>
       </a>
 
-      <button
-        ref={menuButtonRef}
-        className={styles.menuButton}
-        type="button"
-        onClick={() => setMenuOpen((open) => !open)}
-        aria-expanded={menuOpen}
-        aria-controls="main-navigation"
-        aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
-      >
-        {menuOpen ? <CloseIcon /> : <MenuIcon />}
-      </button>
-
-      <nav
-        id="main-navigation"
-        className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}
-        aria-label="Main navigation"
-      >
-        {content.nav.map((item) => (
-          <a key={item.href} href={homeUrl(item.href)} onClick={() => setMenuOpen(false)}>
-            {item.label}
-          </a>
-        ))}
-        <a
-          className={styles.navCv}
-          href={assetUrl(content.links.cv)}
-          download
-          onClick={() => setMenuOpen(false)}
-        >
-          Download CV
-        </a>
-        <a
-          className={styles.hireButton}
-          href={homeUrl(content.navCta.href)}
-          onClick={() => setMenuOpen(false)}
-        >
-          {content.navCta.label}
+      <div className={styles.headerActions}>
+        <a className={styles.headerCv} href={assetUrl(content.links.cv)} download>
+          CV ↓
         </a>
         <button
           className={styles.themeButton}
@@ -89,6 +75,37 @@ export function Header() {
         >
           {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
         </button>
+        <button
+          ref={menuButtonRef}
+          className={styles.menuButton}
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-controls="main-navigation"
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+        >
+          {menuOpen ? <CloseIcon /> : <MenuIcon />}
+        </button>
+      </div>
+
+      <nav
+        id="main-navigation"
+        className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}
+        aria-label="Main navigation"
+      >
+        {content.nav.map((item, index) => (
+          <a key={item.href} href={navHref(item.href)} onClick={() => setMenuOpen(false)}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            {item.label}
+          </a>
+        ))}
+        <a
+          className={styles.navContact}
+          href={homeUrl('#contact')}
+          onClick={() => setMenuOpen(false)}
+        >
+          Start a conversation ↗
+        </a>
       </nav>
     </header>
   );

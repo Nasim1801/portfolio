@@ -2,7 +2,7 @@
   font-family: 'Figtree';
   font-style: normal;
   font-weight: 400 800;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/figtree-latin-variable.woff2') format('woff2');
 }
 
@@ -10,7 +10,7 @@
   font-family: 'JetBrains Mono';
   font-style: normal;
   font-weight: 500 700;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/jetbrains-mono-latin-variable.woff2') format('woff2');
 }
 
@@ -18,28 +18,32 @@
   font-family: 'Unbounded';
   font-style: normal;
   font-weight: 500 800;
-  font-display: optional;
+  font-display: swap;
   src: url('/fonts/unbounded-latin-variable.woff2') format('woff2');
 }
 
 :root {
   color-scheme: light;
-  --paper: #f4f6f2;
+  --paper: #f1f3f7;
   --paper-elevated: #ffffff;
-  --paper-soft: #e8ede8;
-  --ink: #17201b;
-  --ink-soft: #59665f;
-  --line: #d7dfd9;
-  --line-strong: #b9c5bd;
-  --brand: #1f6a4a;
-  --brand-strong: #145238;
-  --brand-soft: #deeee4;
-  --sumlume-blue: #2058c7;
-  --gold: #9d6a0f;
-  --gold-bright: #d5a83c;
+  --paper-soft: #e4e8f0;
+  --ink: #0c1020;
+  --ink-soft: #596173;
+  --line: #ced4df;
+  --line-strong: #aab4c5;
+  --signal: #4d65e8;
+  --signal-contrast: #ffffff;
+  --signal-bright: #6d82ff;
+  --signal-soft: #dde3ff;
+  --violet: #7657d8;
+  --green: #18836a;
+  --gold: #956811;
+  --gold-bright: #c99424;
+  --warning: #b04f38;
   --white: #ffffff;
-  --shadow: 0 24px 70px rgba(27, 45, 34, 0.14);
-  --shadow-soft: 0 12px 36px rgba(27, 45, 34, 0.09);
+  --shadow: 0 22px 60px rgba(29, 39, 69, 0.13);
+  --shadow-soft: 0 12px 34px rgba(29, 39, 69, 0.09);
+  --shadow-large: 0 42px 110px rgba(23, 31, 57, 0.18);
   --display: 'Unbounded', 'Arial Black', sans-serif;
   --body: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -47,22 +51,26 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #101512;
-  --paper-elevated: #18201b;
-  --paper-soft: #202a24;
-  --ink: #f1f5ef;
-  --ink-soft: #b8c4bc;
-  --line: #303d35;
-  --line-strong: #48594e;
-  --brand: #75c79b;
-  --brand-strong: #9ad9b5;
-  --brand-soft: #1d392a;
-  --sumlume-blue: #79a0ff;
-  --gold: #e0ba62;
-  --gold-bright: #f0ce80;
+  --paper: #080b12;
+  --paper-elevated: #0e1320;
+  --paper-soft: #141a29;
+  --ink: #f4f6fb;
+  --ink-soft: #9da8bc;
+  --line: #242d3e;
+  --line-strong: #39455a;
+  --signal: #7187ff;
+  --signal-contrast: #080b12;
+  --signal-bright: #93a3ff;
+  --signal-soft: #192347;
+  --violet: #a98df4;
+  --green: #52d4aa;
+  --gold: #e2bc66;
+  --gold-bright: #f1ce7b;
+  --warning: #ff8f75;
   --white: #ffffff;
   --shadow: 0 26px 80px rgba(0, 0, 0, 0.38);
-  --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.26);
+  --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.28);
+  --shadow-large: 0 50px 130px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -115,8 +123,8 @@ canvas {
 }
 
 ::selection {
-  background: var(--brand-soft);
-  color: var(--ink);
+  background: var(--signal);
+  color: var(--white);
 }
 
 :focus-visible {

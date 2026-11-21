@@ -1,13 +1,11 @@
-import { lazy, Suspense, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { content, type SelectedProject, type TeamProject } from '../data/content';
 import { assetUrl, pageUrl } from '../utils/links';
-import { DeviceFrame, MediaImage } from './Media';
+import { DeviceFrame, Gallery, MediaImage } from './Media';
 import { GithubIcon, GlobeIcon, LinkedinIcon } from './Icons';
+import { ProjectConstellation } from './ProjectConstellation';
+import { SkillAtlas } from './SkillAtlas';
 import styles from '../styles/site.module.css';
-
-const HeroMotionVisual = lazy(() =>
-  import('./HeroMotionVisual').then((module) => ({ default: module.HeroMotionVisual })),
-);
 
 const accentStyle = (accent: string, soft: string) =>
   ({ '--project-accent': accent, '--project-soft': soft }) as CSSProperties;
@@ -58,9 +56,12 @@ function SectionHeading({
 
 export function Hero() {
   const { hero, links } = content;
-
   return (
     <section className={styles.hero} id="top" aria-labelledby="hero-title">
+      <div className={styles.heroRail} aria-hidden="true">
+        <span>NM / PORTFOLIO / 2026</span>
+        <span>51.5072° N · 0.1276° W</span>
+      </div>
       <div className={styles.heroCopy}>
         <p className={styles.status}>
           <span aria-hidden="true" />
@@ -68,18 +69,25 @@ export function Hero() {
         </p>
         <p className={styles.heroName}>{hero.name}</p>
         <p className={styles.heroKicker}>{hero.kicker}</p>
-        <h1 id="hero-title">{hero.headline}</h1>
+        <h1 id="hero-title">
+          I design systems.
+          <br />
+          <em>Then I make them real.</em>
+        </h1>
         <p className={styles.heroIntro}>{hero.intro}</p>
-        <p className={styles.heroProof}>{hero.proof}</p>
+        <div className={styles.heroProof}>
+          <span>Strongest signal</span>
+          <p>{hero.proof}</p>
+        </div>
         <div className={styles.heroActions}>
-          <a className={styles.primaryButton} href={hero.primaryCta.href}>
-            {hero.primaryCta.label}
+          <a className={styles.primaryButton} href="#work">
+            Explore the work
           </a>
-          <a className={styles.secondaryButton} href={assetUrl(hero.secondaryCta.href)} download>
-            {hero.secondaryCta.label}
+          <a className={styles.secondaryButton} href={pageUrl('lab/')}>
+            Enter Engineering Lab
           </a>
-          <a className={styles.textButton} href="#contact">
-            Contact me
+          <a className={styles.textButton} href={assetUrl(links.cv)} download>
+            Download CV ↓
           </a>
         </div>
         <div className={styles.heroSocials} aria-label="Professional profiles">
@@ -93,75 +101,25 @@ export function Hero() {
           </ExternalLink>
         </div>
       </div>
-      <ProgressiveHeroVisual />
+      <ProjectConstellation />
+      <a className={styles.scrollCue} href="#proof">
+        <span>Scroll</span>
+        <i aria-hidden="true" />
+      </a>
     </section>
-  );
-}
-
-function ProgressiveHeroVisual() {
-  const [motionReady, setMotionReady] = useState(false);
-
-  useEffect(() => {
-    const browserWindow = window as typeof window & {
-      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
-      cancelIdleCallback?: (id: number) => void;
-    };
-    const fallbackTimer = window.setTimeout(() => setMotionReady(true), 1800);
-    const idleId = browserWindow.requestIdleCallback?.(
-      () => {
-        window.clearTimeout(fallbackTimer);
-        setMotionReady(true);
-      },
-      { timeout: 1400 },
-    );
-    return () => {
-      window.clearTimeout(fallbackTimer);
-      if (idleId !== undefined) browserWindow.cancelIdleCallback?.(idleId);
-    };
-  }, []);
-
-  return motionReady ? (
-    <Suspense fallback={<HeroVisualStatic />}>
-      <HeroMotionVisual />
-    </Suspense>
-  ) : (
-    <HeroVisualStatic />
-  );
-}
-
-function HeroVisualStatic() {
-  const { hero } = content;
-  return (
-    <div className={styles.heroVisual} aria-label="Selected project screenshots">
-      <div className={styles.heroPose}>
-        <div className={styles.heroSignalCard}>
-          <span>Physio-AI</span>
-          <strong>96.23%</strong>
-          <small>pose classifier accuracy</small>
-        </div>
-      </div>
-      <div className={styles.heroPhoneOne}>
-        <DeviceFrame item={hero.visual.sumlume} frame="phone" compact priority />
-      </div>
-      <div className={styles.heroPhoneTwo}>
-        <DeviceFrame item={hero.visual.pathlife} frame="phone" compact priority />
-      </div>
-      <div className={styles.accuracyChip}>
-        <span>Published products</span>
-        <strong>2 live on iOS</strong>
-      </div>
-    </div>
   );
 }
 
 export function ProofStrip() {
   return (
-    <section className={styles.proofStrip} aria-label="Selected evidence">
-      <div className={styles.shell}>
-        {content.proof.map((item) => (
+    <section className={styles.proofStrip} id="proof" aria-label="Selected evidence">
+      <p className={styles.proofLabel}>Proof, not promises</p>
+      <div className={styles.proofGrid}>
+        {content.proof.map((item, index) => (
           <div key={item.label}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
             <strong>{item.value}</strong>
-            <span>{item.label}</span>
+            <p>{item.label}</p>
           </div>
         ))}
       </div>
@@ -169,27 +127,20 @@ export function ProofStrip() {
   );
 }
 
-function ProjectVisual({ project }: { project: SelectedProject }) {
-  return (
-    <div className={styles.projectVisual}>
-      <div className={styles.projectVisualHalo} aria-hidden="true" />
-      {project.icon && <MediaImage item={project.icon} className={styles.projectIcon} />}
-      <DeviceFrame
-        item={project.media}
-        frame={project.frame}
-        priority={project.slug === 'sumlume'}
-      />
-    </div>
-  );
-}
-
-function ProjectCard({ project, index }: { project: SelectedProject; index: number }) {
+function ProjectChapter({ project, index }: { project: SelectedProject; index: number }) {
+  const study = content.caseStudies.find((item) => item.slug === project.slug);
+  const media = study?.media ?? [project.media];
   return (
     <article
-      className={`${styles.projectCard} ${index === 0 ? styles.projectCardFeatured : ''}`}
+      className={styles.projectChapter}
       style={accentStyle(project.accent, project.accentSoft)}
+      data-direction={index % 2 === 0 ? 'forward' : 'reverse'}
     >
-      <div className={styles.projectCardCopy}>
+      <div className={styles.projectChapterIndex} aria-hidden="true">
+        <span>PROJECT</span>
+        <strong>{String(index + 1).padStart(2, '0')}</strong>
+      </div>
+      <div className={styles.projectChapterCopy}>
         <p className={styles.eyebrow}>{project.label}</p>
         <div className={styles.projectTitleRow}>
           {project.icon && <MediaImage item={project.icon} className={styles.projectTitleIcon} />}
@@ -197,31 +148,63 @@ function ProjectCard({ project, index }: { project: SelectedProject; index: numb
         </div>
         <p className={styles.projectStatus}>{project.status}</p>
         <p className={styles.projectSummary}>{project.summary}</p>
-        <p className={styles.projectEvidence}>{project.evidence}</p>
+        <div className={styles.projectOutcome}>
+          <span>Verified outcome</span>
+          <strong>{project.evidence}</strong>
+        </div>
         <Stack items={project.stack} label={`${project.name} technology stack`} />
-        <a className={styles.caseStudyLink} href={pageUrl(`projects/${project.slug}/`)}>
-          Read the case study
-        </a>
+        <div className={styles.projectLinks}>
+          <a className={styles.caseStudyLink} href={pageUrl(`projects/${project.slug}/`)}>
+            Read engineering case study
+          </a>
+          {study?.links[0] && (
+            <ExternalLink className={styles.projectExternalLink} href={study.links[0].href}>
+              {study.links[0].label} ↗
+            </ExternalLink>
+          )}
+        </div>
       </div>
-      <ProjectVisual project={project} />
+      <div className={styles.projectChapterMedia}>
+        <div className={styles.mediaCoordinate} aria-hidden="true">
+          REAL PRODUCT / {project.slug.toUpperCase()}
+        </div>
+        {media.length > 1 ? (
+          <Gallery
+            media={media}
+            frame={project.frame}
+            projectName={project.name}
+            title={project.name}
+            address={project.slug === 'physio-ai' ? 'physio-ai / live session' : undefined}
+          />
+        ) : (
+          <div className={styles.singleProjectFrame}>
+            <DeviceFrame
+              item={project.media}
+              frame={project.frame}
+              title={project.name}
+              address="nasim1801.github.io / portfolio"
+            />
+          </div>
+        )}
+      </div>
     </article>
   );
 }
 
 export function SelectedWork() {
   return (
-    <section className={styles.section} id="work" aria-labelledby="work-title">
+    <section className={styles.workSection} id="work" aria-labelledby="work-title">
       <div className={styles.shell}>
         <SectionHeading
-          eyebrow="Selected work"
-          title="Products with real engineering evidence."
-          intro="Published mobile apps, an applied machine-learning system and a product still being built in public view."
+          eyebrow="Selected work · 01–05"
+          title="Products, systems and the engineering between them."
+          intro="Real interfaces and traceable decisions. Select a screen, inspect the evidence, then open the technical case study."
         />
-        <div className={styles.projectGrid}>
-          {content.selectedWork.map((project, index) => (
-            <ProjectCard key={project.slug} project={project} index={index} />
-          ))}
-        </div>
+      </div>
+      <div className={styles.projectExhibition}>
+        {content.selectedWork.map((project, index) => (
+          <ProjectChapter key={project.slug} project={project} index={index} />
+        ))}
       </div>
     </section>
   );
@@ -230,57 +213,57 @@ export function SelectedWork() {
 export function About() {
   const { about } = content;
   return (
-    <section
-      className={`${styles.section} ${styles.aboutSection}`}
-      id="about"
-      aria-labelledby="about-title"
-    >
-      <div className={styles.shell}>
-        <div className={styles.aboutGrid}>
-          <div>
-            <p className={styles.eyebrow}>{about.eyebrow}</p>
-            <h2 id="about-title">{about.title}</h2>
-          </div>
-          <div className={styles.aboutCopy}>
-            <p className={styles.aboutLead}>{about.intro}</p>
-            {about.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
+    <section className={styles.aboutSection} id="about" aria-labelledby="about-title">
+      <div className={styles.aboutSignal} aria-hidden="true">
+        <span>ABOUT / 001</span>
+        <strong>OWN THE WHOLE PATH</strong>
+      </div>
+      <div className={styles.aboutGrid}>
+        <div>
+          <p className={styles.eyebrow}>{about.eyebrow}</p>
+          <h2 id="about-title">{about.title}</h2>
         </div>
-        <div className={styles.principleGrid}>
-          {about.principles.map((principle) => (
-            <article key={principle.title}>
-              <h3>{principle.title}</h3>
-              <p>{principle.text}</p>
-            </article>
+        <div className={styles.aboutCopy}>
+          <p className={styles.aboutLead}>{about.intro}</p>
+          {about.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
+      </div>
+      <div className={styles.principleGrid}>
+        {about.principles.map((principle, index) => (
+          <article key={principle.title}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h3>{principle.title}</h3>
+            <p>{principle.text}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
 
-function TeamCard({ project }: { project: TeamProject }) {
+function TeamProjectFeature({ project, index }: { project: TeamProject; index: number }) {
   return (
-    <article className={styles.teamCard}>
+    <article className={styles.teamFeature}>
       <div className={styles.teamMedia}>
+        <span className={styles.teamNumber}>{String(index + 1).padStart(2, '0')}</span>
         <DeviceFrame
           item={project.media}
           frame={project.frame}
           title={project.name}
-          address={project.name.toLowerCase().replaceAll(' ', '-')}
+          address={project.name === 'CO2 Tracker' ? 'localhost:5173 / customer' : undefined}
         />
         {project.proof && (
           <div className={styles.testProof}>
-            <DeviceFrame item={project.proof} frame="terminal" title="JUnit test run" />
+            <DeviceFrame item={project.proof} frame="terminal" title="JUnit tests passing" />
           </div>
         )}
       </div>
       <div className={styles.teamCopy}>
         <p className={styles.eyebrow}>{project.label}</p>
         <h3>{project.name}</h3>
-        <p>{project.summary}</p>
+        <p className={styles.teamSummary}>{project.summary}</p>
         <dl>
           <div>
             <dt>My role</dt>
@@ -306,16 +289,16 @@ function TeamCard({ project }: { project: TeamProject }) {
 
 export function TeamProjects() {
   return (
-    <section className={`${styles.section} ${styles.teamSection}`} aria-labelledby="team-title">
+    <section className={styles.teamSection} id="team-work" aria-labelledby="team-title">
       <div className={styles.shell}>
         <SectionHeading
-          eyebrow="Team projects"
-          title="Clear ownership inside collaborative work."
-          intro="The project is shared. The contribution is specific."
+          eyebrow="Full-stack and team systems"
+          title="The work extends beyond mobile games."
+          intro="Two university projects with clear ownership across React, Spring Boot, Java and testing."
         />
-        <div className={styles.teamGrid}>
-          {content.teamProjects.map((project) => (
-            <TeamCard key={project.name} project={project} />
+        <div className={styles.teamFeatures}>
+          {content.teamProjects.map((project, index) => (
+            <TeamProjectFeature key={project.name} project={project} index={index} />
           ))}
         </div>
       </div>
@@ -326,16 +309,21 @@ export function TeamProjects() {
 export function Experience() {
   const { experience } = content;
   return (
-    <section className={styles.section} id="experience" aria-labelledby="experience-title">
+    <section
+      className={styles.experienceSection}
+      id="experience"
+      aria-labelledby="experience-title"
+    >
       <div className={styles.shell}>
         <SectionHeading eyebrow={experience.eyebrow} title={experience.title} />
         <ol className={styles.timeline}>
-          {experience.items.map((item) => (
+          {experience.items.map((item, index) => (
             <li
               key={`${item.date}-${item.title}`}
               className={styles.timelineItem}
               data-kind={item.kind}
             >
+              <span className={styles.timelineIndex}>{String(index + 1).padStart(2, '0')}</span>
               <time>{item.date}</time>
               <div>
                 <h3>{item.title}</h3>
@@ -351,26 +339,18 @@ export function Experience() {
 }
 
 export function Skills() {
-  const { skills } = content;
   return (
-    <section
-      className={`${styles.section} ${styles.skillsSection}`}
-      id="skills"
-      aria-labelledby="skills-title"
-    >
+    <section className={styles.skillsSection} id="skills" aria-labelledby="skills-title">
       <div className={styles.shell}>
-        <SectionHeading eyebrow={skills.eyebrow} title={skills.title} />
-        <div className={styles.skillGrid}>
-          {skills.groups.map((group) => (
-            <article key={group.name}>
-              <h3>{group.name}</h3>
-              <Stack items={group.items} label={group.name} />
-            </article>
-          ))}
-        </div>
+        <SectionHeading
+          eyebrow="Technical evidence map"
+          title="Select a technology. See where it shipped."
+          intro="No arbitrary percentages. Every item connects to the product or system where I used it."
+        />
+        <SkillAtlas />
         <p className={styles.languageLine}>
           <GlobeIcon />
-          {skills.languages}
+          {content.skills.languages}
         </p>
       </div>
     </section>
@@ -385,38 +365,42 @@ export function Contact() {
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   };
-
   return (
     <section className={styles.contactSection} id="contact" aria-labelledby="contact-title">
+      <div className={styles.contactNumber} aria-hidden="true">
+        LET’S
+        <br />
+        TALK.
+      </div>
       <div className={styles.contactPanel}>
-        <div>
-          <p className={styles.eyebrow}>{contact.eyebrow}</p>
+        <div className={styles.contactCopy}>
+          <p className={styles.eyebrow}>{contact.eyebrow} · London</p>
           <h2 id="contact-title">{contact.title}</h2>
           <p>{contact.text}</p>
           <Stack items={contact.roles} label="Roles sought" />
-          <a className={styles.contactCv} href={assetUrl(links.cv)} download>
-            Download CV
+          <a className={styles.primaryButton} href={assetUrl(links.cv)} download>
+            Download verified CV ↓
           </a>
         </div>
         <div className={styles.contactLinks}>
           <div>
-            <span>Email</span>
+            <span>01 · Email</span>
             <a href={`mailto:${links.email}`}>{links.email}</a>
             <button type="button" onClick={copyEmail} aria-live="polite">
               {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
           <div>
-            <span>LinkedIn</span>
-            <ExternalLink href={links.linkedin}>linkedin.com/in/nasim-mosayebi</ExternalLink>
+            <span>02 · LinkedIn</span>
+            <ExternalLink href={links.linkedin}>linkedin.com/in/nasim-mosayebi ↗</ExternalLink>
           </div>
           <div>
-            <span>GitHub</span>
-            <ExternalLink href={links.github}>github.com/Nasim1801</ExternalLink>
+            <span>03 · GitHub</span>
+            <ExternalLink href={links.github}>github.com/Nasim1801 ↗</ExternalLink>
           </div>
           <div>
-            <span>Studio</span>
-            <ExternalLink href={links.studio}>pathlifestudio.com</ExternalLink>
+            <span>04 · Studio</span>
+            <ExternalLink href={links.studio}>pathlifestudio.com ↗</ExternalLink>
           </div>
         </div>
       </div>
@@ -428,7 +412,11 @@ export function Footer() {
   const { links } = content;
   return (
     <footer className={styles.footer}>
-      <p>© 2026 Nasim Mosayebi · London</p>
+      <a className={styles.footerWordmark} href={pageUrl()}>
+        <span>NASIM</span>
+        <strong>MOSAYEBI</strong>
+      </a>
+      <p>© 2026 · Software Engineer / Creative Developer · London</p>
       <div>
         <ExternalLink href={links.github} className={styles.footerIcon}>
           <GithubIcon />
@@ -438,12 +426,8 @@ export function Footer() {
           <LinkedinIcon />
           <span className={styles.srOnly}>LinkedIn</span>
         </ExternalLink>
-        <ExternalLink href={links.studio} className={styles.footerIcon}>
-          <GlobeIcon />
-          <span className={styles.srOnly}>PathLife Studio</span>
-        </ExternalLink>
+        <a href="#top">Back to top ↑</a>
       </div>
-      <a href="#top">Back to top</a>
     </footer>
   );
 }

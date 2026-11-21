@@ -6,6 +6,7 @@ import {
   pathLifeScreens,
   pawLifeScreens,
   physioAiScreens,
+  portfolioScreen,
   sumlumeIcon,
   sumlumeScreens,
 } from './screens';
@@ -84,6 +85,16 @@ export interface TeamProject {
   frame: FrameType;
   links: LinkItem[];
   proof?: MediaItem;
+}
+
+export interface SkillEvidenceItem {
+  technology: string;
+  category: string;
+  projects: {
+    name: string;
+    evidence: string;
+    href: string;
+  }[];
 }
 
 const sumlumeStudy: CaseStudy = {
@@ -418,22 +429,115 @@ const pawLifeStudy: CaseStudy = {
   schemaType: 'VideoGame',
 };
 
+const portfolioStudy: CaseStudy = {
+  slug: 'portfolio',
+  name: 'This Portfolio',
+  eyebrow: 'Design and engineering · React web application',
+  status: 'Live on GitHub Pages · Open source',
+  summary:
+    'A performance-conscious creative portfolio that turns real project evidence into interactive, keyboard-accessible browser experiences.',
+  role: 'I designed and engineered the complete experience, from the visual system and component architecture to responsive behaviour, accessibility, metadata, testing and deployment.',
+  accent: '#7187ff',
+  accentSoft: '#e8ebff',
+  media: [portfolioScreen],
+  frame: 'browser',
+  stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'Framer Motion', 'Playwright'],
+  facts: [
+    { value: '2', label: 'working Engineering Lab exhibits' },
+    { value: '5', label: 'project case studies' },
+    { value: '360–1920px', label: 'browser QA range' },
+    { value: 'Static', label: 'GitHub Pages deployment' },
+  ],
+  architecture: [
+    'Typed content and media data',
+    'Reusable React interaction systems',
+    'CSS Module visual language',
+    'Static route metadata generation',
+    'Playwright QA and GitHub Pages release',
+  ],
+  sections: [
+    {
+      id: 'objectives',
+      eyebrow: '01 · Design objectives',
+      title: 'Make the interface part of the evidence.',
+      paragraphs: [
+        'The portfolio needed to do more than describe front-end capability. Its interactions had to demonstrate state management, responsive composition, motion design and accessibility while keeping the recruitment path immediate.',
+        'The visual direction uses a connected signal field rather than a standard landing-page grid. Real project images remain the centre of the experience, while relationships between products, systems and technologies become interactive.',
+      ],
+    },
+    {
+      id: 'components',
+      eyebrow: '02 · Component architecture',
+      title: 'Content, presentation and interaction stay separate.',
+      paragraphs: [
+        'Verified project facts and media metadata live in typed data files. Reusable frames, galleries, project chapters and case-study components read from that source rather than duplicating claims across pages.',
+        'The Engineering Lab keeps rule logic separate from interface state, which makes the number-matching behaviour independently testable. The Physio-AI exhibit uses SVG and derived geometry rather than a recorded animation.',
+      ],
+      bullets: [
+        'Typed project, screenshot and skill-evidence models.',
+        'Small interaction components with explicit keyboard behaviour.',
+        'Static route shells for GitHub Pages metadata and deep links.',
+      ],
+    },
+    {
+      id: 'responsive',
+      eyebrow: '03 · Responsive design',
+      title: 'The concept changes shape, not meaning.',
+      paragraphs: [
+        'Desktop uses spatial composition and asymmetric project chapters. On smaller screens the same content becomes an ordered signal selector, swipeable real media and single-column technical evidence.',
+        'Critical identity, role, location, CV and contact actions never depend on a hover state or an animation finishing.',
+      ],
+    },
+    {
+      id: 'accessibility',
+      eyebrow: '04 · Accessibility and motion',
+      title: 'Interaction is optional. Access is not.',
+      paragraphs: [
+        'The constellation, puzzle, pipeline and skill map support keyboard input, visible focus states and meaningful labels. Live feedback is announced without moving focus unexpectedly.',
+        'Reduced-motion preferences remove decorative transitions while preserving state changes. Semantic headings, landmark regions and descriptive image text keep the site understandable outside its visual presentation.',
+      ],
+    },
+    {
+      id: 'delivery',
+      eyebrow: '05 · Performance, SEO and release',
+      title: 'Creative work still has production constraints.',
+      paragraphs: [
+        'The site avoids a heavy 3D runtime. SVG, CSS and the existing motion dependency provide the visual system, while WebP images, explicit dimensions and lazy loading reduce media cost and layout shift.',
+        'Vite produces static assets under the GitHub Pages base path. Route-specific HTML metadata, structured data, a sitemap and a deployment workflow support discoverability and reliable deep links.',
+      ],
+    },
+    {
+      id: 'tradeoffs',
+      eyebrow: '06 · Trade-offs and maintenance',
+      title: 'Ambition without a fragile runtime.',
+      paragraphs: [
+        'A WebGL scene could create more spectacle, but it would add weight and a less dependable mobile experience without improving the project evidence. The signal field delivers genuine control and spatial depth with regular web primitives.',
+        'Automated build, lint, interaction and responsive checks are kept in the repository so future content edits can be verified before deployment.',
+      ],
+    },
+  ],
+  links: [
+    { label: 'View the portfolio source', href: 'https://github.com/Nasim1801/portfolio' },
+    { label: 'Open the Engineering Lab', href: '/portfolio/lab/' },
+  ],
+  schemaType: 'SoftwareApplication',
+};
+
 export const content = {
   identity: {
     name: 'Nasim Mosayebi',
-    monogram: 'NM',
-    title: 'Nasim Mosayebi | Software Engineer & Mobile Developer in London',
+    title: 'Nasim Mosayebi | Software Engineer & Founder of PathLife Studio',
     description:
       'Portfolio of London software engineer Nasim Mosayebi. Explore native mobile apps, full-stack systems and a real-time computer vision project.',
     location: 'London, United Kingdom',
   },
   nav: [
+    { label: 'Home', href: '#top' },
     { label: 'Work', href: '#work' },
+    { label: 'Engineering Lab', href: 'lab/' },
     { label: 'About', href: '#about' },
-    { label: 'Experience', href: '#experience' },
-    { label: 'Skills', href: '#skills' },
+    { label: 'Contact', href: '#contact' },
   ],
-  navCta: { label: 'Contact', href: '#contact' },
   links: {
     github: 'https://github.com/Nasim1801',
     linkedin: 'https://www.linkedin.com/in/nasim-mosayebi',
@@ -443,18 +547,12 @@ export const content = {
   },
   hero: {
     status: 'London · Open to graduate and junior engineering roles',
-    kicker: 'Software Engineer · Mobile Developer · Full-Stack Developer',
+    kicker: 'Software Engineer / Creative Developer',
     name: 'Nasim Mosayebi',
-    headline: 'I build mobile products from first commit to App Store release.',
+    headline: 'I design systems. Then I make them real.',
     intro:
-      'Computer Science graduate and founder of PathLife Studio. I ship native and cross-platform apps, full-stack systems and applied computer vision.',
+      'Computer Science graduate in London building native apps, full-stack systems and interactive web experiences.',
     proof: 'Two live App Store products. A Grade A pose-tracking project at 96.23% accuracy.',
-    primaryCta: { label: 'View selected work', href: '#work' },
-    secondaryCta: { label: 'Download CV', href: 'Nasim-Mosayebi-CV.pdf', download: true },
-    visual: {
-      sumlume: sumlumeScreens[0],
-      pathlife: pathLifeScreens[0],
-    },
   },
   proof: [
     { value: '2', label: 'live App Store products' },
@@ -522,8 +620,28 @@ export const content = {
       icon: gameIcons.pawlife,
       frame: 'phone',
     },
+    {
+      slug: 'portfolio',
+      name: 'This Portfolio',
+      label: 'Creative front-end engineering · Open source',
+      status: 'Live on GitHub Pages',
+      summary:
+        'A responsive React experience with a playable lab, interactive project constellation and evidence-linked technical map.',
+      evidence: 'Two working browser exhibits with pointer, touch and keyboard controls.',
+      stack: ['React', 'TypeScript', 'CSS Modules', 'Playwright'],
+      accent: '#7187ff',
+      accentSoft: '#e8ebff',
+      media: portfolioScreen,
+      frame: 'browser',
+    },
   ] satisfies SelectedProject[],
-  caseStudies: [sumlumeStudy, pathLifeStudy, physioStudy, pawLifeStudy] satisfies CaseStudy[],
+  caseStudies: [
+    sumlumeStudy,
+    pathLifeStudy,
+    physioStudy,
+    pawLifeStudy,
+    portfolioStudy,
+  ] satisfies CaseStudy[],
   about: {
     eyebrow: 'About',
     title: 'Product ownership backed by a quality mindset.',
@@ -652,56 +770,230 @@ export const content = {
     ],
   },
   skills: {
-    eyebrow: 'Technical expertise',
-    title: 'A practical stack across mobile, web and applied AI.',
-    groups: [
-      {
-        name: 'Languages',
-        items: [
-          'Swift',
-          'Kotlin',
-          'TypeScript',
-          'JavaScript',
-          'Python',
-          'Java',
-          'SQL',
-          'HTML & CSS',
-        ],
-      },
-      {
-        name: 'Mobile and front end',
-        items: ['SwiftUI', 'React Native', 'Expo', 'React', 'Zustand', 'AsyncStorage', 'Figma'],
-      },
-      {
-        name: 'Back end and cloud',
-        items: [
-          'Node.js',
-          'Express',
-          'Spring Boot',
-          'REST APIs',
-          'WebSockets',
-          'SQLite',
-          'H2',
-          'Railway',
-          'Cloudflare',
-        ],
-      },
-      {
-        name: 'AI, testing and delivery',
-        items: [
-          'MediaPipe Pose',
-          'scikit-learn',
-          'Computer vision',
-          'JUnit',
-          'Git & GitHub',
-          'Scrum',
-          'FMEA',
-          'CAPA',
-        ],
-      },
-    ],
     languages: 'English (fluent) · Persian (native) · German (B1) · Arabic (A1)',
   },
+  skillEvidence: [
+    {
+      technology: 'React',
+      category: 'Frontend Engineering',
+      projects: [
+        {
+          name: 'This Portfolio',
+          evidence:
+            'Built the interactive project field, Engineering Lab and evidence map as reusable React components.',
+          href: 'projects/portfolio/',
+        },
+        {
+          name: 'CO2 Tracker',
+          evidence:
+            'Built the customer search, results display and navigation for the sustainability web app.',
+          href: '#team-work',
+        },
+      ],
+    },
+    {
+      technology: 'TypeScript',
+      category: 'Frontend Engineering',
+      projects: [
+        {
+          name: 'This Portfolio',
+          evidence:
+            'Modelled project content, screenshots and interaction state with explicit TypeScript types.',
+          href: 'projects/portfolio/',
+        },
+        {
+          name: 'PathLife',
+          evidence:
+            'Rebuilding year, education, career and event systems in React Native with typed state.',
+          href: 'projects/pathlife/',
+        },
+        {
+          name: 'PawLife',
+          evidence:
+            'Implemented the event engine, navigation and persistent game state in a typed Expo application.',
+          href: 'projects/pawlife/',
+        },
+      ],
+    },
+    {
+      technology: 'HTML & CSS',
+      category: 'Frontend Engineering',
+      projects: [
+        {
+          name: 'This Portfolio',
+          evidence:
+            'Created the responsive signal-field design system, device frames and motion-safe interaction states.',
+          href: 'projects/portfolio/',
+        },
+      ],
+    },
+    {
+      technology: 'SwiftUI',
+      category: 'Mobile Application Development',
+      projects: [
+        {
+          name: 'Sumlume',
+          evidence:
+            'Built the published iPhone and iPad number-puzzle interface natively in SwiftUI.',
+          href: 'projects/sumlume/',
+        },
+        {
+          name: 'PathLife',
+          evidence: 'Built core game interfaces for the live iOS life-simulation product.',
+          href: 'projects/pathlife/',
+        },
+      ],
+    },
+    {
+      technology: 'React Native',
+      category: 'Mobile Application Development',
+      projects: [
+        {
+          name: 'PathLife',
+          evidence:
+            'Leading the Android rebuild and asset migration with React Native and Zustand.',
+          href: 'projects/pathlife/',
+        },
+        {
+          name: 'PawLife',
+          evidence:
+            'Building a pet-life simulation with 16 minigames and a custom state-based architecture.',
+          href: 'projects/pawlife/',
+        },
+      ],
+    },
+    {
+      technology: 'Kotlin',
+      category: 'Mobile Application Development',
+      projects: [
+        {
+          name: 'Sumlume',
+          evidence: 'Developing the native Android version of the number-puzzle product.',
+          href: 'projects/sumlume/',
+        },
+      ],
+    },
+    {
+      technology: 'Expo',
+      category: 'Mobile Application Development',
+      projects: [
+        {
+          name: 'PawLife',
+          evidence: 'Using Expo for the in-development React Native pet simulation.',
+          href: 'projects/pawlife/',
+        },
+      ],
+    },
+    {
+      technology: 'Node.js & Express',
+      category: 'Backend and APIs',
+      projects: [
+        {
+          name: 'PathLife',
+          evidence:
+            'Built the support platform, admin surface, rate limiting and app-ads.txt delivery.',
+          href: 'projects/pathlife/',
+        },
+      ],
+    },
+    {
+      technology: 'Spring Boot',
+      category: 'Backend and APIs',
+      projects: [
+        {
+          name: 'CO2 Tracker',
+          evidence:
+            'Built REST endpoints for name search, typed barcode lookup and the prototype upload flow.',
+          href: '#team-work',
+        },
+      ],
+    },
+    {
+      technology: 'WebSockets',
+      category: 'Backend and APIs',
+      projects: [
+        {
+          name: 'Physio-AI',
+          evidence:
+            'Streamed pose classification results from the Python pipeline to the live web interface.',
+          href: 'projects/physio-ai/',
+        },
+      ],
+    },
+    {
+      technology: 'SQLite & H2',
+      category: 'Databases and Data Management',
+      projects: [
+        {
+          name: 'Physio-AI',
+          evidence: 'Persisted rehabilitation sessions and progress data in SQLite.',
+          href: 'projects/physio-ai/',
+        },
+        {
+          name: 'CO2 Tracker',
+          evidence: 'Modelled product records and timestamped search history in H2 through JPA.',
+          href: '#team-work',
+        },
+      ],
+    },
+    {
+      technology: 'MediaPipe Pose',
+      category: 'AI and Machine Learning',
+      projects: [
+        {
+          name: 'Physio-AI',
+          evidence: 'Extracted 33 pose landmarks per frame from standard webcam video.',
+          href: 'projects/physio-ai/',
+        },
+      ],
+    },
+    {
+      technology: 'scikit-learn',
+      category: 'AI and Machine Learning',
+      projects: [
+        {
+          name: 'Physio-AI',
+          evidence:
+            'Compared classifiers and selected a Random Forest model that achieved 96.23% accuracy.',
+          href: 'projects/physio-ai/',
+        },
+      ],
+    },
+    {
+      technology: 'JUnit',
+      category: 'Testing, Tooling and Deployment',
+      projects: [
+        {
+          name: 'Hospital Appointment System',
+          evidence: 'Added JUnit coverage for the Java Swing appointment-booking module.',
+          href: '#team-work',
+        },
+      ],
+    },
+    {
+      technology: 'Playwright',
+      category: 'Testing, Tooling and Deployment',
+      projects: [
+        {
+          name: 'This Portfolio',
+          evidence: 'Automated route, viewport, theme, console, overflow and interaction checks.',
+          href: 'projects/portfolio/',
+        },
+      ],
+    },
+    {
+      technology: 'GitHub Pages',
+      category: 'Testing, Tooling and Deployment',
+      projects: [
+        {
+          name: 'This Portfolio',
+          evidence:
+            'Configured static route shells, base paths and automated production deployment.',
+          href: 'projects/portfolio/',
+        },
+      ],
+    },
+  ] satisfies SkillEvidenceItem[],
   contact: {
     eyebrow: 'Contact',
     title: 'Let’s build something useful.',

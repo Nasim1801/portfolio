@@ -10,12 +10,13 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
+    "test:lab": "node --import tsx scripts/test-lab.ts",
+    "qa": "tsx scripts/qa-portfolio.ts",
     "capture": "tsx scripts/capture-screens.ts",
     "capture:team": "tsx scripts/capture-team-projects.ts",
     "preview": "vite preview"
   },
   "dependencies": {
-    "framer-motion": "^12.23.12",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
@@ -29,8 +30,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "prettier": "^3.6.2",
     "playwright": "^1.56.1",
+    "prettier": "^3.6.2",
     "sharp": "^0.35.5",
     "tsx": "^4.20.6",
     "typescript": "~5.9.3",

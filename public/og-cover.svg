@@ -1,15 +1,37 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
   <title id="title">Nasim Mosayebi software engineering portfolio</title>
-  <desc id="description">Software Engineer and Mobile Developer in London. Native mobile, full-stack and applied AI work.</desc>
-  <rect width="1200" height="630" fill="#f4f6f2"/>
-  <path d="M780 0h420v630H650c104-77 147-169 130-276-17-103-9-221 0-354Z" fill="#deeee4"/>
-  <circle cx="1040" cy="152" r="160" fill="#2058c7" opacity=".92"/>
-  <circle cx="930" cy="480" r="118" fill="#d5a83c" opacity=".92"/>
-  <rect x="72" y="70" width="98" height="98" rx="28" fill="#17201b"/>
-  <text x="121" y="131" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f4f6f2">NM</text>
-  <text x="72" y="285" font-family="Arial, sans-serif" font-size="68" font-weight="800" fill="#17201b">Nasim Mosayebi</text>
-  <text x="72" y="363" font-family="Arial, sans-serif" font-size="38" font-weight="600" fill="#344039">Software Engineer · Mobile Developer</text>
-  <text x="72" y="434" font-family="Arial, sans-serif" font-size="27" fill="#59665f">Two live App Store products · Applied AI · London</text>
-  <rect x="72" y="493" width="535" height="66" rx="33" fill="#17201b"/>
-  <text x="339" y="536" text-anchor="middle" font-family="monospace" font-size="21" font-weight="700" fill="#ffffff">NATIVE MOBILE · FULL STACK · AI</text>
+  <desc id="description">Software Engineer and Creative Developer in London. Two live App Store products and a Grade A computer vision project.</desc>
+  <defs>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#20293a" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="signal" cx="76%" cy="32%" r="54%">
+      <stop offset="0" stop-color="#30447f" stop-opacity=".78"/>
+      <stop offset="1" stop-color="#080b12" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#080b12"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#signal)"/>
+  <path d="M725 146C842 86 935 214 1028 122M725 146C794 300 888 282 1008 398M1028 122C1034 246 1100 324 1008 398" fill="none" stroke="#7187ff" stroke-opacity=".55" stroke-dasharray="6 10"/>
+  <circle cx="725" cy="146" r="42" fill="#0e1320" stroke="#7187ff" stroke-width="2"/>
+  <circle cx="1028" cy="122" r="42" fill="#0e1320" stroke="#52d4aa" stroke-width="2"/>
+  <circle cx="1008" cy="398" r="42" fill="#0e1320" stroke="#e2bc66" stroke-width="2"/>
+  <circle cx="856" cy="278" r="62" fill="#0e1320" stroke="#39455a"/>
+  <text x="725" y="153" text-anchor="middle" font-family="monospace" font-size="18" font-weight="700" fill="#f4f6fb">01</text>
+  <text x="1028" y="129" text-anchor="middle" font-family="monospace" font-size="18" font-weight="700" fill="#f4f6fb">02</text>
+  <text x="1008" y="405" text-anchor="middle" font-family="monospace" font-size="18" font-weight="700" fill="#f4f6fb">03</text>
+  <text x="856" y="271" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#7187ff">LIVE</text>
+  <text x="856" y="294" text-anchor="middle" font-family="monospace" font-size="12" fill="#9da8bc">SYSTEM</text>
+  <text x="66" y="75" font-family="Arial, sans-serif" font-size="24" font-weight="800" fill="#f4f6fb">N/M</text>
+  <text x="133" y="68" font-family="monospace" font-size="11" font-weight="700" letter-spacing="2" fill="#7187ff">PORTFOLIO / 2026</text>
+  <line x1="66" y1="96" x2="1134" y2="96" stroke="#39455a"/>
+  <text x="66" y="186" font-family="monospace" font-size="14" font-weight="700" letter-spacing="3" fill="#7187ff">SOFTWARE ENGINEER / CREATIVE DEVELOPER</text>
+  <text x="66" y="278" font-family="Arial, sans-serif" font-size="72" font-weight="800" letter-spacing="-3" fill="#f4f6fb">Nasim Mosayebi</text>
+  <text x="66" y="346" font-family="Arial, sans-serif" font-size="37" font-weight="700" letter-spacing="-1" fill="#9da8bc">I design systems. Then I make them real.</text>
+  <line x1="66" y1="399" x2="608" y2="399" stroke="#39455a"/>
+  <text x="66" y="438" font-family="monospace" font-size="14" font-weight="700" letter-spacing="2" fill="#52d4aa">LONDON · OPEN TO GRADUATE &amp; JUNIOR ROLES</text>
+  <text x="66" y="489" font-family="Arial, sans-serif" font-size="23" font-weight="600" fill="#f4f6fb">Two live App Store products</text>
+  <text x="66" y="527" font-family="Arial, sans-serif" font-size="23" font-weight="600" fill="#f4f6fb">Physio-AI · 96.23% accuracy · Grade A</text>
+  <text x="66" y="590" font-family="monospace" font-size="12" letter-spacing="2" fill="#7f8ba1">MOBILE · FULL STACK · APPLIED AI · INTERACTIVE WEB</text>
 </svg>
