@@ -431,7 +431,7 @@ const pawLifeStudy: CaseStudy = {
 
 const portfolioStudy: CaseStudy = {
   slug: 'portfolio',
-  name: 'This Portfolio',
+  name: 'This Portfolio — Design & Engineering',
   eyebrow: 'Design and engineering · React web application',
   status: 'Live on GitHub Pages · Open source',
   summary:
@@ -441,7 +441,7 @@ const portfolioStudy: CaseStudy = {
   accentSoft: '#e8ebff',
   media: [portfolioScreen],
   frame: 'browser',
-  stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'Framer Motion', 'Playwright'],
+  stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'SVG', 'Playwright'],
   facts: [
     { value: '2', label: 'working Engineering Lab exhibits' },
     { value: '5', label: 'project case studies' },
@@ -502,7 +502,7 @@ const portfolioStudy: CaseStudy = {
       eyebrow: '05 · Performance, SEO and release',
       title: 'Creative work still has production constraints.',
       paragraphs: [
-        'The site avoids a heavy 3D runtime. SVG, CSS and the existing motion dependency provide the visual system, while WebP images, explicit dimensions and lazy loading reduce media cost and layout shift.',
+        'The site avoids a heavy 3D runtime. SVG, CSS and lightweight React state provide the visual system, while WebP images, explicit dimensions and lazy loading reduce media cost and layout shift.',
         'Vite produces static assets under the GitHub Pages base path. Route-specific HTML metadata, structured data, a sitemap and a deployment workflow support discoverability and reliable deep links.',
       ],
     },
