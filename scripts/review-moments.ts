@@ -3,7 +3,7 @@
  * because motion is the point of this version.
  *
  * Usage (with `npm run preview` running):
- *   REVIEW_VERSION=v8 PORTFOLIO_CHROME=/usr/bin/google-chrome npm run review:moments
+ *   REVIEW_VERSION=v9 PORTFOLIO_CHROME=/usr/bin/google-chrome npm run review:moments
  * Writes review/<version>-moment-*.png and review/<version>-scroll.webm (convert with ffmpeg).
  */
 import { mkdir, rename, rm } from 'node:fs/promises';
@@ -11,13 +11,13 @@ import { chromium, type Page } from 'playwright';
 
 const site = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4173/portfolio/';
 const out = process.env.REVIEW_OUTPUT ?? 'review';
-const version = process.env.REVIEW_VERSION ?? 'v8';
+const version = process.env.REVIEW_VERSION ?? 'v9';
 const browser = await chromium.launch({ executablePath: process.env.PORTFOLIO_CHROME });
 await mkdir(out, { recursive: true });
 
 async function open(width: number, theme: 'light' | 'dark', route = '') {
   const context = await browser.newContext({
-    viewport: { width, height: width < 500 ? 844 : 900 },
+    viewport: { width, height: width < 500 ? 844 : width > 2000 ? 1440 : 900 },
     colorScheme: theme,
     hasTouch: width < 500,
   });
@@ -43,8 +43,50 @@ async function scrollTo(page: Page, selector: string, offset = 110) {
 const shot = (page: Page, name: string) =>
   page.screenshot({ path: `${out}/${version}-moment-${name}.png` });
 
+// REVIEW_SCOPE=ambient captures only the hero levels and contact section at 1440 and 2560.
+const ambientOnly = process.env.REVIEW_SCOPE === 'ambient';
+
 try {
   for (const theme of ['light', 'dark'] as const) {
+    for (const width of [1440, 2560]) {
+      const tag = `${width}-${theme}`;
+      const page = await open(width, theme);
+      await settle(page, 2600);
+      for (const [name, slug] of [
+        ['PathLife', 'pathlife'],
+        ['Sumlume', 'sumlume'],
+        ['Physio-AI', 'physio'],
+        ['PawLife', 'pawlife'],
+      ]) {
+        await page.getByRole('tab', { name, exact: true }).click({ force: true });
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+        await page.mouse.move(width / 2, 4);
+        await settle(page, 1500);
+        await shot(page, `hero-level-${slug}-${tag}`);
+      }
+      await scrollTo(page, '#contact', 0);
+      await settle(page, 900);
+      await shot(page, `contact-${tag}`);
+      await page.context().close();
+    }
+  }
+  {
+    const page = await open(390, 'light');
+    await settle(page, 2600);
+    await shot(page, 'hero-390-light');
+    await page.evaluate(() => {
+      const panel = document.getElementById('level-panel')!;
+      window.scrollTo({
+        top: panel.getBoundingClientRect().top + window.scrollY - 380,
+        behavior: 'instant',
+      });
+    });
+    await settle(page, 600);
+    await shot(page, 'hero-stage-390-light');
+    await page.context().close();
+  }
+
+  for (const theme of ambientOnly ? [] : (['light', 'dark'] as const)) {
     for (const width of [1440, 390]) {
       const tag = `${width}-${theme}`;
       const page = await open(width, theme);
@@ -86,7 +128,7 @@ try {
             await shot(page, `hero-transition-${tag}`);
           }
           await settle(page, 1500);
-          await shot(page, `hero-level-${slug}-${tag}`);
+          await shot(page, `hero-stage-level-${slug}-${tag}`);
         }
         await pickLevel('PathLife');
       }

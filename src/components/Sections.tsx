@@ -551,7 +551,7 @@ export function Contact() {
     <section className={styles.contact} id="contact" aria-labelledby="contact-title">
       <AmbientTiles
         className={styles.contactCanvas}
-        density={0.9}
+        max={12}
         avoid="[data-no-tiles]"
         set="mix"
         onDark

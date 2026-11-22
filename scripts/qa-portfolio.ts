@@ -307,6 +307,47 @@ try {
   assert.deepEqual(liveErrors, []);
   await lively.close();
 
+  // Ambient objects: never overlapping, never inside a protected zone, and capped in number,
+  // at a laptop width and on a very wide screen, in the hero and the contact section.
+  for (const size of [
+    { width: 1440, height: 900 },
+    { width: 2560, height: 1440 },
+  ]) {
+    const wide = await browser.newContext({ viewport: size });
+    // tsx keeps function names with a __name helper; provide it inside the page.
+    await wide.addInitScript('window.__name = (fn) => fn;');
+    const view = await wide.newPage();
+    await visit(view);
+    await view.waitForTimeout(1500);
+    await view.mouse.move(size.width * 0.3, 120);
+    await view.waitForTimeout(600);
+    for (const section of ['#top', '#contact']) {
+      const state = await view.evaluate((selector) => {
+        type Box = { left: number; top: number; right: number; bottom: number };
+        const canvas = document.querySelector(`${selector} canvas`) as HTMLCanvasElement & {
+          ambient: { objects: () => Box[]; zones: () => Box[] };
+        };
+        const objects = canvas.ambient.objects();
+        const zones = canvas.ambient.zones();
+        const hit = (a: Box, b: Box) =>
+          a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        let overlaps = 0;
+        let inZone = 0;
+        objects.forEach((object, index) => {
+          if (objects.some((other, at) => at > index && hit(object, other))) overlaps += 1;
+          if (zones.some((zone) => hit(object, zone))) inZone += 1;
+        });
+        return { count: objects.length, zones: zones.length, overlaps, inZone };
+      }, section);
+      const label = `${section} ambient objects at ${size.width}px`;
+      assert.ok(state.count >= 6 && state.count <= 16, `${label}: ${state.count} objects`);
+      assert.ok(state.zones > 4, `${label}: protected zones measured`);
+      assert.equal(state.overlaps, 0, `${label}: objects must not overlap`);
+      assert.equal(state.inZone, 0, `${label}: objects must stay out of protected zones`);
+    }
+    await wide.close();
+  }
+
   await visit(page, 'projects/sumlume/');
   await page.getByRole('button', { name: 'Next screenshot' }).click();
   assert.equal(

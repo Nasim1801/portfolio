@@ -2,7 +2,7 @@
 
 Portfolio of Nasim Mosayebi, software engineer (mobile and full-stack) in London. Built with React, TypeScript, Vite and CSS Modules. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
 
-V5 is documented in `AUDIT-V5.md` (findings and fixes) and `CHANGELOG-V5.md`. V6, the game-world redesign, is summarised in `CHANGELOG-V6.md`, the V7 hero change in `CHANGELOG-V7.md` and the V8 themed objects in `CHANGELOG-V8.md`.
+V5 is documented in `AUDIT-V5.md` (findings and fixes) and `CHANGELOG-V5.md`. V6, the game-world redesign, is summarised in `CHANGELOG-V6.md`, the V7 hero change in `CHANGELOG-V7.md` the V8 themed objects in `CHANGELOG-V8.md` and the V9 calmer object layer in `CHANGELOG-V9.md`.
 
 ## Run locally
 
@@ -53,7 +53,7 @@ The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
 - `src/components/Hero.tsx`: identity, animated name, achievement badges and calls to action.
 - `src/components/LevelSelect.tsx`: the hero "Choose a level" stage that rotates through the four featured projects (tab list, swipe, tilt, pause).
 - `src/components/MakeTenBoard.tsx`: the playable make-10 demo shown inside the Sumlume project (roving focus, live status, win screen).
-- `src/fx/`: hand-written motion. `effects.ts` (scroll reveals with a safety net, project colour worlds, tile bursts, Konami code, view-transition helper), `router.ts` (in-place navigation so pages can morph), `AmbientTiles.tsx` (pointer-reactive canvas that pauses off screen and swaps object sets with the hero level), `glyphs.ts` (the per-project object sets, drawn as vector shapes and cached as sprites), `useTilt.ts` (3D tilt) and `ScrollMap.tsx` (XP bar and level map).
+- `src/fx/`: hand-written motion. `effects.ts` (scroll reveals with a safety net, project colour worlds, tile bursts, Konami code, view-transition helper), `router.ts` (in-place navigation so pages can morph), `AmbientTiles.tsx` (a capped, evenly spaced layer of background objects that keep to their own slots, avoid text and controls, pause off screen and swap sets with the hero level), `glyphs.ts` (the per-project object sets, drawn as vector shapes and cached as sprites), `useTilt.ts` (3D tilt) and `ScrollMap.tsx` (XP bar and level map).
 - `src/lab/sumlumeEngine.ts`: pure puzzle rules shared by the hero board and the Lab, tested by `scripts/test-lab.ts`.
 - `src/components/Sections.tsx`: featured projects, more work, skills, about, experience, contact and footer.
 - `src/components/CaseStudyPage.tsx`: case-study layout (at-a-glance facts, gallery, section navigation).

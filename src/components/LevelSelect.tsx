@@ -106,6 +106,7 @@ export function LevelSelect({ onLevel }: { onLevel?: (slug: string) => void }) {
     <div
       ref={root}
       className={styles.showcase}
+      data-no-tiles
       data-world={project.slug}
       data-world-local=""
       onPointerEnter={(event) => {
@@ -223,7 +224,7 @@ export function LevelSelect({ onLevel }: { onLevel?: (slug: string) => void }) {
       </div>
 
       <div className={styles.showControls}>
-        <h2 id="levels-title" className={styles.showTitle} data-no-tiles>
+        <h2 id="levels-title" className={styles.showTitle}>
           Choose a level
         </h2>
         <div className={styles.showTabs} role="tablist" aria-labelledby="levels-title">

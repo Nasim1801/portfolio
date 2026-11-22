@@ -35,7 +35,8 @@ export function Hero() {
     <section className={styles.hero} id="top" aria-labelledby="hero-title">
       <AmbientTiles
         className={styles.heroCanvas}
-        density={2.3}
+        max={16}
+        clearTop={76}
         avoid="[data-no-tiles]"
         set={level}
       />
@@ -90,7 +91,7 @@ export function Hero() {
         </div>
         <LevelSelect onLevel={onLevel} />
       </div>
-      <a className={styles.scrollCue} href="#work" aria-hidden="true" tabIndex={-1}>
+      <a className={styles.scrollCue} data-no-tiles href="#work" aria-hidden="true" tabIndex={-1}>
         <span />
       </a>
     </section>

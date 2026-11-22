@@ -465,7 +465,7 @@ export const objectSets: Record<Exclude<AmbientSet, 'mix'>, SetDefinition> = {
   },
   // Pose-tracking marks: amber and teal lines with coral joints, like the app's overlay.
   'physio-ai': {
-    glyphs: [figure, limb, angle, box, target, limb, figure],
+    glyphs: [figure, limb, angle, box, target],
     tones: [
       ['#0b8f7a', '#7fe3c8'],
       ['#d68a00', '#ffd465'],
@@ -474,7 +474,7 @@ export const objectSets: Record<Exclude<AmbientSet, 'mix'>, SetDefinition> = {
     accent: ['#e0506e', '#ff9db0'],
   },
   pawlife: {
-    glyphs: [paw, bone, fish, ball, bowl, heart, paw],
+    glyphs: [paw, bone, fish, ball, bowl, heart],
     tones: [same('#f2a65a'), same('#c98a5a')],
     accent: none,
   },
@@ -487,19 +487,27 @@ export interface Picked {
   accent: Tone;
   value: number;
 }
+export interface PoolEntry {
+  glyph: Glyph;
+  tones: readonly Tone[];
+  accent: Tone;
+}
 
-/** Choose a glyph and colour from a set. `mix` draws from all four sets in turn. */
-export function pick(set: AmbientSet, index: number): Picked {
-  const definition = objectSets[set === 'mix' ? order[index % order.length] : set];
-  const turn = set === 'mix' ? Math.floor(index / order.length) : index;
-  const glyph = definition.glyphs[turn % definition.glyphs.length];
-  const tones = glyph.tones ?? definition.tones;
-  return {
-    glyph,
-    tone: tones[Math.floor(Math.random() * tones.length)],
-    accent: definition.accent,
-    value: 1 + Math.floor(Math.random() * 9),
-  };
+/** Every object type in a set, each with the colours it may take. `mix` is all four sets. */
+export function pool(set: AmbientSet): PoolEntry[] {
+  const names = set === 'mix' ? order : [set];
+  const entries: PoolEntry[] = [];
+  // Interleave the sets so a mix alternates between projects.
+  const longest = Math.max(...names.map((name) => objectSets[name].glyphs.length));
+  for (let turn = 0; turn < longest; turn += 1) {
+    for (const name of names) {
+      const definition = objectSets[name];
+      const glyph = definition.glyphs[turn];
+      if (!glyph || entries.some((entry) => entry.glyph === glyph)) continue;
+      entries.push({ glyph, tones: glyph.tones ?? definition.tones, accent: definition.accent });
+    }
+  }
+  return entries;
 }
 
 const sprites = new Map<string, HTMLCanvasElement>();

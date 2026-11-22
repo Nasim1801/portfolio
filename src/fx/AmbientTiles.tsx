@@ -1,49 +1,85 @@
 import { useEffect, useRef } from 'react';
 import { reducedMotion } from './effects';
-import { clearSprites, pick, sprite, spriteSpan, type AmbientSet, type Picked } from './glyphs';
+import { clearSprites, pool, sprite, spriteSpan, type AmbientSet, type Picked } from './glyphs';
 
+interface Rect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
 interface Tile extends Picked {
-  x: number;
-  y: number;
+  /** Home position. The object bobs around it and always returns to it. */
+  hx: number;
+  hy: number;
+  /** Offset caused by the pointer. */
+  ox: number;
+  oy: number;
   size: number;
   depth: number;
-  speed: number;
-  spin: number;
-  angle: number;
   phase: number;
-  vx: number;
-  vy: number;
-  /** When this tile starts swapping to the next set, in ms. 0 when idle. */
+  tilt: number;
+  /** When this object starts swapping to the next set, in ms. 0 when idle. */
   swapAt: number;
   swapped: boolean;
   next?: Picked;
 }
+/** Read by the browser checks to prove objects never overlap or enter protected zones. */
+export interface AmbientDebug {
+  objects: () => Rect[];
+  zones: () => Rect[];
+}
 
 const swapOut = 240;
 const swapIn = 420;
-const stagger = 260;
+const bob = 6;
+const maxPush = 16;
+
+/** An element's layout box inside `root`, ignoring transforms (entrance animations, tilts). */
+function layoutRect(element: HTMLElement, root: HTMLElement): Rect {
+  let left = 0;
+  let top = 0;
+  let node: HTMLElement | null = element;
+  while (node && node !== root) {
+    left += node.offsetLeft;
+    top += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return { left, top, right: left + element.offsetWidth, bottom: top + element.offsetHeight };
+}
+const gap = (zone: Rect, x: number, y: number) =>
+  Math.hypot(
+    Math.max(zone.left - x, 0, x - zone.right),
+    Math.max(zone.top - y, 0, y - zone.bottom),
+  );
 
 /**
- * Small objects drifting upwards behind a section, in three parallax depths.
- * The objects belong to a set (one per project) and swap, staggered, when the set
- * changes. They lean away from the pointer and fade out near text. The loop stops
- * when the canvas is off screen or the tab is hidden. With reduced motion it draws
- * one still frame of the first set and ignores later changes.
+ * A quiet layer of small objects behind a section. Each object has its own slot, placed
+ * with a minimum spacing and outside every text block, the stage, the header and the
+ * level map. Objects bob gently around their slot, lean away from the pointer and come
+ * back, so they can never overlap or clump. The objects belong to a set (one per
+ * project) and swap in place when the set changes. The loop stops when the canvas is
+ * off screen or the tab is hidden. With reduced motion it draws one still frame of the
+ * first set and ignores later changes.
  */
 export function AmbientTiles({
   className,
-  density = 1,
+  max = 16,
   avoid,
   set = 'sumlume',
   onDark = false,
+  clearTop = 0,
 }: {
   className?: string;
-  density?: number;
-  /** Selector for text blocks, inside the canvas's parent, that tiles must stay clear of. */
+  /** Most objects ever shown, however large the screen. */
+  max?: number;
+  /** Selector for blocks, inside the canvas's parent, that objects must stay clear of. */
   avoid?: string;
   set?: AmbientSet;
   /** The canvas sits on a dark band whatever the theme. */
   onDark?: boolean;
+  /** Height at the top of the canvas to keep clear (the fixed header). */
+  clearTop?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const change = useRef<(next: AmbientSet) => void>(undefined);
@@ -58,69 +94,142 @@ export function AmbientTiles({
     const context = canvas?.getContext('2d');
     if (!canvas || !context) return;
     const still = reducedMotion();
+    const hover = window.matchMedia('(hover: hover)').matches;
     let current = initialSet.current;
     let width = 0;
     let height = 0;
     let tiles: Tile[] = [];
+    let zones: Rect[] = [];
     let frame = 0;
     let running = false;
     let last = 0;
     const pointer = { x: -9999, y: -9999 };
-    let zones: { left: number; top: number; right: number; bottom: number }[] = [];
-    let measured = 0;
     canvas.dataset.set = current;
 
-    // Text blocks the tiles must not sit behind, in canvas coordinates.
     const measure = () => {
-      measured = performance.now();
-      if (!avoid || !canvas.parentElement) return;
-      const origin = canvas.getBoundingClientRect();
-      const pad = 10;
-      zones = [...canvas.parentElement.querySelectorAll(avoid)].map((element) => {
-        const rect = element.getBoundingClientRect();
-        return {
-          left: rect.left - origin.left - pad,
-          top: rect.top - origin.top - pad,
-          right: rect.right - origin.left + pad,
-          bottom: rect.bottom - origin.top + pad,
-        };
-      });
-    };
-    // 0 inside a text zone, rising to 1 a short distance outside it.
-    const clearance = (x: number, y: number, size: number) => {
-      let nearest = Infinity;
-      for (const zone of zones) {
-        const dx = Math.max(zone.left - x, 0, x - zone.right);
-        const dy = Math.max(zone.top - y, 0, y - zone.bottom);
-        nearest = Math.min(nearest, Math.hypot(dx, dy));
+      zones = [];
+      const root = canvas.parentElement;
+      if (root && avoid) {
+        root.querySelectorAll<HTMLElement>(avoid).forEach((element) => {
+          if (element.offsetWidth) zones.push(layoutRect(element, root));
+        });
       }
-      // Narrow screens have little open space, so the fade there is tighter.
-      return Math.max(0, Math.min(1, (nearest - size * 0.55) / (width < 600 ? 12 : 34)));
+      if (clearTop) zones.push({ left: 0, top: 0, right: width, bottom: clearTop });
+      // The level map sits at the right edge of wide screens.
+      if (window.innerWidth >= 1400) {
+        zones.push({ left: width - 120, top: 0, right: width, bottom: height });
+      }
+    };
+
+    /** Give every slot an object so that neighbours differ in shape and colour. */
+    const assign = (name: AmbientSet): Picked[] => {
+      const entries = pool(name);
+      const picked: Picked[] = [];
+      const colours: string[] = [];
+      tiles.forEach((tile, index) => {
+        const near = tiles
+          .slice(0, index)
+          .map((other, at) => ({ at, d: Math.hypot(other.hx - tile.hx, other.hy - tile.hy) }))
+          .sort((a, b) => a.d - b.d)
+          .slice(0, 3)
+          .map(({ at }) => at);
+        let entry = entries[index % entries.length];
+        for (let step = 0; step < entries.length; step += 1) {
+          const candidate = entries[(index + step) % entries.length];
+          if (!near.some((at) => picked[at].glyph === candidate.glyph)) {
+            entry = candidate;
+            break;
+          }
+        }
+        let tone = entry.tones[index % entry.tones.length];
+        for (let step = 0; step < entry.tones.length; step += 1) {
+          const candidate = entry.tones[(index + step) % entry.tones.length];
+          if (!near.some((at) => colours[at] === candidate[0])) {
+            tone = candidate;
+            break;
+          }
+        }
+        let value = 1 + (index % 9);
+        while (near.some((at) => picked[at].value === value)) value = 1 + (value % 9);
+        colours.push(tone[0]);
+        picked.push({ glyph: entry.glyph, tone, accent: entry.accent, value });
+      });
+      return picked;
     };
 
     const seed = () => {
-      // Phones get more, smaller objects: most of the hero there is text they must avoid.
-      const count = Math.round(
-        Math.min(34, Math.max(10, (width * height) / 42000)) * density * (width < 600 ? 1.8 : 1),
-      );
-      tiles = Array.from({ length: count }, (_, index) => {
-        const depth = 0.35 + Math.random() * 0.65;
+      const phone = width < 600;
+      const spacing = phone ? 84 : 140;
+      const largest = phone ? 28 : 36;
+      // An object may bob, and be pushed by the pointer, without ever leaving this radius.
+      const reach = largest / 2 + bob + (hover ? maxPush : 0);
+      const clear = reach + 6;
+      const limit = Math.min(max, Math.max(phone ? 5 : 8, Math.round(width / 95)));
+
+      // Candidate slots on a jittered grid, outside the protected zones.
+      const candidates: { x: number; y: number }[] = [];
+      const columns = Math.floor(width / 24);
+      const rows = Math.floor(height / 24);
+      for (let row = 0; row <= rows; row += 1) {
+        for (let column = 0; column <= columns; column += 1) {
+          const x = ((column + 0.5 + (Math.random() - 0.5) * 0.5) * width) / (columns + 1);
+          const y = ((row + 0.5 + (Math.random() - 0.5) * 0.5) * height) / (rows + 1);
+          if (x < reach || y < reach || x > width - reach || y > height - reach) continue;
+          if (zones.some((zone) => gap(zone, x, y) < clear)) continue;
+          candidates.push({ x, y });
+        }
+      }
+
+      // Pick slots as far from each other as possible: an even spread, never closer than `spacing`.
+      const slots: { x: number; y: number }[] = [];
+      const distance = candidates.map(() => Infinity);
+      let next = candidates.findIndex((point) => point.x < width / 2 && point.y < height / 2);
+      if (next < 0) next = 0;
+      while (candidates.length && slots.length < limit) {
+        const chosen = candidates[next];
+        slots.push(chosen);
+        let best = -1;
+        candidates.forEach((point, index) => {
+          distance[index] = Math.min(
+            distance[index],
+            Math.hypot(point.x - chosen.x, point.y - chosen.y),
+          );
+          if (best < 0 || distance[index] > distance[best]) best = index;
+        });
+        if (best < 0 || distance[best] < spacing) break;
+        next = best;
+      }
+
+      tiles = slots.map((slot, index) => {
+        // Three depth layers, shared out evenly: far ones are smaller and fainter.
+        const depth = [1, 0.35, 0.68][index % 3];
         return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          size: (22 + depth * 36) * (width < 600 ? 0.78 : 1),
+          hx: slot.x,
+          hy: slot.y,
+          ox: 0,
+          oy: 0,
+          size: (phone ? 0.8 : 1) * (18 + depth * 18),
           depth,
-          speed: 6 + depth * 16,
-          spin: 0.12 + Math.random() * 0.16,
-          angle: (Math.random() - 0.5) * 0.5,
-          phase: Math.random() * Math.PI * 2,
-          ...pick(current, index),
-          vx: 0,
-          vy: 0,
+          phase: index * 2.4,
+          tilt: ((index % 5) - 2) * 0.09,
           swapAt: 0,
           swapped: false,
+          glyph: undefined as never,
+          tone: undefined as never,
+          accent: undefined as never,
+          value: 0,
         };
       });
+      assign(current).forEach((picked, index) => Object.assign(tiles[index], picked));
+      canvas.dataset.count = String(tiles.length);
+    };
+
+    const place = (tile: Tile, now: number) => {
+      const t = still ? 0 : now / 1000;
+      return {
+        x: tile.hx + tile.ox + (still ? 0 : Math.sin(t * 0.5 + tile.phase) * bob * 0.7),
+        y: tile.hy + tile.oy + (still ? 0 : Math.cos(t * 0.37 + tile.phase) * bob),
+      };
     };
 
     const draw = (dt: number, now = 0) => {
@@ -152,42 +261,32 @@ export function AmbientTiles({
           }
         }
         if (dt) {
-          const dx = tile.x - pointer.x;
-          const dy = tile.y - pointer.y;
+          // Lean away from the pointer, a little, then spring back home.
+          let tx = 0;
+          let ty = 0;
+          const dx = tile.hx - pointer.x;
+          const dy = tile.hy - pointer.y;
           const distance = Math.hypot(dx, dy);
-          if (distance < 170) {
-            const force = ((170 - distance) / 170) * 900 * tile.depth;
-            tile.vx += (dx / (distance || 1)) * force * dt;
-            tile.vy += (dy / (distance || 1)) * force * dt;
+          if (hover && distance < 150) {
+            const push = ((150 - distance) / 150) * maxPush;
+            tx = (dx / (distance || 1)) * push;
+            ty = (dy / (distance || 1)) * push;
           }
-          tile.vx *= 0.94;
-          tile.vy *= 0.94;
-          tile.x += tile.vx * dt;
-          tile.y += (tile.vy - tile.speed) * dt;
-          if (tile.y < -tile.size) {
-            tile.y = height + tile.size;
-            tile.x = Math.random() * width;
-          }
-          if (tile.x < -tile.size) tile.x = width + tile.size;
-          if (tile.x > width + tile.size) tile.x = -tile.size;
+          const ease = Math.min(1, dt * 5);
+          tile.ox += (tx - tile.ox) * ease;
+          tile.oy += (ty - tile.oy) * ease;
         }
-        const fade = clearance(tile.x, tile.y, tile.size);
-        if (fade < 0.02 || scale < 0.02) continue;
+        if (scale < 0.02) continue;
         const line = tile.glyph.line;
-        // Line-drawn glyphs breathe gently instead of sitting as solid tiles.
-        const pulse = line ? 0.82 + 0.18 * Math.sin(now / 520 + tile.phase) : 1;
-        const span =
-          tile.size * scale * spriteSpan * (line ? 1 + 0.05 * Math.sin(now / 520 + tile.phase) : 1);
+        const wave = still ? 0 : Math.sin(now / 900 + tile.phase);
+        const span = tile.size * scale * spriteSpan;
+        const { x, y } = place(tile, now);
         context.save();
-        context.translate(tile.x, tile.y);
-        // Objects rock gently rather than spin, so houses and bowls stay upright.
-        context.rotate(
-          (tile.angle + tile.spin * Math.sin(now / 1700 + tile.phase) + tile.vx * 0.002) *
-            (line ? 0.5 : 1) +
-            twist,
-        );
-        context.globalAlpha =
-          (line ? 0.45 + tile.depth * 0.5 : 0.32 + tile.depth * 0.5) * fade * pulse;
+        context.translate(x, y);
+        context.rotate(tile.tilt * (line ? 0.5 : 1) + wave * 0.07 + twist);
+        // Background only: nothing here should be as loud as a button or a badge.
+        const base = line ? 0.2 + tile.depth * 0.3 : 0.14 + tile.depth * 0.26;
+        context.globalAlpha = base * (dark ? 0.85 : 1) * (line ? 0.9 + wave * 0.1 : 1);
         context.drawImage(sprite(tile, dark), -span / 2, -span / 2, span, span);
         context.restore();
       }
@@ -200,13 +299,12 @@ export function AmbientTiles({
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      seed();
       measure();
+      seed();
       draw(0, performance.now());
     };
 
     const loop = (now: number) => {
-      if (now - measured > 700) measure();
       const dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
       draw(dt, now);
@@ -229,11 +327,23 @@ export function AmbientTiles({
       current = next;
       canvas.dataset.set = next;
       const now = performance.now();
-      tiles.forEach((tile, index) => {
-        tile.next = pick(next, index + Math.floor(Math.random() * 3));
-        tile.swapAt = now + Math.random() * stagger;
+      // Swap in place, slot by slot, in a wave from left to right.
+      assign(next).forEach((picked, index) => {
+        const tile = tiles[index];
+        tile.next = picked;
+        tile.swapAt = now + (tile.hx / Math.max(1, width)) * 320;
         tile.swapped = false;
       });
+    };
+
+    (canvas as HTMLCanvasElement & { ambient?: AmbientDebug }).ambient = {
+      objects: () =>
+        tiles.map((tile) => {
+          const { x, y } = place(tile, performance.now());
+          const half = tile.size / 2;
+          return { left: x - half, top: y - half, right: x + half, bottom: y + half };
+        }),
+      zones: () => zones,
     };
 
     const onPointer = (event: PointerEvent) => {
@@ -261,10 +371,10 @@ export function AmbientTiles({
     themeWatcher.observe(document.documentElement, { attributeFilter: ['data-theme'] });
 
     resize();
-    // Number tiles drawn before the web font arrived would keep the fallback font.
+    // The web font changes the text layout and the look of number tiles: place again once.
     void document.fonts?.ready.then(() => {
       clearSprites();
-      draw(0, performance.now());
+      resize();
     });
     visibility.observe(canvas);
     resizer.observe(canvas);
@@ -281,7 +391,7 @@ export function AmbientTiles({
       document.removeEventListener('pointerleave', onLeave);
       document.removeEventListener('visibilitychange', onHidden);
     };
-  }, [density, avoid, onDark]);
+  }, [max, avoid, onDark, clearTop]);
 
   return <canvas ref={ref} className={className} aria-hidden="true" />;
 }

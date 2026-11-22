@@ -1714,7 +1714,7 @@
   align-items: center;
   gap: var(--s-8);
   max-width: var(--max);
-  min-height: min(100svh, 920px);
+  min-height: min(100svh, 860px);
   margin: 0 auto;
   padding: calc(var(--header) + var(--s-8)) var(--gutter) var(--s-9);
 }
