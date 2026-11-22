@@ -17,6 +17,7 @@ npm run format
 npm run test:lab
 npm run build
 npm run preview
+# In a second terminal
 npm run qa
 ```
 
@@ -36,13 +37,14 @@ Screenshot paths, dimensions and alt text live in:
 src/data/screens.ts
 ```
 
-Real media is stored under `public/assets/`. Add a full-size PNG to the relevant project folder and reference it in `src/data/screens.ts`. `npm run build` refreshes the optimised WebP versions. Never substitute mock screens for product evidence.
+Real media is stored under `public/assets/`. Run `npm run prepare:assets -- --game pathlife dashboard /absolute/path/to/capture.png` to import a verified game image. Update its dimensions, label and alt text in `src/data/screens.ts` and its provenance in `ASSET-AUDIT-V4.md`. For non-game media the build generates display WebP files from the checked-in PNG originals.
 
 The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
 
 ## Main architecture
 
-- `src/components/ProjectConstellation.tsx`: pointer, touch and keyboard project field in the hero.
+- `src/components/ExhibitionHero.tsx`: keyboard-operable selector and layered product artwork.
+- `src/components/Media.tsx`: responsive gallery, swipe controls, and full-resolution dialog.
 - `src/components/lab/`: the playable make-10 board and interactive Physio-AI system visualisation.
 - `src/lab/sumlumeEngine.ts`: pure, independently tested matching rules.
 - `src/components/SkillAtlas.tsx`: selectable technology-to-project evidence map.
@@ -50,7 +52,7 @@ The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
 - `src/styles/site.module.css`: core responsive visual system.
 - `src/styles/lab.module.css`: Engineering Lab interface and exhibit states.
 
-The design audit, two explored directions and final rationale are in `DESIGN-V3.md`.
+See `ASSET-AUDIT-V4.md` for release and development media sources. `DESIGN-V3.md` records the previous design.
 
 ## Routes and SEO
 
@@ -64,13 +66,15 @@ The static build creates indexable HTML entry points for:
 /portfolio/projects/physio-ai/
 /portfolio/projects/pawlife/
 /portfolio/projects/portfolio/
+/portfolio/projects/co2-tracker/
+/portfolio/projects/hospital-appointment-system/
 ```
 
 `scripts/generate-static-routes.mjs` generates route-specific titles, descriptions, canonical URLs, social metadata and structured data, plus the GitHub Pages fallback. Update that script and `public/sitemap.xml` when adding a route.
 
 ## Interaction and browser QA
 
-`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all seven routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, secure external links, console errors, the mobile menu, constellation keyboard controls, skill selection, lightbox controls, puzzle validation and Physio-AI controls.
+`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, failed requests, JavaScript errors, the mobile menu, product-selector keyboard controls, skill selection, CV download, theme persistence, screenshot controls and both Lab interactions. Set `PORTFOLIO_AXE_PATH` to a local copy of axe-core to run accessibility scans at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
 
 ## Deploy
 

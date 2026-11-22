@@ -1,86 +1,90 @@
-import type { CSSProperties } from 'react';
-import { content, type CaseStudy } from '../data/content';
+import { content, type CaseStudy, type CaseStudySection } from '../data/content';
 import { homeUrl, pageUrl } from '../utils/links';
-import { DeviceFrame, Gallery, MediaImage } from './Media';
+import { Gallery, MediaImage } from './Media';
 import { PoseTracker } from './PoseTracker';
 import styles from '../styles/site.module.css';
 
-const studyStyle = (study: CaseStudy) =>
-  ({ '--project-accent': study.accent, '--project-soft': study.accentSoft }) as CSSProperties;
-
-function ExternalAction({ label, href }: { label: string; href: string }) {
+function StudySection({ section }: { section: CaseStudySection }) {
   return (
-    <a className={styles.secondaryButton} href={href} target="_blank" rel="noopener noreferrer">
-      {label}
-    </a>
+    <section id={section.id}>
+      <p className={styles.eyebrow}>{section.eyebrow.replace(/^\d+ · /, '')}</p>
+      <h2>{section.title}</h2>
+      {section.paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+      {section.bullets && (
+        <ul>
+          {section.bullets.map((bullet) => (
+            <li key={bullet}>{bullet}</li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 
 export function CaseStudyPage({ study }: { study: CaseStudy }) {
-  const currentIndex = content.caseStudies.findIndex((item) => item.slug === study.slug);
-  const nextStudy = content.caseStudies[(currentIndex + 1) % content.caseStudies.length];
+  const current = content.caseStudies.findIndex((item) => item.slug === study.slug);
+  const next = content.caseStudies[(current + 1) % content.caseStudies.length];
+  const isPortrait = study.frame === 'phone' || study.frame === 'print';
 
   return (
-    <main id="main-content" className={styles.casePage} style={studyStyle(study)}>
+    <main
+      id="main-content"
+      className={styles.casePage}
+      data-project={study.slug}
+      data-layout={isPortrait ? 'portrait' : 'landscape'}
+    >
       <div className={styles.caseShell}>
         <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-          <a href={pageUrl()}>Portfolio</a>
-          <span aria-hidden="true">/</span>
           <a href={homeUrl('#work')}>Selected work</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{study.name}</span>
         </nav>
 
-        <section className={styles.caseHero} aria-labelledby="case-title">
+        <header className={styles.caseHero}>
           <div className={styles.caseHeroCopy}>
             <p className={styles.eyebrow}>{study.eyebrow}</p>
             <div className={styles.caseIdentity}>
-              {study.icon && <MediaImage item={study.icon} className={styles.caseIcon} />}
-              <h1 id="case-title">{study.name}</h1>
+              {study.icon && (
+                <MediaImage item={study.icon} className={styles.caseIcon} decorative sizes="72px" />
+              )}
+              <h1>{study.name}</h1>
             </div>
             <p className={styles.caseStatus}>{study.status}</p>
             <p className={styles.caseSummary}>{study.summary}</p>
-            <div className={styles.rolePanel}>
-              <span>My role</span>
-              <p>{study.role}</p>
-            </div>
-            <ul className={styles.stack} aria-label={`${study.name} technology stack`}>
-              {study.stack.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
             {study.links.length > 0 && (
               <div className={styles.caseActions}>
-                {study.links.map((link, index) =>
-                  index === 0 ? (
-                    <a
-                      className={styles.primaryButton}
-                      key={link.href}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <ExternalAction key={link.href} {...link} />
-                  ),
-                )}
+                {study.links.map(({ label, href }, index) => (
+                  <a
+                    className={index === 0 ? styles.primaryButton : styles.secondaryButton}
+                    key={href}
+                    href={href}
+                    target={href.startsWith('https:') ? '_blank' : undefined}
+                    rel={href.startsWith('https:') ? 'noopener noreferrer' : undefined}
+                  >
+                    {label}
+                  </a>
+                ))}
               </div>
             )}
           </div>
-          <div className={styles.caseHeroMedia}>
-            <DeviceFrame
-              item={study.media[0]}
+          <section
+            className={styles.caseHeroMedia}
+            id="evidence"
+            aria-label={`${study.name} screenshot gallery`}
+          >
+            <Gallery
+              media={study.media}
               frame={study.frame}
-              address={study.slug === 'physio-ai' ? 'physio-ai / live session' : undefined}
+              projectName={study.name}
               title={study.name}
               priority
             />
-          </div>
-        </section>
+          </section>
+        </header>
 
-        <section className={styles.caseFacts} aria-label={`${study.name} project facts`}>
+        <section className={styles.caseFacts} aria-label="Project facts">
           {study.facts.map((fact) => (
             <div key={fact.label}>
               <strong>{fact.value}</strong>
@@ -91,47 +95,36 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
 
         <div className={styles.caseBody}>
           <aside className={styles.caseNav} aria-label="Case study sections">
-            <p>Case study</p>
+            <p>In this case study</p>
             <ol>
-              {study.sections.slice(0, 2).map((section) => (
-                <li key={section.id}>
-                  <a href={`#${section.id}`}>{section.title}</a>
-                </li>
-              ))}
+              <li>
+                <a href="#responsibilities">Responsibilities</a>
+              </li>
               <li>
                 <a href="#architecture">Architecture</a>
               </li>
-              {study.sections.slice(2).map((section) => (
+              {study.sections.map((section) => (
                 <li key={section.id}>
                   <a href={`#${section.id}`}>{section.title}</a>
                 </li>
               ))}
-              <li>
-                <a href="#evidence">Product evidence</a>
-              </li>
             </ol>
           </aside>
           <article className={styles.caseArticle}>
-            {study.sections.slice(0, 2).map((section) => (
-              <section id={section.id} key={section.id}>
-                <p className={styles.eyebrow}>{section.eyebrow}</p>
-                <h2>{section.title}</h2>
-                {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+            <section id="responsibilities" className={styles.rolePanel}>
+              <p className={styles.eyebrow}>My role</p>
+              <h2>Responsibilities</h2>
+              <p>{study.role}</p>
+              <ul className={styles.stack} aria-label="Technology stack">
+                {study.stack.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
-                {section.bullets && (
-                  <ul>
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            ))}
+              </ul>
+            </section>
 
             <section id="architecture" className={styles.architectureSection}>
-              <p className={styles.eyebrow}>System view</p>
-              <h2>{study.name} architecture</h2>
+              <p className={styles.eyebrow}>System design</p>
+              <h2>Architecture</h2>
               <ol className={styles.architectureFlow}>
                 {study.architecture.map((item) => (
                   <li key={item}>{item}</li>
@@ -144,56 +137,20 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
               )}
             </section>
 
-            {study.sections.slice(2).map((section) => (
-              <section id={section.id} key={section.id}>
-                <p className={styles.eyebrow}>{section.eyebrow}</p>
-                <h2>{section.title}</h2>
-                {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-                {section.bullets && (
-                  <ul>
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                )}
-              </section>
+            {study.sections.map((section) => (
+              <StudySection section={section} key={section.id} />
             ))}
           </article>
         </div>
 
-        <section className={styles.caseEvidence} id="evidence" aria-labelledby="evidence-title">
-          <header>
-            <p className={styles.eyebrow}>Real product evidence</p>
-            <h2 id="evidence-title">Screens from {study.name}.</h2>
-            <p>Every image below comes from the actual product or its published store material.</p>
-          </header>
-          <Gallery
-            media={study.media}
-            frame={study.frame}
-            projectName={study.name}
-            address={study.slug === 'physio-ai' ? 'physio-ai / product interface' : undefined}
-            title={study.name}
-          />
-        </section>
-
         <section className={styles.nextStudy} aria-label="Next case study">
           <div>
-            <span>Next case study</span>
-            <h2>{nextStudy.name}</h2>
-            <p>{nextStudy.summary}</p>
+            <p className={styles.eyebrow}>Next case study</p>
+            <h2>{next.name}</h2>
+            <p>{next.summary}</p>
           </div>
-          <a className={styles.primaryButton} href={pageUrl(`projects/${nextStudy.slug}/`)}>
-            Read {nextStudy.name}
-          </a>
-        </section>
-
-        <section className={styles.caseContact}>
-          <p className={styles.eyebrow}>Available in London</p>
-          <h2>Looking for an engineer who already knows how to own the whole product?</h2>
-          <a className={styles.primaryButton} href={homeUrl('#contact')}>
-            Contact Nasim
+          <a className={styles.primaryButton} href={pageUrl(`projects/${next.slug}/`)}>
+            Read case study
           </a>
         </section>
       </div>

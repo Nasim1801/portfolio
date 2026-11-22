@@ -3,8 +3,8 @@
   "short_name": "Nasim Mosayebi",
   "start_url": "/portfolio/",
   "display": "standalone",
-  "background_color": "#f4f6f2",
-  "theme_color": "#1f6a4a",
+  "background_color": "#f7f6f0",
+  "theme_color": "#202913",
   "icons": [
     {
       "src": "favicon.svg",

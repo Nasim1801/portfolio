@@ -22,20 +22,20 @@ export function EngineeringLabPage() {
     <main id="main-content" className={styles.labPage}>
       <header className={styles.labHero}>
         <a className={styles.backLink} href={pageUrl()}>
-          ← Portfolio home
+          Portfolio home
         </a>
-        <p className={styles.labEyebrow}>Built in the browser · 02 live exhibits</p>
+        <p className={styles.labEyebrow}>Interactive demonstrations</p>
         <h1>
-          Engineering <em>you can touch.</em>
+          Engineering <em>Lab</em>
         </h1>
         <div className={styles.labIntro}>
           <p>
-            Two working demonstrations translate real project logic into accessible browser
-            interactions. No video, no static mock-up and no claim of production inference.
+            Play a number puzzle built around Sumlume’s matching rules, then follow an interactive
+            model of the Physio-AI pose pipeline.
           </p>
           <dl>
             <div>
-              <dt>Input</dt>
+              <dt>Controls</dt>
               <dd>Pointer · touch · keyboard</dd>
             </div>
             <div>
@@ -46,16 +46,11 @@ export function EngineeringLabPage() {
         </div>
       </header>
 
-      <div className={styles.labRail} aria-hidden="true">
-        <span>LAB / NM / 2026</span>
-        <span>SCROLL TO EXPERIMENT</span>
-      </div>
       <SumlumeMiniLab />
       <PosePipelineLab />
 
       <section className={styles.labClosing}>
-        <p>Want the implementation story?</p>
-        <h2>The portfolio itself is documented as an engineering project.</h2>
+        <h2>How this site was built</h2>
         <a href={pageUrl('projects/portfolio/')}>Read the design and engineering case study</a>
       </section>
     </main>

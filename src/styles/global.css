@@ -1,119 +1,111 @@
 @font-face {
-  font-family: 'Figtree';
-  font-style: normal;
+  font-family: 'Instrument Serif';
+  src: url('/fonts/instrument-serif.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/instrument-serif-italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: Manrope;
+  src: url('/fonts/manrope-variable.woff2') format('woff2');
   font-weight: 400 800;
   font-display: swap;
-  src: url('/fonts/figtree-latin-variable.woff2') format('woff2');
 }
-
 @font-face {
   font-family: 'JetBrains Mono';
-  font-style: normal;
+  src: url('/fonts/jetbrains-mono-latin-variable.woff2') format('woff2');
   font-weight: 500 700;
   font-display: swap;
-  src: url('/fonts/jetbrains-mono-latin-variable.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Unbounded';
-  font-style: normal;
-  font-weight: 500 800;
-  font-display: swap;
-  src: url('/fonts/unbounded-latin-variable.woff2') format('woff2');
 }
 
 :root {
   color-scheme: light;
-  --paper: #f1f3f7;
-  --paper-elevated: #ffffff;
-  --paper-soft: #e4e8f0;
-  --ink: #0c1020;
-  --ink-soft: #596173;
-  --line: #ced4df;
-  --line-strong: #aab4c5;
-  --signal: #4d65e8;
-  --signal-contrast: #ffffff;
-  --signal-bright: #6d82ff;
-  --signal-soft: #dde3ff;
-  --violet: #7657d8;
-  --green: #18836a;
-  --gold: #956811;
-  --gold-bright: #c99424;
-  --warning: #b04f38;
-  --white: #ffffff;
-  --shadow: 0 22px 60px rgba(29, 39, 69, 0.13);
-  --shadow-soft: 0 12px 34px rgba(29, 39, 69, 0.09);
-  --shadow-large: 0 42px 110px rgba(23, 31, 57, 0.18);
-  --display: 'Unbounded', 'Arial Black', sans-serif;
-  --body: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --paper: #f7f6f0;
+  --paper-elevated: #fffefa;
+  --paper-soft: #eeeee4;
+  --ink: #191b14;
+  --ink-soft: #505446;
+  --line: #d0d2c3;
+  --line-strong: #a7a895;
+  --signal: #405f20;
+  --signal-contrast: #fffefa;
+  --signal-bright: #395a15;
+  --signal-soft: #e2eaca;
+  --violet: #6a4ba0;
+  --green: #356126;
+  --gold: #795211;
+  --gold-bright: #56772a;
+  --warning: #a73616;
+  --white: #fffefa;
+  --shadow: 0 18px 44px #181e1428;
+  --shadow-soft: 0 10px 24px #181e141a;
+  --shadow-large: 0 34px 75px #14180d45;
+  --lime: #d9ef91;
+  --display: 'Instrument Serif', Georgia, serif;
+  --body: Manrope, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --gutter: clamp(1rem, 4vw, 4.75rem);
+  --site-width: 1640px;
 }
-
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #080b12;
-  --paper-elevated: #0e1320;
-  --paper-soft: #141a29;
-  --ink: #f4f6fb;
-  --ink-soft: #9da8bc;
-  --line: #242d3e;
-  --line-strong: #39455a;
-  --signal: #7187ff;
-  --signal-contrast: #080b12;
-  --signal-bright: #93a3ff;
-  --signal-soft: #192347;
-  --violet: #a98df4;
-  --green: #52d4aa;
-  --gold: #e2bc66;
-  --gold-bright: #f1ce7b;
-  --warning: #ff8f75;
-  --white: #ffffff;
-  --shadow: 0 26px 80px rgba(0, 0, 0, 0.38);
-  --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.28);
-  --shadow-large: 0 50px 130px rgba(0, 0, 0, 0.5);
+  --paper: #151711;
+  --paper-elevated: #20231a;
+  --paper-soft: #292e21;
+  --ink: #f2f3e9;
+  --ink-soft: #bcc2af;
+  --line: #3d4433;
+  --line-strong: #6e765f;
+  --signal: #cee983;
+  --signal-contrast: #191b14;
+  --signal-bright: #d8ef9a;
+  --signal-soft: #313d23;
+  --violet: #c9afea;
+  --green: #bade93;
+  --gold: #f1cd84;
+  --gold-bright: #d9ef91;
+  --warning: #ffa17d;
+  --shadow: 0 18px 44px #0006;
+  --shadow-soft: 0 10px 24px #0004;
+  --shadow-large: 0 34px 75px #0008;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
-
 html {
-  min-width: 320px;
-  overflow-x: clip;
   scroll-behavior: smooth;
-  scroll-padding-top: 104px;
+  scroll-padding-top: 88px;
 }
-
 body {
   min-width: 320px;
-  min-height: 100vh;
   margin: 0;
-  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--body);
-  font-size: 16px;
-  line-height: 1.6;
-  text-rendering: optimizeLegibility;
+  font: 1.0625rem/1.65 var(--body);
   -webkit-font-smoothing: antialiased;
 }
-
 button,
 input,
 textarea,
 select {
   font: inherit;
 }
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-a {
+button {
   color: inherit;
 }
-
+a {
+  color: inherit;
+  text-underline-offset: 0.24em;
+}
 img,
 video,
 svg,
@@ -121,22 +113,18 @@ canvas {
   display: block;
   max-width: 100%;
 }
-
-::selection {
-  background: var(--signal);
-  color: var(--white);
+img {
+  height: auto;
 }
-
+::selection {
+  background: var(--lime);
+  color: #191b14;
+}
 :focus-visible {
   outline: 3px solid var(--gold-bright);
   outline-offset: 4px;
 }
-
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {

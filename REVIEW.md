@@ -1,5 +1,7 @@
 # Portfolio V3 review
 
+This document records the earlier V3 review. The owner requested a substantial redesign after reviewing the deployed version.
+
 Reviewed on 21 November 2026 as both a London technical recruiter screening graduate and junior engineers and a hiring manager inspecting implementation evidence.
 
 ## Before

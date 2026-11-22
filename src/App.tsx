@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
+import { ExhibitionHero } from './components/ExhibitionHero';
 import { Header } from './components/Header';
-import { CaseStudyPage } from './components/CaseStudyPage';
-import { EngineeringLabPage } from './components/EngineeringLabPage';
 import {
   About,
   Contact,
   Experience,
   Footer,
-  Hero,
+  LabInvitation,
   ProofStrip,
   SelectedWork,
   Skills,
@@ -16,6 +15,15 @@ import {
 import { content, findCaseStudy, type CaseStudy } from './data/content';
 import { pageUrl, routePath } from './utils/links';
 import styles from './styles/site.module.css';
+
+const CaseStudyPage = lazy(() =>
+  import('./components/CaseStudyPage').then(({ CaseStudyPage }) => ({ default: CaseStudyPage })),
+);
+const EngineeringLabPage = lazy(() =>
+  import('./components/EngineeringLabPage').then(({ EngineeringLabPage }) => ({
+    default: EngineeringLabPage,
+  })),
+);
 
 const siteUrl = 'https://nasim1801.github.io/portfolio/';
 
@@ -76,13 +84,14 @@ function HomePage() {
     <>
       <PageMetadata />
       <main id="main-content">
-        <Hero />
+        <ExhibitionHero />
         <ProofStrip />
         <SelectedWork />
-        <About />
+        <LabInvitation />
         <TeamProjects />
-        <Experience />
         <Skills />
+        <About />
+        <Experience />
         <Contact />
       </main>
     </>
@@ -115,7 +124,10 @@ export default function App() {
         Skip to content
       </a>
       <Header />
-      <div className={styles.pageEnter} key={route}>
+      <Suspense
+        key={route}
+        fallback={<main id="main-content" className={styles.routeLoading} aria-busy="true" />}
+      >
         {study ? (
           <>
             <PageMetadata study={study} />
@@ -128,7 +140,7 @@ export default function App() {
         ) : (
           <NotFoundPage />
         )}
-      </div>
+      </Suspense>
       <Footer />
     </>
   );

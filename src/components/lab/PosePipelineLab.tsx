@@ -93,7 +93,7 @@ export function PosePipelineLab() {
     <section className={`${styles.exhibit} ${styles.poseExhibit}`} aria-labelledby="pose-lab-title">
       <div className={styles.exhibitHeader}>
         <div>
-          <p className={styles.labIndex}>Exhibit 02 · Interactive system model</p>
+          <p className={styles.labIndex}>Physio-AI</p>
           <h2 id="pose-lab-title">Trace a pose through the pipeline</h2>
         </div>
         <span className={styles.simulationChip}>Visual simulation</span>
@@ -114,6 +114,7 @@ export function PosePipelineLab() {
             role="tab"
             aria-selected={stage === index}
             aria-controls="pipeline-stage-panel"
+            id={`pose-stage-${index}`}
             tabIndex={stage === index ? 0 : -1}
             onClick={() => setStage(index)}
             onKeyDown={(event) => {
@@ -125,7 +126,6 @@ export function PosePipelineLab() {
               tabRefs.current[next]?.focus();
             }}
           >
-            <span>{String(index + 1).padStart(2, '0')}</span>
             {item.name}
           </button>
         ))}
@@ -134,7 +134,7 @@ export function PosePipelineLab() {
       <div className={styles.poseLabLayout}>
         <div className={styles.poseViewport}>
           <div className={styles.viewportMeta}>
-            <span>CAM_01 · simulated frame</span>
+            <span>Simulated frame</span>
             <span>{showSkeleton ? `${angle}° right knee` : 'raw input'}</span>
           </div>
           <svg
@@ -210,9 +210,12 @@ export function PosePipelineLab() {
           className={styles.pipelineReadout}
           id="pipeline-stage-panel"
           role="tabpanel"
+          aria-labelledby={`pose-stage-${stage}`}
           aria-live="polite"
         >
-          <p>Active stage · {String(stage + 1).padStart(2, '0')}</p>
+          <p>
+            Step {stage + 1} of {stages.length}
+          </p>
           <h3>{stages[stage].name}</h3>
           <p>{stages[stage].detail}</p>
           <dl>

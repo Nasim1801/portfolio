@@ -8,3 +8,6 @@ dist
 !.env.example
 work/
 *.log
+
+review/v4/
+review/pawlife-captures/

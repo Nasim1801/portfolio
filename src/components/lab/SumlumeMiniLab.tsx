@@ -81,10 +81,9 @@ export function SumlumeMiniLab() {
     <section className={styles.exhibit} aria-labelledby="sumlume-lab-title">
       <div className={styles.exhibitHeader}>
         <div>
-          <p className={styles.labIndex}>Exhibit 01 · React state</p>
-          <h2 id="sumlume-lab-title">The make-10 machine</h2>
+          <p className={styles.labIndex}>Sumlume rules</p>
+          <h2 id="sumlume-lab-title">Play Make 10</h2>
         </div>
-        <span className={styles.liveChip}>Playable</span>
       </div>
 
       <div className={styles.puzzleLayout}>
@@ -132,7 +131,7 @@ export function SumlumeMiniLab() {
           </div>
         </div>
 
-        <aside className={styles.exhibitNotes}>
+        <div className={styles.exhibitNotes}>
           <p className={styles.noteLabel}>What this proves</p>
           <ol>
             <li>
@@ -150,7 +149,7 @@ export function SumlumeMiniLab() {
             make-10 rule. It is not the production iOS game.
           </p>
           <a href="../projects/sumlume/">Inspect the full Sumlume case study</a>
-        </aside>
+        </div>
       </div>
     </section>
   );

@@ -48,6 +48,7 @@ export function SkillAtlas() {
               categoryRefs.current[index] = element;
             }}
             aria-selected={category === item}
+            id={`skill-category-${index}`}
             aria-controls="skill-evidence-panel"
             tabIndex={category === item ? 0 : -1}
             onClick={() => chooseCategory(item)}
@@ -60,7 +61,6 @@ export function SkillAtlas() {
               categoryRefs.current[next]?.focus();
             }}
           >
-            <span>{String(index + 1).padStart(2, '0')}</span>
             {item}
           </button>
         ))}
@@ -85,15 +85,14 @@ export function SkillAtlas() {
           id="skill-evidence-panel"
           className={styles.skillEvidence}
           role="tabpanel"
+          aria-labelledby={`skill-category-${categoryOrder.indexOf(category)}`}
           aria-live="polite"
         >
-          <p>Selected technology</p>
           <h3>{selected.technology}</h3>
           <span className={styles.skillCategoryLabel}>{selected.category}</span>
           <div className={styles.evidenceConnections}>
-            {selected.projects.map((project, index) => (
+            {selected.projects.map((project) => (
               <article key={`${selected.technology}-${project.name}`}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
                 <div>
                   <h4>{project.name}</h4>
                   <p>{project.evidence}</p>

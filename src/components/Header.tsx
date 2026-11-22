@@ -22,10 +22,14 @@ export function Header() {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
     document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem('nm-theme', nextTheme);
+    try {
+      localStorage.setItem('nm-theme', nextTheme);
+    } catch {
+      // The page can still switch themes when browser storage is unavailable.
+    }
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', nextTheme === 'dark' ? '#080b12' : '#f1f3f7');
+      ?.setAttribute('content', nextTheme === 'dark' ? '#151711' : '#f7f6f0');
   };
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export function Header() {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       setMenuOpen(false);
-      window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+      menuButtonRef.current?.focus();
     };
     window.addEventListener('keydown', closeOnEscape);
     return () => window.removeEventListener('keydown', closeOnEscape);
@@ -50,22 +54,14 @@ export function Header() {
     <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
       <a className={styles.logo} href={pageUrl()}>
         <span className={styles.logoMark} aria-hidden="true">
-          N<span>/</span>M
+          nm.
         </span>
-        <strong>
-          <span>Nasim</span>
-          <span>Mosayebi</span>
-        </strong>
-        <small>
-          Software Engineer
-          <br />
-          London
-        </small>
+        <strong>Nasim Mosayebi</strong>
       </a>
 
       <div className={styles.headerActions}>
         <a className={styles.headerCv} href={assetUrl(content.links.cv)} download>
-          CV ↓
+          CV
         </a>
         <button
           className={styles.themeButton}
@@ -93,19 +89,11 @@ export function Header() {
         className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}
         aria-label="Main navigation"
       >
-        {content.nav.map((item, index) => (
+        {content.nav.map((item) => (
           <a key={item.href} href={navHref(item.href)} onClick={() => setMenuOpen(false)}>
-            <span>{String(index + 1).padStart(2, '0')}</span>
             {item.label}
           </a>
         ))}
-        <a
-          className={styles.navContact}
-          href={homeUrl('#contact')}
-          onClick={() => setMenuOpen(false)}
-        >
-          Start a conversation ↗
-        </a>
       </nav>
     </header>
   );

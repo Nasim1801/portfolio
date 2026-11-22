@@ -4,7 +4,7 @@ import { chromium, type Page } from 'playwright';
 import sharp from 'sharp';
 
 const pawLifeUrl = process.env.PAWLIFE_URL ?? 'http://127.0.0.1:8085';
-const outputDirectory = path.resolve('public/assets/pawlife');
+const outputDirectory = path.resolve(process.env.PAWLIFE_CAPTURE_DIR ?? 'review/pawlife-captures');
 
 async function settle(page: Page) {
   await page.waitForLoadState('networkidle').catch(() => undefined);

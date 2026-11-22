@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#080b12" />
+    <meta name="theme-color" content="#151711" />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="description"
@@ -45,27 +45,59 @@
     <link rel="canonical" href="https://nasim1801.github.io/portfolio/" />
     <link
       rel="preload"
-      href="%BASE_URL%fonts/unbounded-latin-variable.woff2"
+      href="%BASE_URL%fonts/instrument-serif.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="%BASE_URL%fonts/figtree-latin-variable.woff2"
+      href="%BASE_URL%fonts/manrope-variable.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
+    <link
+      rel="preload"
+      href="%BASE_URL%fonts/instrument-serif-italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      data-home-preload
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      imagesrcset="%BASE_URL%assets/sumlume/classic-540.webp 540w, %BASE_URL%assets/sumlume/classic.webp 1179w"
+      imagesizes="(max-width: 520px) 44vw, 260px"
+    />
+    <link
+      data-home-preload
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      imagesrcset="%BASE_URL%assets/sumlume/home-540.webp 540w, %BASE_URL%assets/sumlume/home.webp 1179w"
+      imagesizes="230px"
+    />
     <script>
       (() => {
-        const stored = localStorage.getItem('nm-theme');
+        let stored;
+        try {
+          stored = localStorage.getItem('nm-theme');
+        } catch {
+          /* Storage unavailable */
+        }
         const theme =
-          stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          stored === 'dark' || stored === 'light'
+            ? stored
+            : matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
         document.documentElement.dataset.theme = theme;
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', theme === 'dark' ? '#080b12' : '#f1f3f7');
+          ?.setAttribute('content', theme === 'dark' ? '#151711' : '#f7f6f0');
       })();
     </script>
     <script type="application/ld+json">

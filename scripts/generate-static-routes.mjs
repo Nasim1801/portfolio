@@ -13,7 +13,7 @@ const routes = [
     title: 'Sumlume Case Study | Nasim Mosayebi',
     description:
       'How Nasim Mosayebi built and released Sumlume, a native SwiftUI number puzzle for iPhone and iPad, with an Android version in Kotlin in development.',
-    image: 'assets/sumlume/gameplay.webp',
+    image: 'assets/sumlume/classic.webp',
     type: 'VideoGame',
   },
   {
@@ -23,7 +23,7 @@ const routes = [
     title: 'PathLife Case Study | Nasim Mosayebi',
     description:
       'Engineering case study for PathLife, a live iOS life simulation with a React Native Android rebuild and supporting Node.js infrastructure.',
-    image: 'assets/pathlife/01-main.webp',
+    image: 'assets/pathlife/dashboard.webp',
     type: 'VideoGame',
   },
   {
@@ -43,7 +43,7 @@ const routes = [
     title: 'PawLife Case Study | Nasim Mosayebi',
     description:
       'Engineering case study for PawLife, an in-development React Native pet-life simulation with a custom event engine and persistent progression.',
-    image: 'assets/pawlife/01-home.webp',
+    image: 'assets/pawlife/home.webp',
     type: 'VideoGame',
   },
   {
@@ -54,6 +54,26 @@ const routes = [
     description:
       'How Nasim Mosayebi designed and engineered an interactive React portfolio with accessible browser demonstrations, responsive project storytelling and static deployment.',
     image: 'assets/portfolio/01-home.webp',
+    type: 'SoftwareApplication',
+  },
+  {
+    slug: 'co2-tracker',
+    path: 'projects/co2-tracker',
+    name: 'CO2 Tracker',
+    title: 'CO2 Tracker Case Study | Nasim Mosayebi',
+    description:
+      'A React and Spring Boot team project for looking up product carbon-footprint data.',
+    image: 'assets/co2-tracker/01-customer-page.webp',
+    type: 'SoftwareApplication',
+  },
+  {
+    slug: 'hospital-appointment-system',
+    path: 'projects/hospital-appointment-system',
+    name: 'Hospital Appointment System',
+    title: 'Hospital Appointment System Case Study | Nasim Mosayebi',
+    description:
+      'A Java Swing booking module with JUnit evidence from a Brunel University London team project.',
+    image: 'assets/hospital/01-login.webp',
     type: 'SoftwareApplication',
   },
   {
@@ -77,7 +97,9 @@ function replaceMeta(html, selector, value) {
 for (const route of routes) {
   const routeUrl = `${siteUrl}${route.path}/`;
   const imageUrl = `${siteUrl}${route.image}`;
-  let html = source.replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`);
+  let html = source
+    .replace(/<link\s+data-home-preload[^>]*>\s*/g, '')
+    .replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`);
   html = replaceMeta(html, 'name="description"', route.description);
   html = replaceMeta(html, 'property="og:title"', route.title);
   html = replaceMeta(html, 'property="og:description"', route.description);

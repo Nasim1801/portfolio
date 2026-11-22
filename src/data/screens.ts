@@ -1,120 +1,189 @@
 export interface ScreenshotAsset {
   src: string;
   smallSrc?: string;
+  thumbnailSrc?: string;
   smallWidth?: number;
   sizes?: string;
   fallbackSrc?: string;
   alt: string;
   width: number;
   height: number;
-  available?: boolean;
+  label?: string;
 }
 
-const portraitSize = { width: 1179, height: 2556 } as const;
-const portraitResponsive = {
-  smallWidth: 640,
-  sizes: '(max-width: 700px) 80vw, 360px',
-} as const;
+function portrait(
+  src: string,
+  width: number,
+  height: number,
+  label: string,
+  alt: string,
+): ScreenshotAsset {
+  return {
+    src: `${src}.webp`,
+    smallSrc: `${src}-540.webp`,
+    thumbnailSrc: `${src}-112.webp`,
+    smallWidth: 540,
+    sizes: '(max-width: 650px) 48vw, 290px',
+    width,
+    height,
+    label,
+    alt,
+  };
+}
+
+export const sumlumeScreens: ScreenshotAsset[] = [
+  portrait(
+    'assets/sumlume/classic',
+    1179,
+    2556,
+    'Classic board',
+    'Official Sumlume App Store artwork showing the colourful Classic board and an example of numbers that add to ten',
+  ),
+  portrait(
+    'assets/sumlume/home',
+    1179,
+    2556,
+    'Home and progression',
+    'Sumlume home screen showing Continue Classic, Daily Challenge and level progress',
+  ),
+  portrait(
+    'assets/sumlume/daily',
+    1179,
+    2556,
+    'Daily Challenge',
+    'Sumlume Daily Challenge board with a dated number puzzle',
+  ),
+  portrait(
+    'assets/sumlume/achievements',
+    1179,
+    2556,
+    'Achievements',
+    'Sumlume achievements screen showing milestones and unlockable rewards',
+  ),
+  portrait(
+    'assets/sumlume/statistics',
+    1179,
+    2556,
+    'Statistics',
+    'Sumlume statistics screen displaying best score, puzzles played and numbers matched',
+  ),
+  portrait(
+    'assets/sumlume/collection',
+    1179,
+    2556,
+    'Collection',
+    'Sumlume collection screen with animal avatars and decorative frames',
+  ),
+];
 
 export const pathLifeScreens: ScreenshotAsset[] = [
-  {
-    src: 'assets/pathlife/01-main.webp',
-    smallSrc: 'assets/pathlife/01-main-640.webp',
-    fallbackSrc: 'assets/pathlife/01-main.png',
-    alt: 'PathLife main life screen showing the character age and stat bars',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pathlife/02-event.webp',
-    smallSrc: 'assets/pathlife/02-event-640.webp',
-    fallbackSrc: 'assets/pathlife/02-event.png',
-    alt: 'PathLife life event showing story text and choices',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pathlife/03-career.webp',
-    smallSrc: 'assets/pathlife/03-career-640.webp',
-    fallbackSrc: 'assets/pathlife/03-career.png',
-    alt: 'PathLife career screen showing available jobs',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pathlife/04-education.webp',
-    smallSrc: 'assets/pathlife/04-education-640.webp',
-    fallbackSrc: 'assets/pathlife/04-education.png',
-    alt: 'PathLife education screen showing study options',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pathlife/05-profile.webp',
-    smallSrc: 'assets/pathlife/05-profile-640.webp',
-    fallbackSrc: 'assets/pathlife/05-profile.png',
-    alt: 'PathLife character profile and life summary screen',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
+  portrait(
+    'assets/pathlife/dashboard',
+    1179,
+    2556,
+    'Life dashboard',
+    'Official PathLife App Store artwork showing Grace’s dashboard, career goal, well-being and age controls',
+  ),
+  portrait(
+    'assets/pathlife/decisions',
+    1206,
+    2622,
+    'Life decisions',
+    'PathLife life event presenting a relationship dilemma and four choices',
+  ),
+  portrait(
+    'assets/pathlife/relationships',
+    1179,
+    2556,
+    'Relationships',
+    'PathLife relationships screen listing family members and their connection scores',
+  ),
+  portrait(
+    'assets/pathlife/career',
+    1179,
+    2556,
+    'Career',
+    'PathLife career screen showing a software developer’s pay, performance and promotion progress',
+  ),
+  portrait(
+    'assets/pathlife/education',
+    1179,
+    2556,
+    'Education',
+    'PathLife education overview with university offers and student-life actions',
+  ),
+  portrait(
+    'assets/pathlife/business',
+    1179,
+    2556,
+    'Business',
+    'PathLife gym company dashboard showing finances, staff and clubs',
+  ),
+  portrait(
+    'assets/pathlife/property',
+    1179,
+    2556,
+    'Property',
+    'PathLife property management screen showing valuation, rental and renovation actions',
+  ),
 ];
 
 export const pawLifeScreens: ScreenshotAsset[] = [
-  {
-    src: 'assets/pawlife/01-home.webp',
-    smallSrc: 'assets/pawlife/01-home-640.webp',
-    fallbackSrc: 'assets/pawlife/01-home.png',
-    alt: "PawLife home screen showing Maple's room, life stage and current story",
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pawlife/02-minigame.webp',
-    smallSrc: 'assets/pawlife/02-minigame-640.webp',
-    fallbackSrc: 'assets/pawlife/02-minigame.png',
-    alt: 'PawLife Tug of War minigame in action',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pawlife/03-minigames-list.webp',
-    smallSrc: 'assets/pawlife/03-minigames-list-640.webp',
-    fallbackSrc: 'assets/pawlife/03-minigames-list.png',
-    alt: 'PawLife screen showing the choice of minigames',
-    available: false,
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pawlife/04-event.webp',
-    smallSrc: 'assets/pawlife/04-event-640.webp',
-    fallbackSrc: 'assets/pawlife/04-event.png',
-    alt: 'PawLife care story for Maple showing three player choices',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pawlife/05-achievements.webp',
-    smallSrc: 'assets/pawlife/05-achievements-640.webp',
-    fallbackSrc: 'assets/pawlife/05-achievements.png',
-    alt: 'PawLife Life Album showing the scores leaderboard',
-    ...portraitSize,
-    ...portraitResponsive,
-  },
-  {
-    src: 'assets/pawlife/06-share-card.webp',
-    smallSrc: 'assets/pawlife/06-share-card-640.webp',
-    fallbackSrc: 'assets/pawlife/06-share-card.png',
-    alt: 'PawLife shareable life results card',
-    available: false,
-    ...portraitSize,
-    ...portraitResponsive,
-  },
+  portrait(
+    'assets/pawlife/home',
+    1206,
+    2622,
+    'Home life',
+    'PawLife development build showing Bella at home in year four, with needs and story controls',
+  ),
+  portrait(
+    'assets/pawlife/care',
+    1206,
+    2622,
+    'Companionship',
+    'PawLife companionship session with an invitation to care for Bella',
+  ),
+  portrait(
+    'assets/pawlife/creation',
+    1206,
+    2622,
+    'Character creation',
+    'PawLife companion selection showing a dog preview, animal choices and breed options',
+  ),
+  portrait(
+    'assets/pawlife/shelter',
+    1206,
+    2622,
+    'Shelter story',
+    'PawLife opening biography for Saffron, a kitten living in a shelter',
+  ),
+  portrait(
+    'assets/pawlife/outing',
+    1206,
+    2622,
+    'Neighbourhood activity',
+    'PawLife neighbourhood activity asking the player to guide their pet across a grid towards a ribbon',
+  ),
+  portrait(
+    'assets/pawlife/beach',
+    1206,
+    2622,
+    'Beach activity',
+    'PawLife beach scene showing a choice between playing with the foam and following a shell line',
+  ),
+  portrait(
+    'assets/pawlife/progression',
+    1206,
+    2622,
+    'Life progression',
+    'PawLife annual review showing Marshmallow’s current stage and the option to begin year one',
+  ),
 ];
 
 export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/01-live-squat.webp',
+    label: 'Live squat tracking',
     fallbackSrc: 'assets/physio-ai/01-live-squat.png',
     alt: 'Physio-AI live squat session showing tracked pose landmarks, eleven repetitions and 100% session accuracy',
     width: 1179,
@@ -122,6 +191,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/physio-ai/02-live-standing.webp',
+    label: 'Standing detection',
     fallbackSrc: 'assets/physio-ai/02-live-standing.png',
     alt: 'Physio-AI live session detecting the standing position before a squat',
     width: 988,
@@ -129,6 +199,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/physio-ai/03-progress-dashboard.webp',
+    label: 'Progress dashboard',
     fallbackSrc: 'assets/physio-ai/03-progress-dashboard.png',
     alt: 'Physio-AI progress dashboard showing session accuracy, rep volume and joint performance',
     width: 902,
@@ -136,6 +207,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/physio-ai/04-session-history.webp',
+    label: 'Session history',
     fallbackSrc: 'assets/physio-ai/04-session-history.png',
     alt: 'Physio-AI session history showing squat repetitions, accuracy and joint performance',
     width: 1206,
@@ -143,6 +215,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/physio-ai/05-profile-settings.webp',
+    label: 'Recovery settings',
     fallbackSrc: 'assets/physio-ai/05-profile-settings.png',
     alt: 'Physio-AI profile and recovery progress screen with personal account details redacted',
     width: 724,
@@ -150,6 +223,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/physio-ai/06-ai-feedback-panel.webp',
+    label: 'Live feedback',
     fallbackSrc: 'assets/physio-ai/06-ai-feedback-panel.png',
     alt: 'Physio-AI session panel showing rep count, form score and live corrective feedback',
     width: 360,
@@ -157,58 +231,10 @@ export const physioAiScreens: ScreenshotAsset[] = [
   },
 ];
 
-export const sumlumeScreens: ScreenshotAsset[] = [
-  {
-    src: 'assets/sumlume/gameplay.webp',
-    smallSrc: 'assets/sumlume/gameplay-480.webp',
-    smallWidth: 480,
-    sizes: '(max-width: 700px) 70vw, 360px',
-    alt: 'Sumlume Classic game board showing colourful number tiles, score, combo, hint and undo controls',
-    width: 720,
-    height: 1560,
-  },
-  {
-    src: 'assets/sumlume/screenshot-1.webp',
-    alt: 'Sumlume App Store screenshot explaining that players match equal numbers or pairs that make ten',
-    width: 690,
-    height: 1496,
-  },
-  {
-    src: 'assets/sumlume/screenshot-5.webp',
-    alt: 'Sumlume daily challenge board with a dated puzzle and matching controls',
-    width: 690,
-    height: 1496,
-  },
-  {
-    src: 'assets/sumlume/screenshot-6.webp',
-    alt: 'Sumlume collection screen showing unlockable animal avatars and decorative frames',
-    width: 690,
-    height: 1496,
-  },
-  {
-    src: 'assets/sumlume/screenshot-8.webp',
-    alt: 'Sumlume statistics screen showing personal best and puzzle progress',
-    width: 690,
-    height: 1496,
-  },
-  {
-    src: 'assets/sumlume/screenshot-9.webp',
-    alt: 'Sumlume achievements screen showing milestone progress and unlockable rewards',
-    width: 690,
-    height: 1496,
-  },
-  {
-    src: 'assets/sumlume/screenshot-10.webp',
-    alt: 'Sumlume home screen showing Classic, Daily Challenge, leaderboards, statistics and achievements',
-    width: 690,
-    height: 1496,
-  },
-];
-
 export const sumlumeIcon: ScreenshotAsset = {
   src: 'assets/sumlume/icon.webp',
-  smallSrc: 'assets/sumlume/icon-128.webp',
-  smallWidth: 128,
+  smallSrc: 'assets/sumlume/icon-160.webp',
+  smallWidth: 160,
   sizes: '82px',
   alt: 'Sumlume app icon with glowing number tiles',
   width: 512,
@@ -218,7 +244,8 @@ export const sumlumeIcon: ScreenshotAsset = {
 export const portfolioScreen: ScreenshotAsset = {
   src: 'assets/portfolio/01-home.webp',
   fallbackSrc: 'assets/portfolio/01-home.png',
-  alt: 'Nasim Mosayebi portfolio homepage showing the interactive project signal field',
+  label: 'Exhibition homepage',
+  alt: 'Nasim Mosayebi portfolio homepage showing the Digital Product Exhibition and product selector',
   width: 1600,
   height: 1000,
 };
@@ -227,10 +254,9 @@ export const gameIcons = {
   sumlume: sumlumeIcon,
   pathlife: {
     src: 'assets/pathlife/icon.webp',
-    smallSrc: 'assets/pathlife/icon-192.webp',
-    smallWidth: 192,
+    smallSrc: 'assets/pathlife/icon-160.webp',
+    smallWidth: 160,
     sizes: '80px',
-    fallbackSrc: 'assets/pathlife/icon.png',
     alt: 'PathLife app icon',
     width: 512,
     height: 512,
@@ -252,6 +278,7 @@ const hospitalSize = { width: 2000, height: 1083 } as const;
 export const co2TrackerScreens: ScreenshotAsset[] = [
   {
     src: 'assets/co2-tracker/01-customer-page.webp',
+    label: 'Customer dashboard',
     fallbackSrc: 'assets/co2-tracker/01-customer-page.png',
     alt: 'ECOlution customer page with sidebar, product search, photo upload and barcode lookup controls',
     width: 2000,
@@ -259,6 +286,7 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/co2-tracker/02-search-results.webp',
+    label: 'Product search',
     fallbackSrc: 'assets/co2-tracker/02-search-results.png',
     alt: 'ECOlution search results showing three laptops and their carbon footprints: Apple MacBook, Dell XPS and Framework',
     width: 2000,
@@ -266,6 +294,7 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/co2-tracker/03-barcode-result.webp',
+    label: 'Barcode lookup',
     fallbackSrc: 'assets/co2-tracker/03-barcode-result.png',
     alt: 'ECOlution typed barcode lookup showing an Apple MacBook result with a 200 kg carbon footprint',
     width: 2000,
@@ -273,6 +302,7 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   },
   {
     src: 'assets/co2-tracker/04-upload-simulated.webp',
+    label: 'Simulated photo lookup',
     fallbackSrc: 'assets/co2-tracker/04-upload-simulated.png',
     alt: 'ECOlution prototype photo upload alert showing simulated recognition of Training Shoes',
     width: 2000,
@@ -283,24 +313,28 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
 export const hospitalScreens: ScreenshotAsset[] = [
   {
     src: 'assets/hospital/01-login.webp',
+    label: 'Hospital search',
     fallbackSrc: 'assets/hospital/01-login.png',
     alt: 'Hospital Appointment System start screen for finding a hospital',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/02-booking.webp',
+    label: 'Choose a date and time',
     fallbackSrc: 'assets/hospital/02-booking.png',
     alt: 'Hospital Appointment System booking module with calendar and time choices',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/03-confirmation.webp',
+    label: 'Booking confirmation',
     fallbackSrc: 'assets/hospital/03-confirmation.png',
     alt: 'Hospital Appointment System confirmation for a fictional appointment',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/04-schedule.webp',
+    label: 'Appointment schedule',
     fallbackSrc: 'assets/hospital/04-schedule.png',
     alt: 'Hospital Appointment System appointment schedule update screen',
     ...hospitalSize,
@@ -309,6 +343,7 @@ export const hospitalScreens: ScreenshotAsset[] = [
 
 export const hospitalTestScreen: ScreenshotAsset = {
   src: 'assets/hospital/05-tests.webp',
+  label: 'JUnit test result',
   fallbackSrc: 'assets/hospital/05-tests.png',
   alt: 'JUnit terminal output showing the Hospital booking module test passing',
   width: 1880,

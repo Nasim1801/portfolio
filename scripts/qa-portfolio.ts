@@ -1,7 +1,9 @@
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium, type Page } from 'playwright';
 
-const origin = 'http://127.0.0.1:4173';
-const base = '/portfolio/';
+const site = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4173/portfolio/';
+const output = process.env.PORTFOLIO_QA_OUTPUT ?? 'review/v4/after';
 const routes = [
   '',
   'lab/',
@@ -10,206 +12,188 @@ const routes = [
   'projects/physio-ai/',
   'projects/pawlife/',
   'projects/portfolio/',
+  'projects/co2-tracker/',
+  'projects/hospital-appointment-system/',
 ];
 const viewports = [
-  { name: 'small-mobile', width: 360, height: 800 },
-  { name: 'mobile', width: 390, height: 844 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop', width: 1440, height: 1000 },
-  { name: 'wide', width: 1920, height: 1080 },
+  { width: 360, height: 800 },
+  { width: 390, height: 844 },
+  { width: 768, height: 1024 },
+  { width: 1440, height: 1000 },
+  { width: 1920, height: 1080 },
 ];
-const themes = ['light', 'dark'] as const;
-
-type Check = {
-  route: string;
-  viewport: string;
-  theme: string;
-  overflow: number;
-  images: number;
-  brokenImages: string[];
-  title: string;
-  h1: number;
-  emptyAlt: string[];
-  insecureBlankLinks: string[];
-  consoleErrors: string[];
-  pageErrors: string[];
-  failedRequests: string[];
-};
-
-async function settle(page: Page) {
-  await page.evaluate(async () => document.fonts.ready);
-  await page.evaluate(async () => {
-    for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight) {
-      window.scrollTo(0, y);
-      await new Promise((resolve) => setTimeout(resolve, 28));
-    }
-  });
-  await page.waitForTimeout(180);
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(100);
-}
-
+const failures: string[] = [];
+const axePath = process.env.PORTFOLIO_AXE_PATH;
 const browser = await chromium.launch({
-  headless: true,
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  executablePath:
+    process.env.PORTFOLIO_CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 });
-const results: Check[] = [];
+const result: { route: string; width: number; theme: string; images: number; resources: number }[] =
+  [];
 
-for (const theme of themes) {
-  for (const viewport of viewports) {
-    const context = await browser.newContext({ viewport });
-    await context.addInitScript((selectedTheme) => {
-      localStorage.setItem('nm-theme', selectedTheme);
-    }, theme);
+async function visit(page: Page, route = '') {
+  const url = new URL(route, site).href;
+  assert.ok((await page.goto(url, { waitUntil: 'load' }))?.ok(), url);
+  await page.locator('main h1').waitFor();
+  await page.evaluate(() => document.fonts.ready);
+}
 
-    for (const route of routes) {
-      const page = await context.newPage();
-      const consoleErrors: string[] = [];
-      const pageErrors: string[] = [];
-      const failedRequests: string[] = [];
-      page.on('console', (message) => {
-        if (message.type() === 'error') consoleErrors.push(message.text());
+try {
+  await mkdir(output, { recursive: true });
+  for (const theme of ['light', 'dark']) {
+    for (const viewport of viewports) {
+      const context = await browser.newContext({
+        viewport,
+        colorScheme: theme as 'light' | 'dark',
+        reducedMotion: 'reduce',
       });
-      page.on('pageerror', (error) => pageErrors.push(error.message));
-      page.on('requestfailed', (request) => {
-        if (!request.url().includes('favicon')) {
-          failedRequests.push(
-            `${request.method()} ${request.url()} ${request.failure()?.errorText}`,
+      for (const route of routes) {
+        const page = await context.newPage();
+        const label = `${route || 'home'} at ${viewport.width}px (${theme})`;
+        page.on('pageerror', (error) => failures.push(`${label}: ${error.message}`));
+        page.on('response', (response) => {
+          if (response.status() >= 400 && response.url().startsWith(site)) {
+            failures.push(`${label}: HTTP ${response.status()} for ${response.url()}`);
+          }
+        });
+        await visit(page, route);
+        const metrics = await page.evaluate(async () => {
+          const images = [...document.images].filter((image) => image.getClientRects().length);
+          await Promise.all(
+            images.map(async (image) => {
+              image.loading = 'eager';
+              await image.decode().catch(() => undefined);
+            }),
           );
+          return {
+            images: images.length,
+            missingImages: images
+              .filter((image) => !image.naturalWidth || !image.hasAttribute('alt'))
+              .map((image) => image.src),
+            overflow: document.documentElement.scrollWidth - innerWidth,
+            headings: document.querySelectorAll('h1').length,
+            resources: performance.getEntriesByType('resource').length,
+          };
+        });
+        if (metrics.overflow > 0 || metrics.headings !== 1 || metrics.missingImages.length) {
+          failures.push(`${label}: ${JSON.stringify(metrics)}`);
         }
-      });
-
-      const response = await page.goto(`${origin}${base}${route}`, { waitUntil: 'networkidle' });
-      if (!response?.ok()) pageErrors.push(`HTTP ${response?.status()} for ${route || 'home'}`);
-      await settle(page);
-
-      const report = await page.evaluate(() => {
-        const images = [...document.images];
-        return {
-          overflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
-          images: images.length,
-          brokenImages: images
-            .filter((image) => image.complete && image.naturalWidth === 0)
-            .map((image) => image.currentSrc || image.src),
-          title: document.title,
-          h1: document.querySelectorAll('h1').length,
-          emptyAlt: images.filter((image) => !image.hasAttribute('alt')).map((image) => image.src),
-          insecureBlankLinks: [
-            ...document.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]'),
-          ]
-            .filter((link) => !link.rel.includes('noopener'))
-            .map((link) => link.href),
-        };
-      });
-
-      results.push({
-        route: route || 'home',
-        viewport: `${viewport.name}-${viewport.width}`,
-        theme,
-        ...report,
-        consoleErrors,
-        pageErrors,
-        failedRequests,
-      });
-
-      if (theme === 'dark' && route === '' && (viewport.width === 390 || viewport.width === 1440)) {
-        await page.screenshot({ path: `review/v3-after-${viewport.width}.png`, fullPage: false });
+        result.push({
+          route: route || 'Home',
+          width: viewport.width,
+          theme,
+          images: metrics.images,
+          resources: metrics.resources,
+        });
+        const slug = route.split('/').filter(Boolean).at(-1) || 'home';
+        if (theme === 'light') {
+          await page.screenshot({ path: `${output}/${slug}-${viewport.width}.png` });
+        }
+        if (axePath && (viewport.width === 390 || viewport.width === 1440)) {
+          await page.addScriptTag({ path: axePath });
+          const violations = await page.evaluate(async () => {
+            const api = (
+              window as unknown as {
+                axe: {
+                  run: () => Promise<{
+                    violations: { id: string; nodes: { target: string[] }[] }[];
+                  }>;
+                };
+              }
+            ).axe;
+            return (await api.run()).violations.map(({ id, nodes }) => ({
+              id,
+              elements: nodes.map((node) => node.target),
+            }));
+          });
+          if (violations.length) failures.push(`${label}: axe ${JSON.stringify(violations)}`);
+        }
+        await page.close();
       }
-      await page.close();
+      await context.close();
     }
-    await context.close();
   }
+
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  });
+  const page = await context.newPage();
+  await visit(page);
+  const menu = page.getByRole('button', { name: 'Open navigation' });
+  await menu.click();
+  assert.equal(await page.getByRole('navigation', { name: 'Main navigation' }).isVisible(), true);
+  await page.keyboard.press('Escape');
+  assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+  await page.getByRole('tab', { name: 'Sumlume', exact: true }).focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(
+    await page.getByRole('tab', { name: 'PathLife', exact: true }).getAttribute('aria-selected'),
+    'true',
+  );
+  await page.keyboard.press('End');
+  assert.equal(
+    await page.getByRole('tab', { name: 'PawLife', exact: true }).getAttribute('aria-selected'),
+    'true',
+  );
+  await page.keyboard.press('Tab');
+  assert.match(
+    await page.evaluate(() => document.activeElement?.getAttribute('aria-label') ?? ''),
+    /PawLife case study/,
+  );
+  await page.getByRole('button', { name: 'TypeScript', exact: true }).click();
+  assert.equal(
+    await page.getByRole('heading', { name: 'TypeScript', exact: true }).isVisible(),
+    true,
+  );
+  const download = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Download CV', exact: true }).first().click();
+  assert.equal((await download).suggestedFilename(), 'Nasim-Mosayebi-CV.pdf');
+  await page.getByRole('button', { name: /switch to dark mode/i }).click();
+  await page.reload();
+  assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+
+  await visit(page, 'projects/sumlume/');
+  await page.getByRole('button', { name: 'Next screenshot' }).click();
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'Show Home and progression' })
+      .getAttribute('aria-current'),
+    'true',
+  );
+  const viewerTrigger = page.getByRole('button', { name: /view full size/i });
+  await viewerTrigger.click();
+  const viewer = page.getByRole('dialog');
+  assert.equal(await viewer.isVisible(), true);
+  assert.equal(
+    await viewer
+      .getByRole('button', { name: 'Close screenshot' })
+      .evaluate((el) => el === document.activeElement),
+    true,
+  );
+  await page.keyboard.press('ArrowRight');
+  assert.match((await viewer.locator('img').getAttribute('alt')) ?? '', /Daily Challenge/);
+  await page.keyboard.press('Escape');
+  assert.equal(await viewer.isVisible(), false);
+  assert.equal(await viewerTrigger.evaluate((el) => el === document.activeElement), true);
+
+  await visit(page, 'lab/');
+  await page.getByRole('button', { name: 'Tile 1, number 4' }).click();
+  await page.getByRole('button', { name: 'Tile 2, number 6' }).click();
+  assert.equal(await page.getByText(/4 and 6 cleared/i).isVisible(), true);
+  await page.getByRole('tab', { name: /random forest/i }).click();
+  assert.equal(
+    await page.getByRole('tab', { name: /random forest/i }).getAttribute('aria-selected'),
+    'true',
+  );
+  await page.locator('input[type="range"]').fill('74');
+  assert.equal(await page.locator('input[type="range"]').inputValue(), '74');
+  await context.close();
+} finally {
+  await browser.close();
+  await writeFile(`${output}/checks.json`, JSON.stringify({ checks: result, failures }, null, 2));
+  console.log(JSON.stringify({ checks: result.length, failures }, null, 2));
 }
 
-const interactionContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
-await interactionContext.addInitScript(() => localStorage.setItem('nm-theme', 'dark'));
-const interactionPage = await interactionContext.newPage();
-
-await interactionPage.goto(`${origin}${base}`, { waitUntil: 'networkidle' });
-await interactionPage.getByRole('button', { name: /open navigation/i }).click();
-const menuOpened = await interactionPage
-  .getByRole('navigation', { name: /main navigation/i })
-  .isVisible();
-await interactionPage.keyboard.press('Escape');
-const menuClosed =
-  (await interactionPage
-    .getByRole('button', { name: /open navigation/i })
-    .getAttribute('aria-expanded')) === 'false';
-
-const selectedProject = interactionPage.getByRole('tab', { name: /sumlume/i });
-await selectedProject.focus();
-await interactionPage.keyboard.press('ArrowRight');
-const constellationKeyboard = await interactionPage
-  .getByRole('tab', { name: /pathlife/i })
-  .getAttribute('aria-selected');
-
-await interactionPage.locator('#skills').scrollIntoViewIfNeeded();
-await interactionPage.getByRole('button', { name: 'TypeScript', exact: true }).click();
-const skillEvidenceUpdated = await interactionPage
-  .getByRole('heading', { name: 'TypeScript', exact: true })
-  .isVisible();
-
-await interactionPage.goto(`${origin}${base}projects/sumlume/`, { waitUntil: 'networkidle' });
-await interactionPage
-  .getByRole('button', { name: /open .* full size/i })
-  .first()
-  .click();
-const lightboxOpened = await interactionPage.getByRole('dialog').isVisible();
-await interactionPage.keyboard.press('ArrowRight');
-await interactionPage.keyboard.press('Escape');
-const lightboxClosed = (await interactionPage.getByRole('dialog').count()) === 0;
-
-await interactionPage.goto(`${origin}${base}lab/`, { waitUntil: 'networkidle' });
-await interactionPage.getByRole('button', { name: 'Tile 1, number 4' }).click();
-await interactionPage.getByRole('button', { name: 'Tile 2, number 6' }).click();
-const puzzleMatch = await interactionPage.getByText(/4 and 6 cleared/i).isVisible();
-await interactionPage.getByRole('tab', { name: /random forest/i }).click();
-const pipelineSelection = await interactionPage
-  .getByRole('tab', { name: /random forest/i })
-  .getAttribute('aria-selected');
-await interactionPage.locator('input[type="range"]').fill('74');
-const poseRange = await interactionPage.locator('input[type="range"]').inputValue();
-
-await interactionContext.close();
-await browser.close();
-
-const failures = results.filter(
-  (result) =>
-    result.overflow > 0 ||
-    result.brokenImages.length > 0 ||
-    result.h1 !== 1 ||
-    result.emptyAlt.length > 0 ||
-    result.insecureBlankLinks.length > 0 ||
-    result.consoleErrors.length > 0 ||
-    result.pageErrors.length > 0 ||
-    result.failedRequests.length > 0,
-);
-
-const interactions = {
-  menuOpened,
-  menuClosed,
-  constellationKeyboard: constellationKeyboard === 'true',
-  skillEvidenceUpdated,
-  lightboxOpened,
-  lightboxClosed,
-  puzzleMatch,
-  pipelineSelection: pipelineSelection === 'true',
-  poseRange: poseRange === '74',
-};
-
-console.log(
-  JSON.stringify(
-    {
-      checks: results.length,
-      failures,
-      interactions,
-      titles: [...new Set(results.map((result) => result.title))],
-    },
-    null,
-    2,
-  ),
-);
-
-if (failures.length > 0 || Object.values(interactions).some((value) => !value)) {
-  process.exitCode = 1;
-}
+assert.deepEqual(failures, []);

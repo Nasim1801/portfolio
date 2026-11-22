@@ -3,3 +3,6 @@ node_modules
 package-lock.json
 public/assets/**/*.webp
 work
+
+review/v4
+review/pawlife-captures
