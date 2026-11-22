@@ -1,19 +1,12 @@
-import { lazy, Suspense, useEffect } from 'react';
-import { ExhibitionHero } from './components/ExhibitionHero';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Header } from './components/Header';
-import {
-  About,
-  Contact,
-  Experience,
-  Footer,
-  LabInvitation,
-  ProofStrip,
-  SelectedWork,
-  Skills,
-  TeamProjects,
-} from './components/Sections';
+import { Hero } from './components/Hero';
+import { About, Contact, Experience, Footer, SelectedWork, Skills } from './components/Sections';
 import { content, findCaseStudy, type CaseStudy } from './data/content';
-import { pageUrl, routePath } from './utils/links';
+import { confettiRain, initKonami, initReveals, initWorlds } from './fx/effects';
+import { initRouter, useRoute } from './fx/router';
+import { ScrollMap } from './fx/ScrollMap';
+import { pageUrl, scrollToHash } from './utils/links';
 import styles from './styles/site.module.css';
 
 const CaseStudyPage = lazy(() =>
@@ -35,7 +28,7 @@ function PageMetadata({ study }: { study?: CaseStudy }) {
   useEffect(() => {
     const title = study ? `${study.name} Case Study | Nasim Mosayebi` : content.identity.title;
     const description = study
-      ? `${study.name}: ${study.summary} Read the engineering case study by London software engineer Nasim Mosayebi.`
+      ? `${study.name}: ${study.summary} A case study by London software engineer Nasim Mosayebi.`
       : content.identity.description;
     const url = study ? `${siteUrl}projects/${study.slug}/` : siteUrl;
 
@@ -47,35 +40,14 @@ function PageMetadata({ study }: { study?: CaseStudy }) {
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
     document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', url);
-
-    let schema = document.querySelector<HTMLScriptElement>('#page-schema');
-    if (!schema) {
-      schema = document.createElement('script');
-      schema.id = 'page-schema';
-      schema.type = 'application/ld+json';
-      document.head.append(schema);
-    }
-    schema.textContent = JSON.stringify(
-      study
-        ? {
-            '@context': 'https://schema.org',
-            '@type': study.schemaType,
-            name: study.name,
-            description: study.summary,
-            url,
-            author: { '@type': 'Person', name: content.identity.name, url: siteUrl },
-            image: `${siteUrl}${study.media[0].src}`,
-          }
-        : {
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'Nasim Mosayebi developer portfolio',
-            url: siteUrl,
-            author: { '@type': 'Person', name: content.identity.name },
-          },
-    );
   }, [study]);
 
+  return null;
+}
+
+/** Scrolls to the URL fragment after the route has rendered. */
+function HashTarget() {
+  useEffect(() => scrollToHash(), []);
   return null;
 }
 
@@ -84,16 +56,14 @@ function HomePage() {
     <>
       <PageMetadata />
       <main id="main-content">
-        <ExhibitionHero />
-        <ProofStrip />
+        <Hero />
         <SelectedWork />
-        <LabInvitation />
-        <TeamProjects />
         <Skills />
         <About />
         <Experience />
         <Contact />
       </main>
+      <HashTarget />
     </>
   );
 }
@@ -101,29 +71,62 @@ function HomePage() {
 function NotFoundPage() {
   return (
     <main id="main-content" className={styles.notFound}>
-      <p className={styles.eyebrow}>404</p>
-      <h1>That page is not part of this portfolio.</h1>
-      <p>Return to the selected work or use the navigation to continue.</p>
-      <a className={styles.primaryButton} href={pageUrl()}>
-        Portfolio home
+      <h1>This page isn’t part of the portfolio.</h1>
+      <p>The link may be out of date. The home page lists all of my work.</p>
+      <a className={styles.buttonPrimary} href={pageUrl()}>
+        Go to the home page
       </a>
     </main>
   );
 }
 
+/** Ambient colour behind the whole page. It tweens into each project's world. */
+function Atmosphere() {
+  return (
+    <div className={styles.atmosphere} aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </div>
+  );
+}
+
 export default function App() {
-  const route = routePath();
+  const route = useRoute();
+  const [toast, setToast] = useState('');
   const projectMatch = /^projects\/([^/]+)$/.exec(route);
   const study = projectMatch ? findCaseStudy(projectMatch[1]) : undefined;
   const knownHomeRoute = route === '' || route === 'index.html';
   const labRoute = route === 'lab';
+
+  useEffect(() => {
+    const stopRouter = initRouter();
+    const stopReveals = initReveals();
+    const stopWorlds = initWorlds();
+    let timer = 0;
+    const stopKonami = initKonami(() => {
+      confettiRain(120);
+      setToast('Cheat code accepted. Extra lives granted. The CV is still worth reading.');
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setToast(''), 6000);
+    });
+    return () => {
+      stopRouter();
+      stopReveals();
+      stopWorlds();
+      stopKonami();
+      window.clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <>
       <a className={styles.skipLink} href="#main-content">
         Skip to content
       </a>
-      <Header />
+      <Atmosphere />
+      <Header isHome={knownHomeRoute} />
+      {knownHomeRoute && <ScrollMap />}
       <Suspense
         key={route}
         fallback={<main id="main-content" className={styles.routeLoading} aria-busy="true" />}
@@ -132,6 +135,7 @@ export default function App() {
           <>
             <PageMetadata study={study} />
             <CaseStudyPage study={study} />
+            <HashTarget />
           </>
         ) : labRoute ? (
           <EngineeringLabPage />
@@ -142,6 +146,9 @@ export default function App() {
         )}
       </Suspense>
       <Footer />
+      <p className={styles.toast} role="status" data-on={toast ? '' : undefined}>
+        {toast}
+      </p>
     </>
   );
 }

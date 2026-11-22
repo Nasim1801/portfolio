@@ -25,9 +25,7 @@ export function EngineeringLabPage() {
           Portfolio home
         </a>
         <p className={styles.labEyebrow}>Interactive demonstrations</p>
-        <h1>
-          Engineering <em>Lab</em>
-        </h1>
+        <h1>Engineering Lab</h1>
         <div className={styles.labIntro}>
           <p>
             Play a number puzzle built around Sumlume’s matching rules, then follow an interactive
@@ -36,11 +34,11 @@ export function EngineeringLabPage() {
           <dl>
             <div>
               <dt>Controls</dt>
-              <dd>Pointer · touch · keyboard</dd>
+              <dd>Pointer, touch and keyboard</dd>
             </div>
             <div>
               <dt>Runtime</dt>
-              <dd>React · TypeScript · SVG</dd>
+              <dd>React, TypeScript and SVG</dd>
             </div>
           </dl>
         </div>

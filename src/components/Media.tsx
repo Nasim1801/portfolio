@@ -22,22 +22,19 @@ export function MediaImage({
   sizes?: string;
 }) {
   const thumbnailSrc = thumbnail && item.thumbnailSrc;
-  const [failed, setFailed] = useState<{ src: string; count: number }>();
-  const errors = failed?.src === item.src ? failed.count : 0;
-  if (errors >= (item.fallbackSrc ? 3 : 2)) {
+  const [failedSrc, setFailedSrc] = useState<string>();
+  if (failedSrc === item.src) {
     return decorative ? null : (
-      <span className={styles.mediaUnavailable}>Image temporarily unavailable.</span>
+      <span className={styles.mediaUnavailable}>Image unavailable: {item.alt}</span>
     );
   }
 
   return (
     <img
       className={className}
-      src={assetUrl(
-        errors >= 2 && item.fallbackSrc ? item.fallbackSrc : (!errors && thumbnailSrc) || item.src,
-      )}
+      src={assetUrl(thumbnailSrc || item.src)}
       srcSet={
-        !fullSize && !thumbnailSrc && !errors && item.smallSrc
+        !fullSize && !thumbnailSrc && item.smallSrc
           ? `${assetUrl(item.smallSrc)} ${item.smallWidth ?? 640}w, ${assetUrl(item.src)} ${item.width}w`
           : undefined
       }
@@ -48,7 +45,7 @@ export function MediaImage({
       loading={priority ? 'eager' : 'lazy'}
       fetchPriority={priority ? 'high' : 'auto'}
       decoding="async"
-      onError={() => setFailed({ src: item.src, count: errors + 1 })}
+      onError={() => setFailedSrc(item.src)}
     />
   );
 }
@@ -59,12 +56,14 @@ export function DeviceFrame({
   address,
   title,
   priority = false,
+  sizes,
 }: {
   item: MediaItem;
   frame: FrameType;
   address?: string;
   title?: string;
   priority?: boolean;
+  sizes?: string;
 }) {
   return (
     <div className={styles.deviceFrame} data-frame={frame}>
@@ -76,7 +75,7 @@ export function DeviceFrame({
           <span>{address ?? title}</span>
         </div>
       )}
-      <MediaImage item={item} priority={priority} />
+      <MediaImage item={item} priority={priority} sizes={sizes} />
     </div>
   );
 }
@@ -171,6 +170,11 @@ export function Gallery({
               frame={frame}
               title={title}
               priority={priority && active === 0}
+              sizes={
+                frame === 'phone' || frame === 'print'
+                  ? undefined
+                  : '(max-width: 900px) 92vw, 760px'
+              }
             />
           </div>
           <span className={styles.expandHint}>View full size</span>

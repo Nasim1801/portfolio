@@ -4,7 +4,7 @@ import { chromium, type BrowserContext, type Page } from 'playwright';
 import sharp from 'sharp';
 
 const co2TrackerUrl = process.env.CO2_TRACKER_URL ?? 'http://127.0.0.1:4180';
-const outputDirectory = path.resolve('public/assets/co2-tracker');
+const outputDirectory = path.resolve('media-src/co2-tracker');
 
 async function settle(page: Page) {
   await page.waitForLoadState('networkidle').catch(() => undefined);
@@ -33,9 +33,6 @@ async function capture(page: Page, filename: string, maxWidth: number) {
     .resize({ width: maxWidth, withoutEnlargement: true })
     .png({ compressionLevel: 9, adaptiveFiltering: true })
     .toFile(pngPath);
-  await sharp(pngPath)
-    .webp({ quality: 82, effort: 6 })
-    .toFile(pngPath.replace(/\.png$/i, '.webp'));
   await unlink(rawPath);
 
   const metadata = await sharp(pngPath).metadata();

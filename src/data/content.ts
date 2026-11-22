@@ -1,3 +1,11 @@
+/**
+ * Verified portfolio content.
+ *
+ * Every fact here comes from the CV, the App Store listings recorded in
+ * ASSET-AUDIT-V4.md, or the earlier reviewed copy. Do not add metrics,
+ * employers or results without evidence. AUDIT-V5.md lists claims that
+ * still need the owner's confirmation.
+ */
 import type { ScreenshotAsset } from './screens';
 import {
   co2TrackerScreens,
@@ -8,177 +16,85 @@ import {
   pawLifeScreens,
   physioAiScreens,
   portfolioScreen,
-  sumlumeIcon,
   sumlumeScreens,
 } from './screens';
 
 export type FrameType = 'phone' | 'print' | 'browser' | 'desktop' | 'terminal';
+export type MediaItem = ScreenshotAsset;
+export type StatusTone = 'live' | 'graded' | 'progress' | 'done';
 
 export interface LinkItem {
   label: string;
   href: string;
-  download?: boolean;
-}
-
-export type MediaItem = ScreenshotAsset;
-
-export interface SelectedProject {
-  slug: string;
-  name: string;
-  label: string;
-  status: string;
-  summary: string;
-  evidence: string;
-  stack: string[];
-  media: MediaItem;
-  icon?: MediaItem;
-  frame: FrameType;
 }
 
 export interface CaseStudySection {
   id: string;
-  eyebrow: string;
-  title: string;
-  paragraphs: string[];
+  heading: string;
+  lead?: string;
+  paragraphs?: string[];
   bullets?: string[];
 }
 
 export interface CaseStudy {
   slug: string;
   name: string;
-  eyebrow: string;
+  kind: string;
   status: string;
+  tone: StatusTone;
   summary: string;
   role: string;
   icon?: MediaItem;
   media: MediaItem[];
   frame: FrameType;
   stack: string[];
-  facts: { value: string; label: string }[];
+  facts: { label: string; value: string }[];
   architecture: string[];
   sections: CaseStudySection[];
   links: LinkItem[];
   schemaType: 'VideoGame' | 'SoftwareApplication';
+  /** Owner should review sections drafted from documented facts. */
+  draftedSections?: string[];
 }
 
-export interface TeamProject {
+export interface FeaturedProject {
   slug: string;
-  name: string;
-  label: string;
   summary: string;
   role: string;
-  outcome: string;
   stack: string[];
-  media: MediaItem;
-  frame: FrameType;
+  /** Two screens for the card. The first is in front. */
+  preview: MediaItem[];
+  /** Stage colour behind the screenshots, chosen from the product artwork. */
+  stage: string;
   links: LinkItem[];
-  proof?: MediaItem;
+  hasFullCaseStudy?: boolean;
 }
 
-export interface SkillEvidenceItem {
-  technology: string;
-  category: string;
-  projects: {
-    name: string;
-    evidence: string;
-    href: string;
-  }[];
+export interface MoreProject {
+  slug: string;
+  name: string;
+  kind: string;
+  summary: string;
+  role: string;
+  stack: string[];
+  thumbnail: MediaItem;
+  links: LinkItem[];
 }
 
-const sumlumeStudy: CaseStudy = {
-  slug: 'sumlume',
-  name: 'Sumlume',
-  eyebrow: 'PathLife Studio · Native mobile game',
-  status: 'Live on iPhone and iPad · Android in development',
-  summary:
-    'A colourful number puzzle where players match equal numbers or pairs that add up to 10, then build progress through daily challenges, achievements and personal records.',
-  role: 'Founder & Software Developer. I lead the product design, native mobile implementation and release work under PathLife Studio.',
-  icon: sumlumeIcon,
-  media: sumlumeScreens,
-  frame: 'print',
-  stack: ['Swift', 'SwiftUI', 'Kotlin', 'Native iOS', 'Native Android'],
-  facts: [
-    { value: 'Live', label: 'on the App Store' },
-    { value: '2.0.0', label: 'current iOS version' },
-    { value: 'iPhone + iPad', label: 'published platforms' },
-    { value: 'Kotlin', label: 'Android build in development' },
-  ],
-  architecture: [
-    'SwiftUI interface',
-    'Rule-driven puzzle board',
-    'Session and progression state',
-    'App Store release',
-  ],
-  sections: [
-    {
-      id: 'overview',
-      eyebrow: '01 · Product',
-      title: 'Simple rules with room for strategy.',
-      paragraphs: [
-        'Sumlume starts with one clear rule: match identical numbers or two numbers that add up to 10. Each valid pair clears space and changes the next move, so a familiar mechanic develops strategic depth.',
-        'The product goal was to make the board immediately readable while giving players reasons to return through Classic games, Daily Challenges, achievements, statistics and collectible profile items.',
-      ],
-    },
-    {
-      id: 'responsibility',
-      eyebrow: '02 · Responsibility',
-      title: 'Native development across two platforms.',
-      paragraphs: [
-        'The published iPhone and iPad version is built natively for iOS with SwiftUI. A native Android version is being developed in Kotlin and is not currently presented as a published Google Play release.',
-        'My work spans the product experience, puzzle behaviour, interface design, progression surfaces and the practical release work required to maintain a live App Store product.',
-      ],
-      bullets: [
-        'Design a dense puzzle grid that remains clear on different Apple device sizes.',
-        'Keep core game rules consistent while building platform-native interfaces.',
-        'Maintain honest release labels across the published iOS and in-progress Android versions.',
-      ],
-    },
-    {
-      id: 'gameplay',
-      eyebrow: '03 · Game systems',
-      title: 'A board, a session and a longer journey.',
-      paragraphs: [
-        'The board evaluates valid equal-number and make-10 pairs. Hint, Undo and Add Numbers give players ways to recover when the board becomes difficult without removing the need to plan ahead.',
-        'Beyond individual sessions, the published product includes Daily Challenges, experience, achievements, personal records, leaderboards, animal avatars and decorative frames. These systems turn a short puzzle loop into visible long-term progress.',
-      ],
-    },
-    {
-      id: 'quality',
-      eyebrow: '04 · Quality and release',
-      title: 'Maintaining a live iOS release.',
-      paragraphs: [
-        'Version 2.0.0 was released on 16 November 2026. The release refreshed the visual system, expanded progression, improved layouts across iPhone and iPad, and included stability and accessibility refinements.',
-        'The iOS product also includes a Premium purchase and restoration experience. This portfolio explains the released behaviour without exposing private SDK configuration or commercial credentials.',
-      ],
-    },
-    {
-      id: 'lessons',
-      eyebrow: '05 · Lessons',
-      title: 'Clarity is an engineering constraint.',
-      paragraphs: [
-        'Sumlume reinforced that visual polish and software structure cannot be separated in a game. A small change to tile size, hierarchy or feedback can affect readability, board density and the player’s ability to understand the next move.',
-        'Building natively also makes platform behaviour explicit. The product can share a consistent rule set while each client follows the conventions and constraints of its own platform.',
-      ],
-    },
-  ],
-  links: [
-    {
-      label: 'View on the App Store',
-      href: 'https://apps.apple.com/gb/app/sumlume-number-match/id6799957684',
-    },
-    { label: 'Product page', href: 'https://www.pathlifestudio.com/sumlume.html' },
-  ],
-  schemaType: 'VideoGame',
+const store = {
+  pathlife: 'https://apps.apple.com/gb/app/pathlife/id6769602618',
+  sumlume: 'https://apps.apple.com/gb/app/sumlume-number-match/id6799957684',
 };
 
 const pathLifeStudy: CaseStudy = {
   slug: 'pathlife',
   name: 'PathLife',
-  eyebrow: 'PathLife Studio · Life simulation',
-  status: 'Live on iOS · Android rebuild in progress',
+  kind: 'Life simulation game for iPhone',
+  status: 'Live on the App Store',
+  tone: 'live',
   summary:
-    'A life simulation game where each year introduces choices across education, careers, relationships and life events.',
-  role: 'Founder & Software Developer. I work across the iOS game, Android rebuild, support platform, publishing and ad infrastructure.',
+    'A life simulation game where each year brings choices about education, careers, relationships and money, and every choice changes what is possible later.',
+  role: 'I contributed core game logic and SwiftUI interfaces to the published iOS game, I am rebuilding it for Android in React Native and TypeScript, and I designed, built and deployed the support website that cleared its App Store review.',
   icon: gameIcons.pathlife,
   media: pathLifeScreens,
   frame: 'print',
@@ -193,71 +109,160 @@ const pathLifeStudy: CaseStudy = {
     'SQLite',
     'Railway',
     'Cloudflare',
+    'Figma',
   ],
   facts: [
-    { value: '2.1.3', label: 'UK App Store release' },
-    { value: '13', label: 'screens ported to Android' },
-    { value: '500+', label: 'image and sound assets migrated' },
-    { value: '5', label: 'ad networks integrated' },
+    { label: 'Status', value: 'Live on the UK App Store' },
+    { label: 'Current iOS version', value: '2.1.3, released 7 November 2026' },
+    { label: 'Android', value: 'React Native rebuild in progress' },
+    { label: 'Publisher', value: 'PathLife Studio Ltd' },
   ],
   architecture: [
-    'SwiftUI iOS game',
-    'Year and event systems',
-    'React Native Android rebuild',
-    'Node, Express and SQLite support platform',
+    'SwiftUI game for iOS',
+    'Year, education, career and life-event systems',
+    'React Native and TypeScript rebuild for Android, with Zustand state',
+    'Node.js, Express and SQLite support site on Railway behind Cloudflare',
   ],
   sections: [
     {
-      id: 'overview',
-      eyebrow: '01 · Product',
-      title: 'Many connected systems, one readable life story.',
+      id: 'problem',
+      heading: 'Problem',
+      lead: 'PathLife follows one character a year at a time. Education, career, relationships and random life events all read and change the same character, so a decision made at 18 has to make sense at 40.',
       paragraphs: [
-        'PathLife models a character’s progress through annual decisions, education, careers and unexpected events. The challenge is not one isolated screen. It is maintaining consistent state as choices change later opportunities and outcomes.',
-        'I contributed core game logic and SwiftUI interfaces to the published iOS product, with screens designed in Figma.',
+        'That makes the game a state problem more than a screen problem. It also had to get through App Store review, which rejected it under Guideline 1.5 because the app needed a working support website.',
       ],
     },
     {
-      id: 'android',
-      eyebrow: '02 · Cross-platform engineering',
-      title: 'Rebuilding the game for Android.',
-      paragraphs: [
-        'The Android version is a full React Native and TypeScript rebuild rather than a wrapper around the iOS code. I am porting year advance, education, careers and life-event flows while using Zustand for application state.',
-        'The work includes translating data models, recreating interactions and migrating more than 500 image and sound assets while preserving a consistent product identity.',
+      id: 'constraints',
+      heading: 'Constraints',
+      bullets: [
+        'The iOS game is already published, so the Android version has to reproduce its rules and feel without reusing its Swift code.',
+        'App Store review requires a working support URL, a correct App Tracking Transparency prompt and in-app purchases that behave in the sandbox.',
+        'The studio domain has to serve an app-ads.txt file that the ad networks can verify.',
       ],
     },
     {
-      id: 'production',
-      eyebrow: '03 · Production engineering',
-      title: 'The release depended on more than the app.',
+      id: 'architecture',
+      heading: 'Architecture',
       paragraphs: [
-        'Apple rejected the app under App Store Guideline 1.5 because it needed a working support website. I designed and built the required platform with Node.js, Express and SQLite, deployed it on Railway behind Cloudflare, and added an admin dashboard and rate limiting.',
-        'The same platform now hosts app-ads.txt and supports verification across five ad networks. Resolving the rejection turned an immediate release blocker into reusable studio infrastructure.',
+        'Screens are designed in Figma and built natively in SwiftUI for iOS. The Android version is a separate React Native and TypeScript app. The support site is a small Node.js and Express service with an SQLite database, deployed on Railway behind Cloudflare.',
       ],
     },
     {
-      id: 'quality',
-      eyebrow: '04 · Testing and release',
-      title: 'Release work is part of the engineering.',
-      paragraphs: [
-        'Publishing required working through support URL requirements, the App Tracking Transparency prompt and in-app purchase sandbox behaviour. Those checks sit alongside game-state validation and interface testing.',
-        'The result is a live iOS product with a maintained support surface, while the Android version remains clearly labelled as work in progress.',
+      id: 'decisions',
+      heading: 'Key decisions',
+      bullets: [
+        'Rebuild Android in React Native and TypeScript rather than wrap the iOS code. Data models, year advance, education, careers and life events are translated one system at a time.',
+        'Manage Android game state with Zustand, so the year, career, education and event systems work from shared character state.',
+        'Treat the support website as production software: an admin dashboard and rate limiting from the start, and the same service now hosts app-ads.txt for ad-network verification.',
       ],
     },
     {
-      id: 'lessons',
-      eyebrow: '05 · Lessons',
-      title: 'Own the whole path to the user.',
+      id: 'challenges',
+      heading: 'Challenges',
       paragraphs: [
-        'PathLife taught me to treat store review, support, privacy prompts, monetisation configuration and operational tooling as part of the product rather than tasks that happen after development.',
+        'The Guideline 1.5 rejection blocked the release until a real support site existed, so I designed, built and deployed one. Release work also meant getting the App Tracking Transparency prompt right and testing in-app purchases in the sandbox.',
+        'On Android the hard part is consistency: translating the data models and migrating the game’s images and sounds so both versions feel like the same product.',
+      ],
+    },
+    {
+      id: 'outcome',
+      heading: 'Outcome',
+      bullets: [
+        'PathLife 2.1.3 is live on the UK App Store, published by PathLife Studio Ltd.',
+        'The support site at pathlifestudio.com resolved the rejection and now also serves app-ads.txt.',
+        'The Android rebuild is in progress. It is not on Google Play yet.',
+      ],
+    },
+    {
+      id: 'improve',
+      heading: 'What I’d improve',
+      bullets: [
+        'Write automated tests for the year-advance and life-event rules before porting more systems, so iOS and Android can be checked against the same cases.',
+        'Plan store requirements (support URL, privacy prompts, purchase testing) at the start of a project instead of meeting them at review.',
       ],
     },
   ],
   links: [
+    { label: 'View on the App Store', href: store.pathlife },
+    { label: 'Visit pathlifestudio.com', href: 'https://pathlifestudio.com' },
+  ],
+  schemaType: 'VideoGame',
+  draftedSections: ['decisions', 'improve'],
+};
+
+const sumlumeStudy: CaseStudy = {
+  slug: 'sumlume',
+  name: 'Sumlume',
+  kind: 'Number puzzle for iPhone and iPad',
+  status: 'Live on the App Store',
+  tone: 'live',
+  summary:
+    'A number puzzle where players clear pairs that match or add up to 10, with daily challenges, achievements and personal records that give them a reason to come back.',
+  role: 'Founder and developer at PathLife Studio. I lead the product design, the native iOS build and the release work.',
+  icon: gameIcons.sumlume,
+  media: sumlumeScreens,
+  frame: 'print',
+  stack: ['Swift', 'SwiftUI', 'Native iOS'],
+  facts: [
+    { label: 'Status', value: 'Live on the UK App Store' },
+    { label: 'Current iOS version', value: '2.0.0, released 16 November 2026' },
+    { label: 'Platforms', value: 'iPhone and iPad' },
+    { label: 'Android', value: 'In development' },
+  ],
+  architecture: [
+    'SwiftUI interface',
+    'Rule-driven puzzle board',
+    'Session and progression state',
+    'App Store release',
+  ],
+  sections: [
     {
-      label: 'View on the App Store',
-      href: 'https://apps.apple.com/gb/app/pathlife/id6769602618',
+      id: 'product',
+      heading: 'Product',
+      lead: 'One clear rule: match identical numbers or two numbers that add up to 10. Each pair clears space and changes the next move.',
+      paragraphs: [
+        'The goal was a board that is readable at a glance, with Classic games, Daily Challenges, achievements, statistics and collectible profile items to bring players back.',
+      ],
     },
-    { label: 'Studio website', href: 'https://pathlifestudio.com' },
+    {
+      id: 'role',
+      heading: 'My role',
+      paragraphs: [
+        'The published iPhone and iPad version is built natively with SwiftUI. A native Android version is being developed in Kotlin and is not yet on Google Play.',
+      ],
+      bullets: [
+        'Design a dense puzzle grid that stays clear on every Apple screen size.',
+        'Keep the core rules identical while building platform-native interfaces.',
+        'Keep release labels honest across the published iOS and unreleased Android versions.',
+      ],
+    },
+    {
+      id: 'systems',
+      heading: 'Game systems',
+      paragraphs: [
+        'The board evaluates equal-number and make-10 pairs. Hint, Undo and Add Numbers help players recover from a difficult board without removing the need to plan ahead.',
+        'Daily Challenges, experience, achievements, personal records, leaderboards, animal avatars and decorative frames turn a short puzzle loop into visible long-term progress.',
+      ],
+    },
+    {
+      id: 'release',
+      heading: 'Release',
+      paragraphs: [
+        'Version 2.0.0 shipped on 16 November 2026. It refreshed the visual system, expanded progression, improved layouts across iPhone and iPad and included stability and accessibility fixes. The app also includes a Premium purchase and restore flow.',
+      ],
+    },
+    {
+      id: 'lessons',
+      heading: 'What I learned',
+      paragraphs: [
+        'In a puzzle game, visual polish and software structure cannot be separated. A small change to tile size, hierarchy or feedback changes how quickly a player can see the next move.',
+      ],
+    },
+  ],
+  links: [
+    { label: 'View on the App Store', href: store.sumlume },
+    { label: 'Product page', href: 'https://www.pathlifestudio.com/sumlume.html' },
   ],
   schemaType: 'VideoGame',
 };
@@ -265,143 +270,146 @@ const pathLifeStudy: CaseStudy = {
 const physioStudy: CaseStudy = {
   slug: 'physio-ai',
   name: 'Physio-AI',
-  eyebrow: 'Brunel University London · Final-year project',
-  status: 'Grade A · 96.23% classifier accuracy',
+  kind: 'Real-time computer vision, final-year project',
+  status: 'Graded A',
+  tone: 'graded',
   summary:
-    'A real-time physiotherapy feedback system that tracks exercise technique through a standard webcam and returns corrective guidance during a session.',
-  role: 'Individual final-year project. I built the pose-processing, model comparison, real-time feedback pipeline, interface and session persistence.',
+    'A physiotherapy feedback system that watches exercise technique through an ordinary webcam and gives corrective guidance while the user is moving.',
+  role: 'Individual final-year project at Brunel University London. I built the pose processing, model comparison, real-time feedback pipeline, interface and session storage.',
   media: physioAiScreens,
   frame: 'browser',
   stack: ['Python', 'MediaPipe Pose', 'scikit-learn', 'JavaScript', 'WebSockets', 'SQLite'],
   facts: [
-    { value: '96.23%', label: 'best model accuracy' },
-    { value: '33', label: 'pose landmarks per frame' },
-    { value: 'Grade A', label: 'final-year project result' },
-    { value: 'Webcam', label: 'no specialist hardware required' },
+    { label: 'Result', value: 'Grade A, BSc Computer Science' },
+    { label: 'Best model', value: 'Random Forest, 96.23% accuracy' },
+    { label: 'Input', value: '33 pose landmarks per frame from a standard webcam' },
+    { label: 'Evaluation', value: 'Confusion matrices and ROC analysis' },
   ],
   architecture: [
     'Webcam video',
-    'MediaPipe landmarks',
+    'MediaPipe Pose: 33 landmarks per frame',
     'Pose embeddings',
     'Random Forest classifier',
-    'WebSocket feedback and SQLite sessions',
+    'WebSocket stream to the JavaScript interface',
+    'SQLite session history',
   ],
   sections: [
     {
       id: 'problem',
-      eyebrow: '01 · Problem',
-      title: 'Feedback is often missing between appointments.',
-      paragraphs: [
-        'Physiotherapy exercises are frequently completed at home without a clinician watching technique. Physio-AI explores whether a normal webcam can provide useful, immediate feedback while the user exercises.',
-        'The project was designed as an end-to-end system rather than a model in a notebook. It captures movement, classifies form, streams feedback to a web interface and stores session data.',
+      heading: 'Problem',
+      lead: 'Most physiotherapy exercises are done at home, with nobody watching technique. Physio-AI asks whether an ordinary webcam can give useful feedback in the moment.',
+    },
+    {
+      id: 'constraints',
+      heading: 'Constraints',
+      bullets: [
+        'A standard webcam and ordinary hardware. No depth camera or wearable sensors.',
+        'Feedback has to arrive while the user is still moving, so the whole pipeline runs in real time.',
+        'An individual final-year project: one person responsible for data, model, back end and interface.',
       ],
     },
     {
-      id: 'pipeline',
-      eyebrow: '02 · System architecture',
-      title: 'From pixels to corrective guidance.',
+      id: 'architecture',
+      heading: 'Architecture',
       paragraphs: [
-        'MediaPipe Pose extracts 33 body landmarks from each video frame. I transformed those landmarks into pose embeddings that could be compared across several machine-learning approaches.',
-        'The Python back end streams results to a JavaScript front end over WebSockets. Session history and progress are persisted in SQLite so the interface can show more than a single live score.',
+        'MediaPipe Pose extracts 33 body landmarks from each frame. I turned those landmarks into pose embeddings, classified them with scikit-learn, and streamed results from the Python back end to a JavaScript interface over WebSockets. Sessions are stored in SQLite so the interface can show progress over time, not only a live score.',
       ],
     },
     {
-      id: 'model',
-      eyebrow: '03 · Model selection',
-      title: 'Compare first, then ship the best fit.',
-      paragraphs: [
-        'I trained and compared multiple classifiers, then selected the Random Forest model that achieved 96.23% accuracy. Evaluation included confusion matrices and ROC analysis rather than relying on one headline metric alone.',
-        'The final interface combines classification confidence with live visual feedback and extends the experience with fatigue detection and session progress.',
+      id: 'decisions',
+      heading: 'Key decisions',
+      bullets: [
+        'Classify landmarks, not pixels. Pose embeddings made the same features usable across several machine-learning approaches.',
+        'Compare models before choosing one. I trained several classifiers and chose the Random Forest, judged on confusion matrices and ROC analysis rather than one headline number.',
+        'Build the whole system, not a notebook: live capture, classification, feedback, persistence and a progress dashboard.',
       ],
     },
     {
-      id: 'quality',
-      eyebrow: '04 · Validation',
-      title: 'A useful result needs a usable system.',
+      id: 'challenges',
+      heading: 'Challenges',
       paragraphs: [
-        'The project had to maintain responsive feedback on ordinary hardware while keeping the tracking state understandable to the user. The interface exposes repetitions, accuracy, joint performance and corrective messages without requiring specialist equipment.',
-        'The project received an A grade as my BSc Computer Science final-year project at Brunel University London.',
+        'The model is only one part of the result. Landmark quality, embedding design, streaming latency, confidence thresholds and interface clarity all decide whether the feedback is useful. The interface shows repetitions, accuracy, joint performance and corrective messages so the user can understand what the system sees.',
       ],
     },
     {
-      id: 'lessons',
-      eyebrow: '05 · Lessons',
-      title: 'Applied AI is a systems problem.',
-      paragraphs: [
-        'The strongest model is only one part of the product. Landmark quality, embedding design, streaming latency, confidence thresholds, persistence and interface clarity all influence whether the result is useful in practice.',
+      id: 'outcome',
+      heading: 'Outcome',
+      bullets: [
+        'Graded A as my BSc Computer Science final-year project at Brunel University London.',
+        'The Random Forest classifier reached 96.23% accuracy.',
+        'Extended with fatigue detection, confidence-based visual feedback, session history and a progress dashboard.',
+      ],
+    },
+    {
+      id: 'improve',
+      heading: 'What I’d improve',
+      bullets: [
+        'Test with more people, exercises and camera positions. Accuracy on the project dataset does not show how the system behaves for every body or room.',
+        'Measure end-to-end latency from frame to feedback and report it alongside accuracy.',
       ],
     },
   ],
   links: [{ label: 'View source on GitHub', href: 'https://github.com/Nasim1801/physio-ai-final' }],
   schemaType: 'SoftwareApplication',
+  draftedSections: ['improve'],
 };
 
 const pawLifeStudy: CaseStudy = {
   slug: 'pawlife',
   name: 'PawLife',
-  eyebrow: 'PathLife Studio · Pet life simulation',
-  status: 'In development · Not yet released',
+  kind: 'Pet life simulation for mobile',
+  status: 'In development',
+  tone: 'progress',
   summary:
-    'A pet life simulation with distinct animal personalities, story events, minigames, relationships and a persistent life album.',
-  role: 'Founder & Software Developer. I am designing and building the product from scratch in React Native and Expo.',
+    'A pet life simulation with animal personalities, story events, minigames, relationships and a life album that persists between sessions.',
+  role: 'Founder and developer at PathLife Studio. I am designing and building it from scratch in React Native and Expo.',
   icon: gameIcons.pawlife,
   media: pawLifeScreens,
   frame: 'phone',
   stack: ['React Native', 'Expo', 'TypeScript', 'Zustand', 'AsyncStorage'],
   facts: [
-    { value: 'Care', label: 'interactive sessions' },
-    { value: '4', label: 'animal types' },
-    { value: '17–18 Nov', label: 'native QA capture dates, 2026' },
-    { value: 'In development', label: 'current status' },
+    { label: 'Status', value: 'In development, not released' },
+    { label: 'Screenshots', value: 'Native iOS development builds, 17–18 November 2026' },
+    { label: 'Publisher', value: 'PathLife Studio' },
   ],
   architecture: [
-    'Expo and React Native UI',
+    'Expo and React Native interface',
     'Custom event engine',
     'Zustand application state',
-    'AsyncStorage results and leaderboard',
+    'AsyncStorage for results and leaderboard',
   ],
   sections: [
     {
-      id: 'overview',
-      eyebrow: '01 · Product',
-      title: 'A simulation built around personality.',
-      paragraphs: [
-        'PawLife follows a pet through care, relationships, minigames and story moments. Each animal has its own personality, so the same system needs to produce experiences that feel distinct without becoming inconsistent.',
-        'The gallery records the home, care, story and ageing flows in native iOS development builds from 17–18 November 2026.',
-      ],
+      id: 'product',
+      heading: 'Product',
+      lead: 'PawLife follows a pet through care, relationships, minigames and story moments. Each animal has its own personality, so the same systems have to produce lives that feel different without becoming inconsistent.',
     },
     {
       id: 'systems',
-      eyebrow: '02 · Game systems',
-      title: 'Connected state across a complete life.',
+      heading: 'Game systems',
       paragraphs: [
-        'A custom event engine handles story choices, breed personalities, relationship arcs, life modifiers and the death and legacy flow. Care interactions, outings and annual progression feed into the wider simulation.',
-        'The main engineering challenge is making these systems interact without losing a clear source of truth for the pet’s current state.',
+        'A custom event engine handles story choices, breed personalities, relationship arcs, life modifiers and the end-of-life legacy flow. Care, outings and yearly progression all feed the same simulation.',
       ],
     },
     {
-      id: 'state-design',
-      eyebrow: '03 · Architecture',
-      title: 'State is the product backbone.',
+      id: 'architecture',
+      heading: 'Architecture',
       paragraphs: [
-        'The app uses React Native, Expo and TypeScript, with Zustand for app-wide state and custom state-based navigation. AsyncStorage persists shareable results and the leaderboard between sessions.',
-        'The home screen groups the pet’s state with access to care, exploration and story actions.',
+        'React Native, Expo and TypeScript, with Zustand for app-wide state and a custom state-based navigation system. AsyncStorage keeps shareable results and the leaderboard between sessions.',
       ],
     },
     {
-      id: 'quality',
-      eyebrow: '04 · Current focus',
-      title: 'Exercise the whole life loop.',
+      id: 'focus',
+      heading: 'Current focus',
       paragraphs: [
-        'Development QA exercises returning to a saved life, handling story choices and carrying state from one year into the next. PawLife is still in development.',
+        'Development testing covers returning to a saved life, handling story choices and carrying state from one year into the next.',
       ],
     },
     {
       id: 'lessons',
-      eyebrow: '05 · Lessons',
-      title: 'Narrative systems need software discipline.',
+      heading: 'What I learned',
       paragraphs: [
-        'A funny story choice still needs deterministic state updates, persistence and testable consequences. PawLife has made the relationship between writing, navigation and application state especially clear.',
+        'A funny story choice still needs deterministic state updates, persistence and testable consequences. Writing, navigation and application state are one system.',
       ],
     },
   ],
@@ -411,144 +419,82 @@ const pawLifeStudy: CaseStudy = {
 
 const portfolioStudy: CaseStudy = {
   slug: 'portfolio',
-  name: 'This Portfolio',
-  eyebrow: 'Design and engineering · React web application',
-  status: 'Live on GitHub Pages · Open source',
+  name: 'This portfolio',
+  kind: 'React and TypeScript web app',
+  status: 'Live on GitHub Pages',
+  tone: 'live',
   summary:
-    'A performance-conscious creative portfolio that turns real project evidence into interactive, keyboard-accessible browser experiences.',
-  role: 'I designed and engineered the complete experience, from the visual system and component architecture to responsive behaviour, accessibility, metadata, testing and deployment.',
+    'A fast, static portfolio that plays like a small game: a playable make-10 board, animated project worlds, nine indexable routes and automated browser checks.',
+  role: 'I designed and built it: visual system, components, content model, accessibility, image pipeline, metadata, tests and deployment.',
   media: [portfolioScreen],
   frame: 'browser',
-  stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'SVG', 'Playwright'],
+  stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'Playwright', 'GitHub Actions'],
   facts: [
-    { value: '2', label: 'working Engineering Lab exhibits' },
-    { value: '7', label: 'project case studies' },
-    { value: '360–1920px', label: 'browser QA range' },
-    { value: 'Static', label: 'GitHub Pages deployment' },
+    { label: 'Routes', value: '9 static pages with their own metadata' },
+    { label: 'Browser checks', value: '360 to 1920 px, light and dark' },
+    { label: 'Deployment', value: 'GitHub Actions to GitHub Pages' },
   ],
   architecture: [
     'Typed content and media data',
-    'Reusable React interaction systems',
-    'CSS Module visual language',
-    'Static route metadata generation',
-    'Playwright QA and GitHub Pages release',
+    'React components and CSS Modules',
+    'Pure, tested puzzle rules',
+    'Static route generation for metadata and deep links',
+    'Playwright checks and GitHub Pages release',
   ],
   sections: [
     {
-      id: 'objectives',
-      eyebrow: '01 · Design objectives',
-      title: 'Make the interface part of the evidence.',
+      id: 'goals',
+      heading: 'Goals',
+      lead: 'A recruiter should know who I am, what role I want and how to reach me within one screen. A hiring manager should find real evidence behind every claim.',
+    },
+    {
+      id: 'design',
+      heading: 'Design',
       paragraphs: [
-        'The portfolio needed to do more than describe front-end capability. Its interactions had to demonstrate state management, responsive composition, motion design and accessibility while keeping the recruitment path immediate.',
-        'The Digital Product Exhibition uses editorial typography, product-specific colour and layered screenshots to make the software the centre of the experience. The homepage opens with a keyboard-operable product selector.',
+        'The site is designed as a game world around engineering content. The palette comes from the games’ own art, each featured project has its own colour world, the hero opens with a level-select stage that rotates through the four featured projects, and the Sumlume project includes a playable make-10 board built on the game’s rule. Motion is hand-written CSS and a little canvas, with a calm version for visitors who prefer reduced motion.',
       ],
     },
     {
-      id: 'components',
-      eyebrow: '02 · Component architecture',
-      title: 'Content, presentation and interaction stay separate.',
-      paragraphs: [
-        'Verified project facts and media metadata live in typed data files. Reusable frames, galleries, project chapters and case-study components read from that source and share the same image dimensions, alt text and responsive variants.',
-        'The Engineering Lab keeps rule logic separate from interface state, which makes the number-matching behaviour independently testable. The Physio-AI exhibit uses SVG and derived geometry rather than a recorded animation.',
-      ],
+      id: 'engineering',
+      heading: 'Engineering',
       bullets: [
-        'Typed project, screenshot and skill-evidence models.',
-        'Small interaction components with explicit keyboard behaviour.',
-        'Static route shells for GitHub Pages metadata and deep links.',
-      ],
-    },
-    {
-      id: 'responsive',
-      eyebrow: '03 · Responsive design',
-      title: 'The exhibition adapts to the viewport.',
-      paragraphs: [
-        'CSS Grid shifts the placement of copy and product media across the exhibition. On smaller screens the exhibits stack in reading order and galleries respond to horizontal swipes as well as labelled buttons.',
-        'Critical identity, role, location, CV and contact actions never depend on a hover state or an animation finishing.',
+        'Project facts, screenshots and skills live in typed data files, so the copy is checked by the compiler.',
+        'The puzzle rules are pure TypeScript functions with their own tests, shared by the Sumlume demo on the home page and the Engineering Lab.',
+        'A build step generates WebP variants at display size, and a second step writes a static HTML page for every route.',
+        'A small client router swaps pages in place, so the View Transitions API can morph a project title from the home page into its case study. Every route still exists as a static file.',
       ],
     },
     {
       id: 'accessibility',
-      eyebrow: '04 · Accessibility and motion',
-      title: 'Controls that work beyond the pointer.',
+      heading: 'Accessibility and performance',
       paragraphs: [
-        'The product selector uses roving tab focus. Galleries use a native modal dialog for full-resolution viewing, keyboard navigation and focus restoration. The puzzle, pipeline and skill map expose selections and feedback to assistive technology.',
-        'Reduced-motion preferences remove decorative transitions while preserving state changes. Semantic headings, landmark regions and descriptive image text keep the site understandable outside its visual presentation.',
-      ],
-    },
-    {
-      id: 'delivery',
-      eyebrow: '05 · Performance, SEO and release',
-      title: 'Creative work still has production constraints.',
-      paragraphs: [
-        'The site avoids a heavy 3D runtime. SVG, CSS and lightweight React state provide the visual system, while WebP images, explicit dimensions and lazy loading reduce media cost and layout shift.',
-        'Vite produces static assets under the GitHub Pages base path. Route-specific HTML metadata, structured data, a sitemap and a deployment workflow support discoverability and reliable deep links.',
-      ],
-    },
-    {
-      id: 'tradeoffs',
-      eyebrow: '06 · Trade-offs and maintenance',
-      title: 'Ambition without a fragile runtime.',
-      paragraphs: [
-        'The exhibition layers real product screenshots with CSS transforms and uses local React state for each gallery. The artwork keeps its original aspect ratio across the exhibition, detail pages and full-resolution viewer.',
-        'Automated build, lint, interaction and responsive checks are kept in the repository so future content edits can be verified before deployment.',
+        'Every control works by keyboard, focus is always visible, motion is removed when the system asks for less, and colours meet WCAG AA in both themes. The first screen is text, so it paints before any image loads.',
       ],
     },
   ],
   links: [
-    { label: 'View the portfolio source', href: 'https://github.com/Nasim1801/portfolio' },
-    { label: 'Open the Engineering Lab', href: '/portfolio/lab/' },
+    { label: 'View source on GitHub', href: 'https://github.com/Nasim1801/portfolio' },
+    { label: 'Open the Engineering Lab', href: 'lab/' },
   ],
   schemaType: 'SoftwareApplication',
 };
 
-const teamProjects = [
-  {
-    slug: 'co2-tracker',
-    name: 'CO2 Tracker',
-    label: 'Brunel group project · Scrum Master for Sprint 1',
-    summary:
-      'A sustainability web app that returns product carbon-footprint data through name search, typed barcode input and a prototype photo flow.',
-    role: 'Built the React customer interface, Spring Boot REST API and H2 database. Designed the customer page in Figma and coordinated Sprint 1.',
-    outcome:
-      'Search history is persisted with timestamps and the database is seeded with 12 products.',
-    stack: ['React', 'Spring Boot', 'REST', 'H2', 'JPA', 'Scrum'],
-    media: co2TrackerScreens[1],
-    frame: 'browser',
-    links: [
-      { label: 'View source on GitHub', href: 'https://github.com/Nasim1801/co2-tracker' },
-      { label: 'Watch the demo', href: 'https://youtu.be/2qtJxDQObb4' },
-    ],
-  },
-  {
-    slug: 'hospital-appointment-system',
-    name: 'Hospital Appointment System',
-    label: 'Brunel group project · Java desktop application',
-    summary:
-      'A Swing desktop booking system for patients and staff, covering hospital search, appointment selection and schedule changes.',
-    role: 'Built the appointment booking module in Java, Swing and WindowBuilder, with JUnit coverage.',
-    outcome: 'The team delivered 10 of 11 planned requirements.',
-    stack: ['Java', 'Swing', 'WindowBuilder', 'JUnit'],
-    media: hospitalScreens[1],
-    frame: 'desktop',
-    proof: hospitalTestScreen,
-    links: [
-      {
-        label: 'View source on GitHub',
-        href: 'https://github.com/Nasim1801/hospital-appointment-system',
-      },
-    ],
-  },
-] satisfies TeamProject[];
-
 const co2Study: CaseStudy = {
-  ...teamProjects[0],
-  status: 'Completed university team project',
-  eyebrow: 'Brunel University London · Full-stack application',
+  slug: 'co2-tracker',
+  name: 'CO2 Tracker',
+  kind: 'Full-stack web app, university team project',
+  status: 'Completed team project',
+  tone: 'done',
+  summary:
+    'A sustainability web app that returns product carbon-footprint data from a name search, a typed barcode or a prototype photo flow.',
+  role: 'I built the React customer interface, the Spring Boot REST API and the H2 database, designed the customer page in Figma, and was Scrum Master for Sprint 1.',
   media: co2TrackerScreens,
+  frame: 'browser',
+  stack: ['React', 'Spring Boot', 'REST', 'H2', 'JPA', 'Figma', 'Scrum'],
   facts: [
-    { value: '12', label: 'products seeded for demonstration' },
-    { value: 'Sprint 1', label: 'Scrum Master responsibility' },
-    { value: '3', label: 'customer lookup flows' },
+    { label: 'My role', value: 'Front end, API and database; Scrum Master for Sprint 1' },
+    { label: 'Lookup flows', value: 'Name search, typed barcode, simulated photo' },
+    { label: 'Demo data', value: '12 seeded products' },
   ],
   architecture: [
     'React customer interface',
@@ -559,41 +505,40 @@ const co2Study: CaseStudy = {
   sections: [
     {
       id: 'product',
-      eyebrow: 'Product and data',
-      title: 'Several inputs, one set of product records.',
-      paragraphs: [
-        'ECOlution lets a customer look up an estimated carbon footprint with a name search or a typed barcode. Both flows reveal the matching product and emissions figure from the demonstration dataset.',
-      ],
+      heading: 'Product',
+      lead: 'Customers look up an estimated carbon footprint by product name or typed barcode. Both flows return the matching product and its emissions figure from the demonstration dataset.',
     },
     {
-      id: 'challenge',
-      eyebrow: 'Engineering challenge',
-      title: 'Separate search behaviour from the interface.',
+      id: 'engineering',
+      heading: 'Engineering',
       paragraphs: [
-        'The REST API handles lookups and records timestamps so the React interface can focus on inputs, results and feedback. The H2 seed data makes the demonstration repeatable. The photo path simulates a result to demonstrate an upload flow.',
+        'The REST API handles lookups and records timestamped search history, so the React interface only deals with inputs, results and feedback. Seed data makes the demo repeatable. The photo path simulates a result to show how an upload flow would work.',
       ],
     },
-    {
-      id: 'validation',
-      eyebrow: 'Evidence and delivery',
-      title: 'Demonstrating the completed customer journey.',
-      paragraphs: [
-        'The gallery shows a name search, a typed barcode result and the simulated upload response. The source and recorded demo document the university deliverable. The database contains example records for that demonstration.',
-      ],
-    },
+  ],
+  links: [
+    { label: 'View source on GitHub', href: 'https://github.com/Nasim1801/co2-tracker' },
+    { label: 'Watch the demo', href: 'https://youtu.be/2qtJxDQObb4' },
   ],
   schemaType: 'SoftwareApplication',
 };
 
 const hospitalStudy: CaseStudy = {
-  ...teamProjects[1],
-  status: 'Completed university team project',
-  eyebrow: 'Brunel University London · Java desktop application',
+  slug: 'hospital-appointment-system',
+  name: 'Hospital Appointment System',
+  kind: 'Java desktop app, university team project',
+  status: 'Completed team project',
+  tone: 'done',
+  summary:
+    'A Swing desktop booking system for patients and staff: find a hospital, pick a date and time, confirm and manage the appointment.',
+  role: 'I built the appointment booking module in Java, Swing and WindowBuilder, with JUnit tests.',
   media: [...hospitalScreens, hospitalTestScreen],
+  frame: 'desktop',
+  stack: ['Java', 'Swing', 'WindowBuilder', 'JUnit'],
   facts: [
-    { value: '10 of 11', label: 'planned requirements delivered by the team' },
-    { value: 'JUnit', label: 'automated booking-module test' },
-    { value: 'Swing', label: 'desktop interface' },
+    { label: 'My role', value: 'Appointment booking module and its tests' },
+    { label: 'Team result', value: '10 of 11 planned requirements delivered' },
+    { label: 'Testing', value: 'JUnit' },
   ],
   architecture: [
     'Hospital selection',
@@ -604,44 +549,49 @@ const hospitalStudy: CaseStudy = {
   sections: [
     {
       id: 'product',
-      eyebrow: 'Product',
-      title: 'A booking flow for patients and staff.',
-      paragraphs: [
-        'The Swing application brings hospital search, time selection, confirmation and schedule changes into a single desktop workflow. My contribution focused on the appointment booking module and its test coverage.',
-      ],
+      heading: 'Product',
+      lead: 'Hospital search, time selection, confirmation and schedule changes in one desktop workflow. My part was the booking module and its tests.',
     },
     {
-      id: 'challenge',
-      eyebrow: 'Engineering challenge',
-      title: 'Make the booking state visible.',
+      id: 'engineering',
+      heading: 'Engineering',
       paragraphs: [
-        'The booking module separates choosing a date and time from confirmation so the user can review the appointment before proceeding. The schedule screen demonstrates how the resulting appointment can be revisited.',
+        'Choosing a date and time is separate from confirming it, so the user can review the appointment first. The gallery pairs a fictional booking with the passing JUnit test for the module.',
       ],
     },
+  ],
+  links: [
     {
-      id: 'validation',
-      eyebrow: 'Testing and delivery',
-      title: 'JUnit evidence alongside the working interface.',
-      paragraphs: [
-        'The gallery pairs a fictional booking walkthrough with the passing booking-module test. The team completed 10 of 11 planned requirements for the university submission.',
-      ],
+      label: 'View source on GitHub',
+      href: 'https://github.com/Nasim1801/hospital-appointment-system',
     },
   ],
   schemaType: 'SoftwareApplication',
 };
 
+const caseStudies = [
+  pathLifeStudy,
+  sumlumeStudy,
+  physioStudy,
+  pawLifeStudy,
+  co2Study,
+  hospitalStudy,
+  portfolioStudy,
+] satisfies CaseStudy[];
+
 export const content = {
   identity: {
     name: 'Nasim Mosayebi',
-    title: 'Nasim Mosayebi | Software Engineer & Founder of PathLife Studio',
+    role: 'Software engineer, mobile and full-stack',
+    title: 'Nasim Mosayebi | Software Engineer, Mobile and Full-Stack | London',
     description:
-      'Portfolio of London software engineer Nasim Mosayebi. Explore native mobile apps, full-stack systems and a real-time computer vision project.',
-    location: 'London, United Kingdom',
+      'Nasim Mosayebi is a London software engineer who builds and ships mobile apps end to end: SwiftUI and React Native apps, the Node.js services behind them, and the App Store release.',
+    location: 'London',
   },
   nav: [
     { label: 'Work', href: '#work' },
-    { label: 'Engineering Lab', href: 'lab/' },
     { label: 'About', href: '#about' },
+    { label: 'Experience', href: '#experience' },
     { label: 'Contact', href: '#contact' },
   ],
   links: {
@@ -652,414 +602,215 @@ export const content = {
     cv: 'Nasim-Mosayebi-CV.pdf',
   },
   hero: {
-    intro:
-      'I’m a Brunel Computer Science graduate building native apps, full-stack systems and interactive web experiences.',
+    value:
+      'I build and ship mobile apps end to end: SwiftUI and React Native front ends, the Node.js services behind them, and the App Store release in between.',
+    availability: 'Open to graduate and junior roles',
   },
-  proof: [
-    { value: '2', label: 'live App Store products' },
-    { value: '96.23%', label: 'Physio-AI classifier accuracy' },
-    { value: '2:1', label: 'BSc Computer Science' },
-    { value: 'Grade A', label: 'final-year computer vision project' },
+  /** Achievement badges. Verified facts only: App Store listings, CV grade, CV languages. */
+  achievements: [
+    { mark: '2', title: '2 games live', detail: 'on the App Store' },
+    { mark: 'A', title: 'Grade A', detail: 'final-year project' },
+    { mark: '4', title: '4 languages', detail: 'spoken' },
   ],
-  selectedWork: [
-    {
-      slug: 'sumlume',
-      name: 'Sumlume',
-      label: 'Native mobile puzzle',
-      status: 'Live on iPhone and iPad',
-      summary:
-        'A number puzzle built around matching equal tiles or pairs that make 10, with daily challenges, achievements and progression.',
-      evidence: 'Version 2.0.0 released on 16 November 2026.',
-      stack: ['SwiftUI', 'Swift', 'Kotlin'],
-      media: sumlumeScreens[0],
-      icon: sumlumeIcon,
-      frame: 'print',
-    },
+  levels: [
+    { id: 'top', label: 'Start' },
+    { id: 'work', label: 'Work' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'about', label: 'About' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'contact', label: 'Contact' },
+  ],
+  featured: [
     {
       slug: 'pathlife',
-      name: 'PathLife',
-      label: 'Life simulation',
-      status: 'Live on iOS · Android rebuild in progress',
       summary:
-        'A life simulation spanning education, careers and events, supported by production web and advertising infrastructure.',
-      evidence: '500+ assets migrated and five ad networks integrated.',
-      stack: ['SwiftUI', 'React Native', 'TypeScript', 'Node.js'],
-      media: pathLifeScreens[0],
-      icon: gameIcons.pathlife,
-      frame: 'print',
+        'A life simulation where every year brings new choices. I worked on the iOS game, I am rebuilding it for Android, and I built the support site that got it through App Store review.',
+      role: 'iOS game logic and SwiftUI interfaces, Android rebuild, support platform',
+      stack: ['SwiftUI', 'React Native', 'TypeScript', 'Node.js', 'SQLite'],
+      preview: [pathLifeScreens[0], pathLifeScreens[1]],
+      stage: '#cfe4f7',
+      links: [{ label: 'App Store', href: store.pathlife }],
+      hasFullCaseStudy: true,
+    },
+    {
+      slug: 'sumlume',
+      summary:
+        'A number puzzle: clear pairs that match or make 10, with daily challenges, achievements and personal records. Version 2.0.0 shipped in November 2026.',
+      role: 'Product design, native iOS build and release',
+      stack: ['Swift', 'SwiftUI'],
+      preview: [sumlumeScreens[0], sumlumeScreens[1]],
+      stage: '#2b49b8',
+      links: [{ label: 'App Store', href: store.sumlume }],
     },
     {
       slug: 'physio-ai',
-      name: 'Physio-AI',
-      label: 'Applied machine learning · Final-year project',
-      status: 'Grade A · 96.23% accuracy',
       summary:
-        'Real-time webcam physiotherapy feedback using MediaPipe Pose, pose embeddings and a Random Forest classifier.',
-      evidence: '33 landmarks per frame with live feedback over WebSockets.',
-      stack: ['Python', 'MediaPipe', 'scikit-learn', 'WebSockets'],
-      media: physioAiScreens[0],
-      frame: 'browser',
+        'Real-time exercise feedback from an ordinary webcam. MediaPipe Pose finds 33 landmarks per frame and a Random Forest classifier scores technique with 96.23% accuracy.',
+      role: 'Individual project: pose processing, model selection, real-time pipeline, interface',
+      stack: ['Python', 'MediaPipe', 'scikit-learn', 'WebSockets', 'SQLite'],
+      preview: [physioAiScreens[0]],
+      stage: '#22302f',
+      links: [{ label: 'GitHub', href: 'https://github.com/Nasim1801/physio-ai-final' }],
+      hasFullCaseStudy: true,
     },
     {
       slug: 'pawlife',
-      name: 'PawLife',
-      label: 'Pet life simulation',
-      status: 'In development · Not yet released',
       summary:
-        'A React Native pet-life simulation with a custom event engine, minigames, personalities and persistent progression.',
-      evidence: 'Current development evidence includes care, outings and annual progression.',
+        'A pet life simulation with personalities, story events and minigames, driven by a custom event engine and persistent state.',
+      role: 'Design and development from scratch',
       stack: ['React Native', 'Expo', 'TypeScript', 'Zustand'],
-      media: pawLifeScreens[0],
-      icon: gameIcons.pawlife,
-      frame: 'phone',
+      preview: [pawLifeScreens[0], pawLifeScreens[1]],
+      stage: '#f1dcb8',
+      links: [],
+    },
+  ] satisfies FeaturedProject[],
+  more: [
+    {
+      slug: 'co2-tracker',
+      name: 'CO2 Tracker',
+      kind: 'Team project',
+      summary: 'Carbon-footprint lookup by product name, barcode or photo.',
+      role: 'React front end, Spring Boot API and H2 database. Scrum Master for Sprint 1.',
+      stack: ['React', 'Spring Boot', 'H2'],
+      thumbnail: co2TrackerScreens[1],
+      links: [
+        { label: 'GitHub', href: 'https://github.com/Nasim1801/co2-tracker' },
+        { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' },
+      ],
+    },
+    {
+      slug: 'hospital-appointment-system',
+      name: 'Hospital Appointment System',
+      kind: 'Team project',
+      summary: 'Desktop booking for patients and staff.',
+      role: 'Booking module in Java and Swing, with JUnit tests.',
+      stack: ['Java', 'Swing', 'JUnit'],
+      thumbnail: hospitalScreens[1],
+      links: [
+        {
+          label: 'GitHub',
+          href: 'https://github.com/Nasim1801/hospital-appointment-system',
+        },
+      ],
     },
     {
       slug: 'portfolio',
-      name: 'This Portfolio',
-      label: 'Creative frontend engineering',
-      status: 'Live on GitHub Pages',
-      summary:
-        'A responsive React experience with a playable lab, interactive product exhibition and evidence-linked skills index.',
-      evidence: 'Two working browser exhibits with pointer, touch and keyboard controls.',
-      stack: ['React', 'TypeScript', 'CSS Modules', 'Playwright'],
-      media: portfolioScreen,
-      frame: 'browser',
+      name: 'This portfolio',
+      kind: 'Personal project',
+      summary: 'Static React site with a playable puzzle and automated browser checks.',
+      role: 'Design, build, tests and deployment.',
+      stack: ['React', 'TypeScript', 'Playwright'],
+      thumbnail: portfolioScreen,
+      links: [{ label: 'GitHub', href: 'https://github.com/Nasim1801/portfolio' }],
     },
-  ] satisfies SelectedProject[],
-  caseStudies: [
-    sumlumeStudy,
-    pathLifeStudy,
-    physioStudy,
-    pawLifeStudy,
-    portfolioStudy,
-    co2Study,
-    hospitalStudy,
-  ] satisfies CaseStudy[],
+  ] satisfies MoreProject[],
+  caseStudies,
+  skills: [
+    {
+      group: 'Mobile',
+      items: [
+        { name: 'Swift and SwiftUI', proof: ['pathlife', 'sumlume'] },
+        { name: 'React Native', proof: ['pathlife', 'pawlife'] },
+        { name: 'Expo', proof: ['pawlife'] },
+        { name: 'Zustand', proof: ['pathlife', 'pawlife'] },
+        { name: 'App Store release', proof: ['pathlife', 'sumlume'] },
+      ],
+    },
+    {
+      group: 'Front-end',
+      items: [
+        { name: 'TypeScript', proof: ['pathlife', 'pawlife', 'portfolio'] },
+        { name: 'React', proof: ['portfolio', 'co2-tracker'] },
+        { name: 'JavaScript', proof: ['physio-ai'] },
+        { name: 'HTML and CSS', proof: ['portfolio'] },
+        { name: 'Figma', proof: ['pathlife', 'co2-tracker'] },
+      ],
+    },
+    {
+      group: 'Back-end and ML',
+      items: [
+        { name: 'Node.js and Express', proof: ['pathlife'] },
+        { name: 'Java and Spring Boot', proof: ['co2-tracker', 'hospital-appointment-system'] },
+        { name: 'Python', proof: ['physio-ai'] },
+        { name: 'SQLite and H2', proof: ['pathlife', 'physio-ai', 'co2-tracker'] },
+        { name: 'WebSockets', proof: ['physio-ai'] },
+        { name: 'MediaPipe and scikit-learn', proof: ['physio-ai'] },
+      ],
+    },
+    {
+      group: 'Tools and practice',
+      items: [
+        { name: 'Git and GitHub', proof: ['portfolio'] },
+        { name: 'JUnit', proof: ['hospital-appointment-system'] },
+        { name: 'Playwright', proof: ['portfolio'] },
+        { name: 'Railway and Cloudflare', proof: ['pathlife'] },
+        { name: 'Agile and Scrum', proof: ['co2-tracker'] },
+      ],
+    },
+  ],
   about: {
-    eyebrow: 'About',
-    title: 'Product ownership backed by a quality mindset.',
-    intro:
-      'I am a London-based software engineer with a BSc Computer Science degree from Brunel University London, awarded with a 2:1 classification.',
+    sheet: [
+      { label: 'Role', value: 'Software engineer, mobile and full-stack' },
+      { label: 'Based in', value: 'London' },
+      { label: 'Degree', value: 'BSc (Hons) Computer Science, 2:1, Brunel University London' },
+      { label: 'Studio', value: 'Founder of PathLife Studio Ltd' },
+      { label: 'Languages', value: 'English, Persian, German (B1), Arabic (A1)' },
+    ],
     paragraphs: [
-      'Through PathLife Studio I have taken mobile products from design and implementation through App Store release, support infrastructure and ongoing maintenance. I am now looking for a graduate or junior engineering role where I can contribute that ownership within an experienced team.',
-      'My earlier Industrial Engineering degree, medical-device quality assurance work and IT support roles shape how I approach software: understand the system, document decisions, test the risky paths and keep the user’s problem visible.',
-    ],
-    principles: [
-      {
-        title: 'Ship the complete product',
-        text: 'Code, release review, support, infrastructure and maintenance all count.',
-      },
-      {
-        title: 'Make decisions testable',
-        text: 'I bring FMEA, CAPA, JUnit and model-evaluation experience to software work.',
-      },
-      {
-        title: 'Explain the trade-off',
-        text: 'Clear technical communication matters to users, teammates and reviewers.',
-      },
+      'I’m a software engineer in London with a 2:1 in Computer Science from Brunel University London. Through PathLife Studio, the company I founded, I take mobile games from design to the App Store and keep them running afterwards.',
+      'Before computer science I studied Industrial Engineering and worked in medical-device quality assurance and IT support. That is where my habits come from: understand the whole system, write decisions down, test the risky paths first, and keep the person using it in view.',
+      'I speak four languages: English, Persian, German and some Arabic. I am looking for a graduate or junior role where I can bring that ownership to an experienced team.',
     ],
   },
-  teamProjects,
-  experience: {
-    eyebrow: 'Experience and education',
-    title: 'Engineering shaped by product, support and quality work.',
-    items: [
-      {
-        date: 'Aug 2026 – now',
-        title: 'Founder & Software Developer',
-        place: 'PathLife Studio Ltd · London',
-        description:
-          'Build and publish iOS games, develop Android versions and maintain the web and advertising infrastructure that supports the studio.',
-        kind: 'current',
-      },
-      {
-        date: 'Apr 2024 – Jun 2026',
-        title: 'IT Administrator, part-time',
-        place: 'ATOZ Education Services · London',
-        description:
-          'Supported hardware, software and network systems, maintained day-to-day IT operations and explained technical solutions to staff and students.',
-        kind: 'past',
-      },
-      {
-        date: '2023 – 2026',
-        title: 'BSc (Hons) Computer Science, 2:1',
-        place: 'Brunel University London',
-        description: 'Final-year project: Physio-AI, awarded Grade A.',
-        kind: 'education',
-      },
-      {
-        date: '2022 – 2023',
-        title: 'Foundation in Computer Science',
-        place: 'Brunel University London',
-        description: 'Pathway programme before the BSc Computer Science degree.',
-        kind: 'education',
-      },
-      {
-        date: 'Jan 2021 – Jan 2022',
-        title: 'Quality Assurance Intern',
-        place: 'Farsar Tejarat · Tehran',
-        description:
-          'Supported process validation, medical-device compliance, FMEA risk assessments, audits and CAPA tracking.',
-        kind: 'past',
-      },
-      {
-        date: 'Apr – Sep 2020',
-        title: 'IT Support Assistant',
-        place: 'Imam Hossein Hospital · Karaj',
-        description:
-          'Installed and configured hardware, software and network systems and diagnosed technical problems for hospital staff.',
-        kind: 'past',
-      },
-      {
-        date: 'Apr – Sep 2019',
-        title: 'IT Support Assistant',
-        place: 'Nedaye Salamat Farsar Alborz · Karaj',
-        description:
-          'Provided first-line CRM support, onboarding, training and account-access management.',
-        kind: 'past',
-      },
-      {
-        date: '2018 – 2022 · awarded 2024',
-        title: 'BSc Industrial Engineering',
-        place: 'Islamic Azad University, Central Tehran',
-        description: 'Systems thinking, process analysis and optimisation.',
-        kind: 'education',
-      },
-    ],
-  },
-  skills: {
-    languages: 'English (fluent) · Persian (native) · German (B1) · Arabic (A1)',
-  },
-  skillEvidence: [
+  experience: [
     {
-      technology: 'React',
-      category: 'Frontend Engineering',
-      projects: [
-        {
-          name: 'This Portfolio',
-          evidence:
-            'Built the interactive project field, Engineering Lab and evidence map as reusable React components.',
-          href: 'projects/portfolio/',
-        },
-        {
-          name: 'CO2 Tracker',
-          evidence:
-            'Built the customer search, results display and navigation for the sustainability web app.',
-          href: '#team-work',
-        },
-      ],
+      date: 'Aug 2026 – now',
+      title: 'Founder and software developer',
+      place: 'PathLife Studio Ltd, London',
+      description:
+        'Build and publish iOS games, develop Android versions, and run the web and advertising infrastructure behind them.',
     },
     {
-      technology: 'TypeScript',
-      category: 'Frontend Engineering',
-      projects: [
-        {
-          name: 'This Portfolio',
-          evidence:
-            'Modelled project content, screenshots and interaction state with explicit TypeScript types.',
-          href: 'projects/portfolio/',
-        },
-        {
-          name: 'PathLife',
-          evidence:
-            'Rebuilding year, education, career and event systems in React Native with typed state.',
-          href: 'projects/pathlife/',
-        },
-        {
-          name: 'PawLife',
-          evidence:
-            'Implemented the event engine, navigation and persistent game state in a typed Expo application.',
-          href: 'projects/pawlife/',
-        },
-      ],
+      date: 'Apr 2024 – Jun 2026',
+      title: 'IT administrator, part-time',
+      place: 'ATOZ Education Services, London',
+      description:
+        'Kept hardware, software and network systems running for staff and students, and explained fixes to non-technical users.',
     },
     {
-      technology: 'HTML & CSS',
-      category: 'Frontend Engineering',
-      projects: [
-        {
-          name: 'This Portfolio',
-          evidence:
-            'Created the responsive signal-field design system, device frames and motion-safe interaction states.',
-          href: 'projects/portfolio/',
-        },
-      ],
+      date: '2023 – 2026',
+      title: 'BSc (Hons) Computer Science, 2:1',
+      place: 'Brunel University London',
+      description:
+        'Final-year project Physio-AI, graded A. Foundation year in Computer Science 2022–2023.',
     },
     {
-      technology: 'SwiftUI',
-      category: 'Mobile Application Development',
-      projects: [
-        {
-          name: 'Sumlume',
-          evidence:
-            'Built the published iPhone and iPad number-puzzle interface natively in SwiftUI.',
-          href: 'projects/sumlume/',
-        },
-        {
-          name: 'PathLife',
-          evidence: 'Built core game interfaces for the live iOS life-simulation product.',
-          href: 'projects/pathlife/',
-        },
-      ],
+      date: 'Jan 2021 – Jan 2022',
+      title: 'Quality assurance intern, regulatory compliance',
+      place: 'Farsar Tejarat, Tehran',
+      description:
+        'Process validation for medical-device compliance, FMEA risk assessments, audit documentation and CAPA tracking.',
     },
     {
-      technology: 'React Native',
-      category: 'Mobile Application Development',
-      projects: [
-        {
-          name: 'PathLife',
-          evidence:
-            'Leading the Android rebuild and asset migration with React Native and Zustand.',
-          href: 'projects/pathlife/',
-        },
-        {
-          name: 'PawLife',
-          evidence:
-            'Building a pet-life simulation with 16 minigames and a custom state-based architecture.',
-          href: 'projects/pawlife/',
-        },
-      ],
+      date: '2019 – 2020',
+      title: 'IT support assistant',
+      place: 'Imam Hossein Hospital and Nedaye Salamat Farsar Alborz, Karaj',
+      description:
+        'Two six-month roles: hospital hardware, software and network support, then first-line CRM support, onboarding and account access.',
     },
     {
-      technology: 'Kotlin',
-      category: 'Mobile Application Development',
-      projects: [
-        {
-          name: 'Sumlume',
-          evidence: 'Developing the native Android version of the number-puzzle product.',
-          href: 'projects/sumlume/',
-        },
-      ],
+      date: '2018 – 2022, awarded 2024',
+      title: 'BSc Industrial Engineering',
+      place: 'Islamic Azad University, Central Tehran',
+      description: 'Systems thinking, process analysis and optimisation.',
     },
-    {
-      technology: 'Expo',
-      category: 'Mobile Application Development',
-      projects: [
-        {
-          name: 'PawLife',
-          evidence: 'Using Expo for the in-development React Native pet simulation.',
-          href: 'projects/pawlife/',
-        },
-      ],
-    },
-    {
-      technology: 'Node.js & Express',
-      category: 'Backend and APIs',
-      projects: [
-        {
-          name: 'PathLife',
-          evidence:
-            'Built the support platform, admin surface, rate limiting and app-ads.txt delivery.',
-          href: 'projects/pathlife/',
-        },
-      ],
-    },
-    {
-      technology: 'Spring Boot',
-      category: 'Backend and APIs',
-      projects: [
-        {
-          name: 'CO2 Tracker',
-          evidence:
-            'Built REST endpoints for name search, typed barcode lookup and the prototype upload flow.',
-          href: '#team-work',
-        },
-      ],
-    },
-    {
-      technology: 'WebSockets',
-      category: 'Backend and APIs',
-      projects: [
-        {
-          name: 'Physio-AI',
-          evidence:
-            'Streamed pose classification results from the Python pipeline to the live web interface.',
-          href: 'projects/physio-ai/',
-        },
-      ],
-    },
-    {
-      technology: 'SQLite & H2',
-      category: 'Databases and Data Management',
-      projects: [
-        {
-          name: 'Physio-AI',
-          evidence: 'Persisted rehabilitation sessions and progress data in SQLite.',
-          href: 'projects/physio-ai/',
-        },
-        {
-          name: 'CO2 Tracker',
-          evidence: 'Modelled product records and timestamped search history in H2 through JPA.',
-          href: '#team-work',
-        },
-      ],
-    },
-    {
-      technology: 'MediaPipe Pose',
-      category: 'AI and Machine Learning',
-      projects: [
-        {
-          name: 'Physio-AI',
-          evidence: 'Extracted 33 pose landmarks per frame from standard webcam video.',
-          href: 'projects/physio-ai/',
-        },
-      ],
-    },
-    {
-      technology: 'scikit-learn',
-      category: 'AI and Machine Learning',
-      projects: [
-        {
-          name: 'Physio-AI',
-          evidence:
-            'Compared classifiers and selected a Random Forest model that achieved 96.23% accuracy.',
-          href: 'projects/physio-ai/',
-        },
-      ],
-    },
-    {
-      technology: 'JUnit',
-      category: 'Testing, Tooling and Deployment',
-      projects: [
-        {
-          name: 'Hospital Appointment System',
-          evidence: 'Added JUnit coverage for the Java Swing appointment-booking module.',
-          href: '#team-work',
-        },
-      ],
-    },
-    {
-      technology: 'Playwright',
-      category: 'Testing, Tooling and Deployment',
-      projects: [
-        {
-          name: 'This Portfolio',
-          evidence: 'Automated route, viewport, theme, console, overflow and interaction checks.',
-          href: 'projects/portfolio/',
-        },
-      ],
-    },
-    {
-      technology: 'GitHub Pages',
-      category: 'Testing, Tooling and Deployment',
-      projects: [
-        {
-          name: 'This Portfolio',
-          evidence:
-            'Configured static route shells, base paths and automated production deployment.',
-          href: 'projects/portfolio/',
-        },
-      ],
-    },
-  ] satisfies SkillEvidenceItem[],
+  ],
   contact: {
-    eyebrow: 'Contact',
-    title: 'Let’s build something useful.',
-    text: 'I am looking for a graduate or junior Software Engineer, Mobile Developer or Full-Stack Developer role in London.',
-    roles: ['Software Engineer', 'Mobile Developer', 'Full-Stack Developer'],
+    title: 'Let’s talk',
+    text: 'I’m looking for a graduate or junior software engineering role in London: mobile, front-end or full-stack. Email is the fastest way to reach me.',
   },
 } as const;
 
-export function findCaseStudy(slug: string) {
+export function findCaseStudy(slug: string): CaseStudy | undefined {
   return content.caseStudies.find((study) => study.slug === slug);
 }

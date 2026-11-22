@@ -1,16 +1,21 @@
 {
-  "name": "Nasim Mosayebi Developer Portfolio",
+  "name": "Nasim Mosayebi, Software Engineer",
   "short_name": "Nasim Mosayebi",
   "start_url": "/portfolio/",
   "display": "standalone",
-  "background_color": "#f7f6f0",
-  "theme_color": "#202913",
+  "background_color": "#eef4ff",
+  "theme_color": "#14113a",
   "icons": [
     {
       "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ]
 }

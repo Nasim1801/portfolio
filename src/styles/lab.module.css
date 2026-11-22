@@ -3,6 +3,7 @@
   --lab-mint: var(--green);
   position: relative;
   min-height: 100vh;
+  padding-top: var(--header);
   overflow: clip;
   background: var(--paper);
 }
@@ -17,14 +18,17 @@
 .labHero {
   padding: clamp(1.5rem, 4vw, 4rem);
   margin-block: clamp(1rem, 3vw, 3rem);
-  border-radius: 7px;
-  background: var(--lime);
-  color: #202913;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  color: var(--ink);
   display: grid;
   align-content: center;
 }
 
 .backLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   width: max-content;
   margin-bottom: clamp(20px, 4vw, 52px);
   color: var(--ink-soft);
@@ -41,31 +45,25 @@
 .noteLabel {
   margin: 0;
   color: var(--signal);
-  font: 700 0.7rem/1.4 var(--mono);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  font: 650 0.875rem/1.4 var(--body);
 }
 
 .labHero h1 {
   max-width: 1100px;
   margin: 22px 0 40px;
-  font: 400 clamp(4rem, 12vw, 10.5rem)/0.92 var(--display);
-  letter-spacing: -0.035em;
-}
-
-.labHero h1 em {
-  font-weight: 400;
+  font: 720 clamp(3.2rem, 9vw, 7rem)/0.92 var(--display);
+  letter-spacing: -0.045em;
 }
 
 .labHero .backLink,
 .labHero .labEyebrow,
 .labHero .labIntro > p,
 .labHero .labIntro dt {
-  color: #344523;
+  color: var(--ink-2);
 }
 
 .labHero .labIntro dl > div {
-  border-color: #769549;
+  border-color: var(--line-strong);
 }
 
 .labIntro {
@@ -98,7 +96,7 @@
 .labIntro dt,
 .labIntro dd {
   margin: 0;
-  font: 600 0.72rem/1.5 var(--mono);
+  font: 650 0.8125rem/1.5 var(--body);
   letter-spacing: 0.03em;
 }
 
@@ -131,9 +129,7 @@
   padding: 10px 13px;
   border: 1px solid currentColor;
   color: var(--lab-mint);
-  font: 700 0.64rem/1 var(--mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 650 0.8125rem/1 var(--body);
 }
 
 .simulationChip {
@@ -170,9 +166,7 @@
   gap: 18px;
   margin-bottom: 26px;
   color: var(--ink-soft);
-  font: 600 0.65rem/1.4 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font: 650 0.8125rem/1.4 var(--body);
 }
 
 .puzzleTopline strong {
@@ -274,8 +268,7 @@
   background: none;
   color: var(--ink);
   cursor: pointer;
-  font: 650 0.72rem/1 var(--mono);
-  text-transform: uppercase;
+  font: 650 0.8125rem/1 var(--body);
 }
 
 .exhibitNotes {
@@ -298,7 +291,7 @@
 
 .exhibitNotes li span {
   color: var(--lab-accent);
-  font: 700 0.65rem/1.5 var(--mono);
+  font: 650 0.8125rem/1.5 var(--body);
 }
 
 .exhibitNotes > p:not(.noteLabel),
@@ -338,7 +331,7 @@
   background: transparent;
   color: var(--ink-soft);
   cursor: pointer;
-  font: 650 0.75rem/1.35 var(--mono);
+  font: 650 0.8125rem/1.35 var(--body);
   text-align: left;
   transition:
     background 180ms ease,
@@ -357,9 +350,9 @@
 .poseViewport {
   padding: clamp(14px, 2.3vw, 28px);
   border: 1px solid var(--line-strong);
-  background: #202c24;
-  --lab-mint: #c5f383;
-  --lab-accent: #b5d57d;
+  background: #161a2e;
+  --lab-mint: #8fe0b5;
+  --lab-accent: #a3b3ff;
   color: #eef4e9;
   box-shadow: var(--shadow-large);
 }
@@ -398,7 +391,7 @@
 .svgLandmark,
 .svgActiveLandmark {
   fill: #ffd26f;
-  stroke: #202c24;
+  stroke: #161a2e;
   stroke-width: 2;
 }
 
@@ -416,7 +409,7 @@
 }
 
 .angleLabel rect {
-  fill: #253d2b;
+  fill: #252c55;
   stroke: var(--lab-accent);
 }
 
@@ -433,11 +426,11 @@
   padding-top: 18px;
   border-top: 1px solid rgba(223, 230, 247, 0.15);
   color: #dce6d8;
-  font: 600 0.67rem/1 var(--mono);
-  text-transform: uppercase;
+  font: 650 0.8125rem/1 var(--body);
 }
 
 .depthControl input {
+  min-height: 32px;
   accent-color: var(--lab-mint);
 }
 
@@ -462,9 +455,7 @@
 .pipelineReadout > p:first-child {
   margin: 0;
   color: var(--lab-accent);
-  font: 700 0.66rem/1 var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font: 650 0.8125rem/1 var(--body);
 }
 
 .pipelineReadout h3 {
@@ -493,7 +484,7 @@
 .pipelineReadout dt,
 .pipelineReadout dd {
   margin: 0;
-  font: 600 0.72rem/1.45 var(--mono);
+  font: 650 0.8125rem/1.45 var(--body);
 }
 
 .pipelineReadout dt,
@@ -515,9 +506,7 @@
 
 .labClosing p {
   color: var(--signal);
-  font: 700 0.7rem/1 var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font: 650 0.8125rem/1 var(--body);
 }
 
 .labClosing h2 {

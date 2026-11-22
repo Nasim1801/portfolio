@@ -1,6 +1,8 @@
 # Nasim Mosayebi portfolio
 
-A creative engineering portfolio for a London software engineer. Built with React, TypeScript, Vite, CSS Modules, SVG and Canvas. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
+Portfolio of Nasim Mosayebi, software engineer (mobile and full-stack) in London. Built with React, TypeScript, Vite and CSS Modules. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
+
+V5 is documented in `AUDIT-V5.md` (findings and fixes) and `CHANGELOG-V5.md`. V6, the game-world redesign, is summarised in `CHANGELOG-V6.md`, the V7 hero change in `CHANGELOG-V7.md` and the V8 themed objects in `CHANGELOG-V8.md`.
 
 ## Run locally
 
@@ -19,7 +21,10 @@ npm run build
 npm run preview
 # In a second terminal
 npm run qa
+REVIEW_PREFIX=v5-after npm run review
 ```
+
+`npm run qa` uses Playwright's Chromium (`npx playwright install chromium`) or the browser in `PORTFOLIO_CHROME`. `npm run review:moments` captures the site mid-interaction as `review/v6-moment-*.png` and records `review/v6-scroll.webm` (needs `npx playwright install ffmpeg`). `npm run review` writes full-page screenshots at 1440 and 390 px in both themes, plus a JSON report of links, contrast, tap targets, headings and transfer size, to `review/`.
 
 The production preview is served at `http://127.0.0.1:4173/portfolio/`. Keep it running before `npm run qa`.
 
@@ -37,22 +42,26 @@ Screenshot paths, dimensions and alt text live in:
 src/data/screens.ts
 ```
 
-Real media is stored under `public/assets/`. Run `npm run prepare:assets -- --game pathlife dashboard /absolute/path/to/capture.png` to import a verified game image. Update its dimensions, label and alt text in `src/data/screens.ts` and its provenance in `ASSET-AUDIT-V4.md`. For non-game media the build generates display WebP files from the checked-in PNG originals.
+Display media is stored under `public/assets/`. Run `npm run prepare:assets -- --game pathlife dashboard /absolute/path/to/capture.png` to import a verified game image. Update its dimensions, label and alt text in `src/data/screens.ts` and its provenance in `ASSET-AUDIT-V4.md`.
+
+PNG originals for landscape screenshots live in `media-src/` and are not deployed. The build writes full-size, 960 px and 160 px WebP variants of each into `public/assets/`, skipping files that are already up to date.
 
 The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
 
 ## Main architecture
 
-- `src/components/ExhibitionHero.tsx`: keyboard-operable selector and layered product artwork.
-- `src/components/Media.tsx`: responsive gallery, swipe controls, and full-resolution dialog.
-- `src/components/lab/`: the playable make-10 board and interactive Physio-AI system visualisation.
-- `src/lab/sumlumeEngine.ts`: pure, independently tested matching rules.
-- `src/components/SkillAtlas.tsx`: selectable technology-to-project evidence map.
-- `src/components/CaseStudyPage.tsx`: shared technical case-study structure.
-- `src/styles/site.module.css`: core responsive visual system.
-- `src/styles/lab.module.css`: Engineering Lab interface and exhibit states.
-
-See `ASSET-AUDIT-V4.md` for release and development media sources. `DESIGN-V3.md` records the previous design.
+- `src/components/Hero.tsx`: identity, animated name, achievement badges and calls to action.
+- `src/components/LevelSelect.tsx`: the hero "Choose a level" stage that rotates through the four featured projects (tab list, swipe, tilt, pause).
+- `src/components/MakeTenBoard.tsx`: the playable make-10 demo shown inside the Sumlume project (roving focus, live status, win screen).
+- `src/fx/`: hand-written motion. `effects.ts` (scroll reveals with a safety net, project colour worlds, tile bursts, Konami code, view-transition helper), `router.ts` (in-place navigation so pages can morph), `AmbientTiles.tsx` (pointer-reactive canvas that pauses off screen and swaps object sets with the hero level), `glyphs.ts` (the per-project object sets, drawn as vector shapes and cached as sprites), `useTilt.ts` (3D tilt) and `ScrollMap.tsx` (XP bar and level map).
+- `src/lab/sumlumeEngine.ts`: pure puzzle rules shared by the hero board and the Lab, tested by `scripts/test-lab.ts`.
+- `src/components/Sections.tsx`: featured projects, more work, skills, about, experience, contact and footer.
+- `src/components/CaseStudyPage.tsx`: case-study layout (at-a-glance facts, gallery, section navigation).
+- `src/components/Media.tsx`: responsive images, device frames, swipeable gallery and full-size dialog.
+- `src/components/lab/`: the Engineering Lab exhibits.
+- `src/utils/links.ts`: base-path helpers and `scrollToHash`, which makes `#fragment` links land after React renders.
+- `src/styles/global.css`: design tokens (colour, spacing and type scales) for both themes.
+- `src/styles/site.module.css`: site components. `src/styles/lab.module.css`: the Lab.
 
 ## Routes and SEO
 
@@ -74,7 +83,7 @@ The static build creates indexable HTML entry points for:
 
 ## Interaction and browser QA
 
-`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, failed requests, JavaScript errors, the mobile menu, product-selector keyboard controls, skill selection, CV download, theme persistence, screenshot controls and both Lab interactions. Set `PORTFOLIO_AXE_PATH` to a local copy of axe-core to run accessibility scans at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
+`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, failed requests, JavaScript errors, the mobile menu, the hero level-select stage, the make-10 demo (matching, mismatch and arrow-key focus), skill links, fragment deep links, CV download, theme persistence, screenshot controls and both Lab interactions. Set `PORTFOLIO_AXE_PATH` to a local copy of axe-core to run accessibility scans at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
 
 ## Deploy
 

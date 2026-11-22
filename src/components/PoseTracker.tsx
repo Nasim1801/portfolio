@@ -273,15 +273,15 @@ export function PoseTracker({ compact = false }: { compact?: boolean }) {
         <span className={styles.poseAnimationLabel}>Animation</span>
         <div className={styles.poseChips} aria-hidden="true">
           <span>
-            squat · reps <b ref={repsRef}>0</b>
+            Squat reps <b ref={repsRef}>0</b>
           </span>
-          <span>form good</span>
+          <span>Form good</span>
         </div>
       </div>
       <div className={styles.poseMeta}>
         <div>
-          <strong>Physio-AI · Random Forest</strong>
-          <span>33 landmarks · real time</span>
+          <strong>Physio-AI Random Forest</strong>
+          <span>33 landmarks per frame, real time</span>
         </div>
         <b>96.23%</b>
       </div>

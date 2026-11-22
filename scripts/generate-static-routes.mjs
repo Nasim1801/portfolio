@@ -12,7 +12,7 @@ const routes = [
     name: 'Sumlume',
     title: 'Sumlume Case Study | Nasim Mosayebi',
     description:
-      'How Nasim Mosayebi built and released Sumlume, a native SwiftUI number puzzle for iPhone and iPad, with an Android version in Kotlin in development.',
+      'How Nasim Mosayebi built and released Sumlume, a native SwiftUI number puzzle for iPhone and iPad that is live on the App Store.',
     image: 'assets/sumlume/classic.webp',
     type: 'VideoGame',
   },
@@ -22,7 +22,7 @@ const routes = [
     name: 'PathLife',
     title: 'PathLife Case Study | Nasim Mosayebi',
     description:
-      'Engineering case study for PathLife, a live iOS life simulation with a React Native Android rebuild and supporting Node.js infrastructure.',
+      'PathLife case study: problem, constraints, architecture, key decisions and outcome for a live iOS life simulation, its React Native Android rebuild and its Node.js support platform.',
     image: 'assets/pathlife/dashboard.webp',
     type: 'VideoGame',
   },
@@ -32,7 +32,7 @@ const routes = [
     name: 'Physio-AI',
     title: 'Physio-AI Case Study | Nasim Mosayebi',
     description:
-      'A Grade A real-time physiotherapy system using MediaPipe Pose and a Random Forest classifier with 96.23% accuracy.',
+      'Physio-AI case study: a Grade A real-time physiotherapy feedback system using MediaPipe Pose and a Random Forest classifier with 96.23% accuracy.',
     image: 'assets/physio-ai/01-live-squat.webp',
     type: 'SoftwareApplication',
   },
@@ -50,9 +50,9 @@ const routes = [
     slug: 'portfolio',
     path: 'projects/portfolio',
     name: 'This Portfolio',
-    title: 'Portfolio Design & Engineering Case Study | Nasim Mosayebi',
+    title: 'This Portfolio Case Study | Nasim Mosayebi',
     description:
-      'How Nasim Mosayebi designed and engineered an interactive React portfolio with accessible browser demonstrations, responsive project storytelling and static deployment.',
+      'How Nasim Mosayebi designed and built this static React and TypeScript portfolio: typed content, a tested puzzle engine, an image pipeline, route metadata and automated browser checks.',
     image: 'assets/portfolio/01-home.webp',
     type: 'SoftwareApplication',
   },

@@ -12,6 +12,8 @@
     "format:write": "prettier --write .",
     "test:lab": "node --import tsx scripts/test-lab.ts",
     "qa": "tsx scripts/qa-portfolio.ts",
+    "review": "tsx scripts/review-capture.ts",
+    "review:moments": "tsx scripts/review-moments.ts",
     "capture": "tsx scripts/capture-screens.ts",
     "capture:team": "tsx scripts/capture-team-projects.ts",
     "preview": "vite preview"

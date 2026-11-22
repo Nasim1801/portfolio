@@ -12,22 +12,6 @@ const baseProps = {
   'aria-hidden': true,
 };
 
-export function ArrowUpRight(props: IconProps) {
-  return (
-    <svg {...baseProps} {...props}>
-      <path d="M7 17 17 7M8 7h9v9" />
-    </svg>
-  );
-}
-
-export function ArrowRight(props: IconProps) {
-  return (
-    <svg {...baseProps} {...props}>
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
-
 export function CloseIcon(props: IconProps) {
   return (
     <svg {...baseProps} {...props}>
@@ -79,11 +63,44 @@ export function LinkedinIcon(props: IconProps) {
   );
 }
 
-export function GlobeIcon(props: IconProps) {
+export function DocumentIcon(props: IconProps) {
   return (
     <svg {...baseProps} {...props}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 3v5h5M9 13h6M9 17h6" />
+    </svg>
+  );
+}
+
+export function MailIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <rect x="3" y="5" width="18" height="14" rx="2.5" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  );
+}
+
+export function PauseIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M8 5v14M16 5v14" />
+    </svg>
+  );
+}
+
+export function PlayIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M7 5v14l12-7Z" />
+    </svg>
+  );
+}
+
+export function ArrowDownIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M12 5v14M6 13l6 6 6-6" />
     </svg>
   );
 }

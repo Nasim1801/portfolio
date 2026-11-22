@@ -1,37 +1,63 @@
-import { readdir } from 'node:fs/promises';
+import { mkdir, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
+// PNG and JPEG originals live in media-src/ so they are not deployed.
+// The build writes display WebP variants into public/assets/.
+const sourceRoot = path.resolve('media-src');
 const assetsRoot = path.resolve('public/assets');
 const sourcePattern = /\.(png|jpe?g)$/i;
 
-async function optimise(sourcePath) {
-  const relativePath = path.relative(assetsRoot, sourcePath).split(path.sep).join('/');
-  const directory = relativePath.split('/')[0];
-  const icon = /\/icon\.png$/i.test(relativePath);
-  const outputPath = sourcePath.replace(sourcePattern, '.webp');
-  const maxWidth = icon
-    ? 512
-    : directory === 'hospital' || directory === 'co2-tracker'
-      ? 2000
-      : directory === 'portfolio'
-        ? 1600
-        : 1179;
+async function isFresh(output, source) {
+  try {
+    const [outputStat, sourceStat] = await Promise.all([stat(output), stat(source)]);
+    return outputStat.mtimeMs >= sourceStat.mtimeMs;
+  } catch {
+    return false;
+  }
+}
 
+async function write(sourcePath, outputPath, width, quality) {
+  if (await isFresh(outputPath, sourcePath)) return false;
   await sharp(sourcePath)
     .rotate()
-    .resize({ width: maxWidth, withoutEnlargement: true })
-    .webp({ quality: 82, effort: 5 })
+    .resize({ width, withoutEnlargement: true })
+    .webp({ quality, effort: 5 })
     .toFile(outputPath);
+  return true;
+}
 
-  if (icon) {
-    await sharp(sourcePath)
-      .rotate()
-      .resize({ width: 192, withoutEnlargement: true })
-      .webp({ quality: 84 })
-      .toFile(outputPath.replace('.webp', '-192.webp'));
-  }
-  console.log(`Optimised ${relativePath}`);
+async function optimise(sourcePath) {
+  const relativePath = path.relative(sourceRoot, sourcePath).split(path.sep).join('/');
+  const directory = relativePath.split('/')[0];
+  const icon = /(^|\/)icon\.png$/i.test(relativePath);
+  const output = path.join(assetsRoot, relativePath.replace(sourcePattern, ''));
+  await mkdir(path.dirname(output), { recursive: true });
+
+  const variants = icon
+    ? [
+        [`${output}.webp`, 512, 82],
+        [`${output}-192.webp`, 192, 84],
+      ]
+    : [
+        [
+          `${output}.webp`,
+          directory === 'hospital' || directory === 'co2-tracker'
+            ? 2000
+            : directory === 'portfolio'
+              ? 1600
+              : 1179,
+          82,
+        ],
+        // Responsive display size and gallery thumbnail for landscape media.
+        [`${output}-960.webp`, 960, 80],
+        [`${output}-160.webp`, 160, 72],
+      ];
+
+  const written = await Promise.all(
+    variants.map(([target, width, quality]) => write(sourcePath, target, width, quality)),
+  );
+  if (written.some(Boolean)) console.log(`Optimised ${relativePath}`);
 }
 
 async function walk(directory) {
@@ -86,5 +112,5 @@ async function importGameScreenshot(game, stem, original) {
 if (process.argv[2] === '--game') {
   await importGameScreenshot(...process.argv.slice(3));
 } else {
-  await walk(assetsRoot);
+  await walk(sourceRoot);
 }

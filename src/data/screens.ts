@@ -4,7 +4,6 @@ export interface ScreenshotAsset {
   thumbnailSrc?: string;
   smallWidth?: number;
   sizes?: string;
-  fallbackSrc?: string;
   alt: string;
   width: number;
   height: number;
@@ -184,7 +183,9 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/01-live-squat.webp',
     label: 'Live squat tracking',
-    fallbackSrc: 'assets/physio-ai/01-live-squat.png',
+    smallSrc: 'assets/physio-ai/01-live-squat-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/physio-ai/01-live-squat-160.webp',
     alt: 'Physio-AI live squat session showing tracked pose landmarks, eleven repetitions and 100% session accuracy',
     width: 1179,
     height: 529,
@@ -192,7 +193,9 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/02-live-standing.webp',
     label: 'Standing detection',
-    fallbackSrc: 'assets/physio-ai/02-live-standing.png',
+    smallSrc: 'assets/physio-ai/02-live-standing-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/physio-ai/02-live-standing-160.webp',
     alt: 'Physio-AI live session detecting the standing position before a squat',
     width: 988,
     height: 437,
@@ -200,7 +203,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/03-progress-dashboard.webp',
     label: 'Progress dashboard',
-    fallbackSrc: 'assets/physio-ai/03-progress-dashboard.png',
+    thumbnailSrc: 'assets/physio-ai/03-progress-dashboard-160.webp',
     alt: 'Physio-AI progress dashboard showing session accuracy, rep volume and joint performance',
     width: 902,
     height: 508,
@@ -208,7 +211,9 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/04-session-history.webp',
     label: 'Session history',
-    fallbackSrc: 'assets/physio-ai/04-session-history.png',
+    smallSrc: 'assets/physio-ai/04-session-history-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/physio-ai/04-session-history-160.webp',
     alt: 'Physio-AI session history showing squat repetitions, accuracy and joint performance',
     width: 1206,
     height: 676,
@@ -216,7 +221,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/05-profile-settings.webp',
     label: 'Recovery settings',
-    fallbackSrc: 'assets/physio-ai/05-profile-settings.png',
+    thumbnailSrc: 'assets/physio-ai/05-profile-settings-160.webp',
     alt: 'Physio-AI profile and recovery progress screen with personal account details redacted',
     width: 724,
     height: 408,
@@ -224,7 +229,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
   {
     src: 'assets/physio-ai/06-ai-feedback-panel.webp',
     label: 'Live feedback',
-    fallbackSrc: 'assets/physio-ai/06-ai-feedback-panel.png',
+    thumbnailSrc: 'assets/physio-ai/06-ai-feedback-panel-160.webp',
     alt: 'Physio-AI session panel showing rep count, form score and live corrective feedback',
     width: 360,
     height: 674,
@@ -243,9 +248,11 @@ export const sumlumeIcon: ScreenshotAsset = {
 
 export const portfolioScreen: ScreenshotAsset = {
   src: 'assets/portfolio/01-home.webp',
-  fallbackSrc: 'assets/portfolio/01-home.png',
-  label: 'Exhibition homepage',
-  alt: 'Nasim Mosayebi portfolio homepage showing the Digital Product Exhibition and product selector',
+  smallSrc: 'assets/portfolio/01-home-960.webp',
+  smallWidth: 960,
+  thumbnailSrc: 'assets/portfolio/01-home-160.webp',
+  label: 'Homepage',
+  alt: 'Nasim Mosayebi portfolio homepage with name, role, calls to action and a level-select stage showing PathLife',
   width: 1600,
   height: 1000,
 };
@@ -266,7 +273,6 @@ export const gameIcons = {
     smallSrc: 'assets/pawlife/icon-192.webp',
     smallWidth: 192,
     sizes: '80px',
-    fallbackSrc: 'assets/pawlife/icon.png',
     alt: 'PawLife app icon',
     width: 512,
     height: 512,
@@ -279,7 +285,9 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   {
     src: 'assets/co2-tracker/01-customer-page.webp',
     label: 'Customer dashboard',
-    fallbackSrc: 'assets/co2-tracker/01-customer-page.png',
+    smallSrc: 'assets/co2-tracker/01-customer-page-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/co2-tracker/01-customer-page-160.webp',
     alt: 'ECOlution customer page with sidebar, product search, photo upload and barcode lookup controls',
     width: 2000,
     height: 1003,
@@ -287,7 +295,9 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   {
     src: 'assets/co2-tracker/02-search-results.webp',
     label: 'Product search',
-    fallbackSrc: 'assets/co2-tracker/02-search-results.png',
+    smallSrc: 'assets/co2-tracker/02-search-results-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/co2-tracker/02-search-results-160.webp',
     alt: 'ECOlution search results showing three laptops and their carbon footprints: Apple MacBook, Dell XPS and Framework',
     width: 2000,
     height: 1233,
@@ -295,7 +305,9 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   {
     src: 'assets/co2-tracker/03-barcode-result.webp',
     label: 'Barcode lookup',
-    fallbackSrc: 'assets/co2-tracker/03-barcode-result.png',
+    smallSrc: 'assets/co2-tracker/03-barcode-result-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/co2-tracker/03-barcode-result-160.webp',
     alt: 'ECOlution typed barcode lookup showing an Apple MacBook result with a 200 kg carbon footprint',
     width: 2000,
     height: 966,
@@ -303,7 +315,9 @@ export const co2TrackerScreens: ScreenshotAsset[] = [
   {
     src: 'assets/co2-tracker/04-upload-simulated.webp',
     label: 'Simulated photo lookup',
-    fallbackSrc: 'assets/co2-tracker/04-upload-simulated.png',
+    smallSrc: 'assets/co2-tracker/04-upload-simulated-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/co2-tracker/04-upload-simulated-160.webp',
     alt: 'ECOlution prototype photo upload alert showing simulated recognition of Training Shoes',
     width: 2000,
     height: 863,
@@ -314,28 +328,36 @@ export const hospitalScreens: ScreenshotAsset[] = [
   {
     src: 'assets/hospital/01-login.webp',
     label: 'Hospital search',
-    fallbackSrc: 'assets/hospital/01-login.png',
+    smallSrc: 'assets/hospital/01-login-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/hospital/01-login-160.webp',
     alt: 'Hospital Appointment System start screen for finding a hospital',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/02-booking.webp',
     label: 'Choose a date and time',
-    fallbackSrc: 'assets/hospital/02-booking.png',
+    smallSrc: 'assets/hospital/02-booking-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/hospital/02-booking-160.webp',
     alt: 'Hospital Appointment System booking module with calendar and time choices',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/03-confirmation.webp',
     label: 'Booking confirmation',
-    fallbackSrc: 'assets/hospital/03-confirmation.png',
+    smallSrc: 'assets/hospital/03-confirmation-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/hospital/03-confirmation-160.webp',
     alt: 'Hospital Appointment System confirmation for a fictional appointment',
     ...hospitalSize,
   },
   {
     src: 'assets/hospital/04-schedule.webp',
     label: 'Appointment schedule',
-    fallbackSrc: 'assets/hospital/04-schedule.png',
+    smallSrc: 'assets/hospital/04-schedule-960.webp',
+    smallWidth: 960,
+    thumbnailSrc: 'assets/hospital/04-schedule-160.webp',
     alt: 'Hospital Appointment System appointment schedule update screen',
     ...hospitalSize,
   },
@@ -344,7 +366,9 @@ export const hospitalScreens: ScreenshotAsset[] = [
 export const hospitalTestScreen: ScreenshotAsset = {
   src: 'assets/hospital/05-tests.webp',
   label: 'JUnit test result',
-  fallbackSrc: 'assets/hospital/05-tests.png',
+  smallSrc: 'assets/hospital/05-tests-960.webp',
+  smallWidth: 960,
+  thumbnailSrc: 'assets/hospital/05-tests-160.webp',
   alt: 'JUnit terminal output showing the Hospital booking module test passing',
   width: 1880,
   height: 825,
