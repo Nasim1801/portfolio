@@ -252,7 +252,7 @@ export const portfolioScreen: ScreenshotAsset = {
   smallWidth: 960,
   thumbnailSrc: 'assets/portfolio/01-home-160.webp',
   label: 'Homepage',
-  alt: 'Nasim Mosayebi portfolio homepage with name, role, calls to action and a level-select stage showing PathLife',
+  alt: 'Nasim Mosayebi’s portfolio homepage with the Graduate Software Engineer title, CV download and PathLife preview',
   width: 1600,
   height: 1000,
 };

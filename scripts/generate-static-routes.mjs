@@ -32,7 +32,7 @@ const routes = [
     name: 'Physio-AI',
     title: 'Physio-AI Case Study | Nasim Mosayebi',
     description:
-      'Physio-AI case study: a Grade A real-time physiotherapy feedback system using MediaPipe Pose and a Random Forest classifier with 96.23% accuracy.',
+      'Physio-AI is a Grade A final-year project on real-time exercise feedback using MediaPipe Pose, scikit-learn and WebSockets.',
     image: 'assets/physio-ai/01-live-squat.webp',
     type: 'SoftwareApplication',
   },
@@ -62,7 +62,7 @@ const routes = [
     name: 'CO2 Tracker',
     title: 'CO2 Tracker Case Study | Nasim Mosayebi',
     description:
-      'A React and Spring Boot team project for looking up product carbon-footprint data.',
+      'A university team demo for product carbon-footprint lookup. The public repository contains the React interface prototype.',
     image: 'assets/co2-tracker/01-customer-page.webp',
     type: 'SoftwareApplication',
   },

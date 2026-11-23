@@ -443,6 +443,14 @@
   color: var(--ink-2);
   font-size: var(--fs-md);
 }
+.workEvidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
 /* ---------- Tags and status ---------- */
 
@@ -2684,9 +2692,6 @@
 
 /* ---------- Footer and toast ---------- */
 
-.footerHint {
-  opacity: 0.85;
-}
 .toast {
   position: fixed;
   bottom: var(--s-5);
@@ -3092,6 +3097,7 @@
   justify-self: end;
 }
 .showPanel {
+  grid-area: 1 / 1;
   perspective: 1100px;
   rotate: 1.2deg;
 }
@@ -3311,9 +3317,13 @@
   }
 }
 .showControls {
+  grid-area: 2 / 1;
   display: flex;
   align-items: center;
   gap: var(--s-3);
+}
+.showControls > .stageButton {
+  order: 1;
 }
 .showTitle {
   flex: none;

@@ -19,7 +19,7 @@ export function EngineeringLabPage() {
   }, []);
 
   return (
-    <main id="main-content" className={styles.labPage}>
+    <main id="main-content" tabIndex={-1} className={styles.labPage}>
       <header className={styles.labHero}>
         <a className={styles.backLink} href={pageUrl()}>
           Portfolio home

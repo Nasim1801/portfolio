@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { chromium, type Page } from 'playwright';
 
 const site = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4173/portfolio/';
@@ -24,6 +24,8 @@ const viewports = [
 ];
 const failures: string[] = [];
 const axePath = process.env.PORTFOLIO_AXE_PATH;
+const cvName = 'Nasim-Mosayebi-CV.pdf';
+const cvUrl = new URL(cvName, site).href;
 // Uses Playwright's bundled Chromium unless PORTFOLIO_CHROME points at another browser.
 const browser = await chromium.launch({ executablePath: process.env.PORTFOLIO_CHROME });
 const result: { route: string; width: number; theme: string; images: number; resources: number }[] =
@@ -55,6 +57,15 @@ try {
           }
         });
         await visit(page, route);
+        assert.equal(
+          await page.getByRole('link', { name: 'Nasim Mosayebi home', exact: true }).count(),
+          1,
+          `${label}: header home link must have an accessible name`,
+        );
+        const headerCv = await page
+          .locator('header a[download]')
+          .evaluate((link) => (link as HTMLAnchorElement).href);
+        assert.equal(headerCv, cvUrl, `${label}: header CV URL`);
         const metrics = await page.evaluate(async () => {
           const images = [...document.images].filter((image) => image.getClientRects().length);
           await Promise.all(
@@ -119,11 +130,47 @@ try {
   });
   const page = await context.newPage();
   await visit(page);
-  const menu = page.getByRole('button', { name: 'Open navigation' });
-  await menu.click();
-  assert.equal(await page.getByRole('navigation', { name: 'Main' }).isVisible(), true);
+  await page.keyboard.press('Tab');
+  assert.equal(
+    await page
+      .getByRole('link', { name: 'Skip to content' })
+      .evaluate((el) => el === document.activeElement),
+    true,
+  );
+  await page.keyboard.press('Enter');
+  assert.equal(
+    await page.locator('#main-content').evaluate((el) => el === document.activeElement),
+    true,
+  );
+  await page.keyboard.press('Tab');
+  assert.equal(
+    await page
+      .getByRole('link', { name: 'View work', exact: true })
+      .evaluate((el) => el === document.activeElement),
+    true,
+  );
+
+  const menu = page.locator('button[aria-controls="main-navigation"]');
+  await menu.focus();
+  await page.keyboard.press('Enter');
+  const nav = page.getByRole('navigation', { name: 'Main' });
+  assert.equal(await nav.isVisible(), true);
+  assert.equal(
+    await nav
+      .getByRole('link', { name: 'Work', exact: true })
+      .evaluate((el) => el === document.activeElement),
+    true,
+  );
+  await page.keyboard.press('Tab');
+  assert.equal(
+    await nav
+      .getByRole('link', { name: 'About', exact: true })
+      .evaluate((el) => el === document.activeElement),
+    true,
+  );
   await page.keyboard.press('Escape');
   assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+  assert.equal(await menu.evaluate((el) => el === document.activeElement), true);
 
   // Hero level select with reduced motion: first project, no rotation control, arrow keys work.
   assert.equal(
@@ -139,9 +186,15 @@ try {
     await page.getByRole('tab', { name: 'PawLife', exact: true }).getAttribute('aria-selected'),
     'true',
   );
-  assert.match(
-    (await page.getByRole('tabpanel').getByRole('link').getAttribute('href')) ?? '',
-    /#pawlife$/,
+  const selectedProject = page.getByRole('tabpanel').getByRole('link');
+  await page.keyboard.press('Tab');
+  assert.equal(await selectedProject.evaluate((el) => el === document.activeElement), true);
+  assert.equal(await selectedProject.getAttribute('href'), '#pawlife');
+  await page.keyboard.press('Enter');
+  assert.equal(new URL(page.url()).hash, '#pawlife');
+  assert.equal(
+    await page.locator('#pawlife').evaluate((el) => el === document.activeElement),
+    true,
   );
   assert.equal(
     await ambientSet(),
@@ -193,12 +246,38 @@ try {
   await skill.click();
   assert.equal(await skill.getAttribute('aria-pressed'), 'false');
 
-  const download = page.waitForEvent('download');
-  await page
-    .getByRole('link', { name: /Download CV/ })
-    .first()
-    .click();
-  assert.equal((await download).suggestedFilename(), 'Nasim-Mosayebi-CV.pdf');
+  const cvLinks = page.locator('a[download]');
+  assert.equal(await cvLinks.count(), 3, 'header, hero and contact CV downloads');
+  const expectedPdf = await readFile(new URL(`../public/${cvName}`, import.meta.url));
+  const cvResponse = await context.request.get(cvUrl);
+  assert.ok(cvResponse.ok());
+  assert.match(cvResponse.headers()['content-type'] ?? '', /^application\/pdf\b/);
+  assert.deepEqual(await cvResponse.body(), expectedPdf, 'served CV matches the working-tree PDF');
+  for (const link of await cvLinks.all()) {
+    assert.equal(await link.evaluate((anchor) => (anchor as HTMLAnchorElement).href), cvUrl);
+    const [download] = await Promise.all([page.waitForEvent('download'), link.click()]);
+    assert.equal(download.suggestedFilename(), cvName);
+    const saved = await download.path();
+    assert.ok(saved);
+    assert.deepEqual(await readFile(saved), expectedPdf);
+  }
+  const withoutJS = await browser.newContext({ javaScriptEnabled: false });
+  const fallback = await withoutJS.newPage();
+  await fallback.goto(site);
+  assert.equal(
+    await fallback
+      .getByRole('link', { name: 'Download CV (PDF)' })
+      .evaluate((anchor) => (anchor as HTMLAnchorElement).href),
+    cvUrl,
+  );
+  await withoutJS.close();
+
+  const publicCo2Source = 'https://github.com/Nasim1801/co2-tracker';
+  const co2Link = (p: Page) => p.getByRole('link', { name: /^React prototype on GitHub/ });
+  assert.equal(await co2Link(page).getAttribute('href'), publicCo2Source);
+  await visit(page, 'projects/co2-tracker/');
+  assert.equal(await co2Link(page).getAttribute('href'), publicCo2Source);
+  await visit(page);
   await page.getByRole('button', { name: /switch to dark mode/i }).click();
   await page.reload();
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
@@ -265,7 +344,10 @@ try {
     'mix',
     'the contact finale mixes all four sets',
   );
-  await live.getByRole('tabpanel').getByRole('link').click();
+  const liveProject = live.getByRole('tabpanel').getByRole('link');
+  await live.keyboard.press('Tab');
+  assert.equal(await liveProject.evaluate((el) => el === document.activeElement), true);
+  await live.keyboard.press('Enter');
   await live.waitForFunction(() => {
     const top = document.getElementById('physio-ai')?.getBoundingClientRect().top ?? -1;
     return top >= 0 && top < 160;

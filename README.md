@@ -1,6 +1,6 @@
 # Nasim Mosayebi portfolio
 
-Portfolio of Nasim Mosayebi, software engineer (mobile and full-stack) in London. Built with React, TypeScript, Vite and CSS Modules. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
+Portfolio of Nasim Mosayebi, a London-based Computer Science graduate specialising in iOS and mobile development. Built with React, TypeScript, Vite and CSS Modules. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
 
 V5 is documented in `AUDIT-V5.md` (findings and fixes) and `CHANGELOG-V5.md`. V6, the game-world redesign, is summarised in `CHANGELOG-V6.md`, the V7 hero change in `CHANGELOG-V7.md` the V8 themed objects in `CHANGELOG-V8.md` and the V9 calmer object layer in `CHANGELOG-V9.md`.
 
@@ -46,7 +46,7 @@ Display media is stored under `public/assets/`. Run `npm run prepare:assets -- -
 
 PNG originals for landscape screenshots live in `media-src/` and are not deployed. The build writes full-size, 960 px and 160 px WebP variants of each into `public/assets/`, skipping files that are already up to date.
 
-The downloadable CV is `public/Nasim-Mosayebi-CV.pdf`.
+Edit the CV in `Nasim-Mosayebi-CV.docx` and export it to `public/Nasim-Mosayebi-CV.pdf`, retaining the existing filename for download links.
 
 ## Main architecture
 
