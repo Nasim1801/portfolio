@@ -118,6 +118,51 @@ export function LevelSelect({ onLevel }: { onLevel?: (slug: string) => void }) {
         if (!event.currentTarget.contains(event.relatedTarget)) setHeld(false);
       }}
     >
+      <div className={styles.showControls}>
+        {canAnimate && (
+          <button
+            type="button"
+            className={styles.stageButton}
+            onClick={() => setPlaying((value) => !value)}
+            aria-label={playing ? 'Pause project rotation' : 'Play project rotation'}
+          >
+            {playing ? <PauseIcon /> : <PlayIcon />}
+          </button>
+        )}
+        <h2 id="levels-title" className={styles.showTitle}>
+          Choose a level
+        </h2>
+        <div className={styles.showTabs} role="tablist" aria-labelledby="levels-title">
+          {levels.map((level, tab) => (
+            <button
+              key={level.project.slug}
+              ref={(element) => {
+                tabs.current[tab] = element;
+              }}
+              type="button"
+              role="tab"
+              id={`level-tab-${level.project.slug}`}
+              aria-selected={tab === index}
+              aria-controls="level-panel"
+              tabIndex={tab === index ? 0 : -1}
+              data-world={level.project.slug}
+              data-world-local=""
+              onClick={() => select(tab)}
+              onKeyDown={(event) => onTabKey(event, tab)}
+            >
+              {level.study.icon ? (
+                <MediaImage item={level.study.icon} decorative sizes="36px" />
+              ) : (
+                <i aria-hidden="true">{tab + 1}</i>
+              )}
+              <span>{level.study.name}</span>
+              {tab === index && (
+                <b key={`${index}-${running}`} data-running={running || undefined} />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
       <div
         id="level-panel"
         role="tabpanel"
@@ -147,7 +192,7 @@ export function LevelSelect({ onLevel }: { onLevel?: (slug: string) => void }) {
           href={`#${project.slug}`}
           style={{ '--stage': project.stage } as CSSProperties}
           onClick={(event) => {
-            if (swiped.current) {
+            if (swiped.current && event.detail > 0) {
               swiped.current = false;
               event.preventDefault();
             }
@@ -221,52 +266,6 @@ export function LevelSelect({ onLevel }: { onLevel?: (slug: string) => void }) {
             </span>
           </span>
         </a>
-      </div>
-
-      <div className={styles.showControls}>
-        <h2 id="levels-title" className={styles.showTitle}>
-          Choose a level
-        </h2>
-        <div className={styles.showTabs} role="tablist" aria-labelledby="levels-title">
-          {levels.map((level, tab) => (
-            <button
-              key={level.project.slug}
-              ref={(element) => {
-                tabs.current[tab] = element;
-              }}
-              type="button"
-              role="tab"
-              id={`level-tab-${level.project.slug}`}
-              aria-selected={tab === index}
-              aria-controls="level-panel"
-              tabIndex={tab === index ? 0 : -1}
-              data-world={level.project.slug}
-              data-world-local=""
-              onClick={() => select(tab)}
-              onKeyDown={(event) => onTabKey(event, tab)}
-            >
-              {level.study.icon ? (
-                <MediaImage item={level.study.icon} decorative sizes="36px" />
-              ) : (
-                <i aria-hidden="true">{tab + 1}</i>
-              )}
-              <span>{level.study.name}</span>
-              {tab === index && (
-                <b key={`${index}-${running}`} data-running={running || undefined} />
-              )}
-            </button>
-          ))}
-        </div>
-        {canAnimate && (
-          <button
-            type="button"
-            className={styles.stageButton}
-            onClick={() => setPlaying((value) => !value)}
-            aria-label={playing ? 'Pause project rotation' : 'Play project rotation'}
-          >
-            {playing ? <PauseIcon /> : <PlayIcon />}
-          </button>
-        )}
       </div>
     </div>
   );

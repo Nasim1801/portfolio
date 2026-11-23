@@ -281,7 +281,7 @@ export function PoseTracker({ compact = false }: { compact?: boolean }) {
       <div className={styles.poseMeta}>
         <div>
           <strong>Physio-AI Random Forest</strong>
-          <span>33 landmarks per frame, real time</span>
+          <span>Reported accuracy on the project dataset</span>
         </div>
         <b>96.23%</b>
       </div>

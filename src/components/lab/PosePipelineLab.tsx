@@ -224,8 +224,8 @@ export function PosePipelineLab() {
               <dd>Random Forest</dd>
             </div>
             <div>
-              <dt>Verified result</dt>
-              <dd>96.23% accuracy</dd>
+              <dt>Reported project accuracy</dt>
+              <dd>96.23% on the project dataset</dd>
             </div>
             <div>
               <dt>Input</dt>

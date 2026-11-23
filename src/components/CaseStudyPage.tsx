@@ -72,6 +72,7 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       className={styles.study}
       data-project={study.slug}
       data-world={study.slug}

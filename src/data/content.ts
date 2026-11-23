@@ -85,6 +85,11 @@ const store = {
   pathlife: 'https://apps.apple.com/gb/app/pathlife/id6769602618',
   sumlume: 'https://apps.apple.com/gb/app/sumlume-number-match/id6799957684',
 };
+const physioSource = 'https://github.com/Nasim1801/physio-ai-final';
+const co2Prototype = {
+  label: 'React prototype on GitHub',
+  href: 'https://github.com/Nasim1801/co2-tracker',
+};
 
 const pathLifeStudy: CaseStudy = {
   slug: 'pathlife',
@@ -281,7 +286,7 @@ const physioStudy: CaseStudy = {
   stack: ['Python', 'MediaPipe Pose', 'scikit-learn', 'JavaScript', 'WebSockets', 'SQLite'],
   facts: [
     { label: 'Result', value: 'Grade A, BSc Computer Science' },
-    { label: 'Best model', value: 'Random Forest, 96.23% accuracy' },
+    { label: 'Reported project result', value: 'Random Forest, 96.23% on the project dataset' },
     { label: 'Input', value: '33 pose landmarks per frame from a standard webcam' },
     { label: 'Evaluation', value: 'Confusion matrices and ROC analysis' },
   ],
@@ -336,7 +341,7 @@ const physioStudy: CaseStudy = {
       heading: 'Outcome',
       bullets: [
         'Graded A as my BSc Computer Science final-year project at Brunel University London.',
-        'The Random Forest classifier reached 96.23% accuracy.',
+        'The project reported 96.23% classification accuracy for the Random Forest on its own dataset.',
         'Extended with fatigue detection, confidence-based visual feedback, session history and a progress dashboard.',
       ],
     },
@@ -349,7 +354,7 @@ const physioStudy: CaseStudy = {
       ],
     },
   ],
-  links: [{ label: 'View source on GitHub', href: 'https://github.com/Nasim1801/physio-ai-final' }],
+  links: [{ label: 'View source on GitHub', href: physioSource }],
   schemaType: 'SoftwareApplication',
   draftedSections: ['improve'],
 };
@@ -424,7 +429,7 @@ const portfolioStudy: CaseStudy = {
   status: 'Live on GitHub Pages',
   tone: 'live',
   summary:
-    'A fast, static portfolio that plays like a small game: a playable make-10 board, animated project worlds, nine indexable routes and automated browser checks.',
+    'A static React portfolio with a playable make-10 board, animated project worlds, nine page routes and automated browser checks.',
   role: 'I designed and built it: visual system, components, content model, accessibility, image pipeline, metadata, tests and deployment.',
   media: [portfolioScreen],
   frame: 'browser',
@@ -458,7 +463,7 @@ const portfolioStudy: CaseStudy = {
       id: 'engineering',
       heading: 'Engineering',
       bullets: [
-        'Project facts, screenshots and skills live in typed data files, so the copy is checked by the compiler.',
+        'Project facts, screenshots and skills live in typed data files, so the compiler checks the content structure.',
         'The puzzle rules are pure TypeScript functions with their own tests, shared by the Sumlume demo on the home page and the Engineering Lab.',
         'A build step generates WebP variants at display size, and a second step writes a static HTML page for every route.',
         'A small client router swaps pages in place, so the View Transitions API can morph a project title from the home page into its case study. Every route still exists as a static file.',
@@ -468,7 +473,7 @@ const portfolioStudy: CaseStudy = {
       id: 'accessibility',
       heading: 'Accessibility and performance',
       paragraphs: [
-        'Every control works by keyboard, focus is always visible, motion is removed when the system asks for less, and colours meet WCAG AA in both themes. The first screen is text, so it paints before any image loads.',
+        'The site includes a skip link, keyboard navigation for the project selector and galleries, and support for reduced motion. Playwright checks cover keyboard paths and layout in light and dark mode.',
       ],
     },
   ],
@@ -482,19 +487,19 @@ const portfolioStudy: CaseStudy = {
 const co2Study: CaseStudy = {
   slug: 'co2-tracker',
   name: 'CO2 Tracker',
-  kind: 'Full-stack web app, university team project',
+  kind: 'University team project',
   status: 'Completed team project',
   tone: 'done',
   summary:
-    'A sustainability web app that returns product carbon-footprint data from a name search, a typed barcode or a prototype photo flow.',
-  role: 'I built the React customer interface, the Spring Boot REST API and the H2 database, designed the customer page in Figma, and was Scrum Master for Sprint 1.',
+    'Look up estimated product carbon footprints by name or typed barcode. GitHub contains the React prototype.',
+  role: 'For the university demo, I built the React customer interface, Spring Boot REST API and H2 persistence. I designed the customer page in Figma and was Scrum Master for Sprint 1.',
   media: co2TrackerScreens,
   frame: 'browser',
   stack: ['React', 'Spring Boot', 'REST', 'H2', 'JPA', 'Figma', 'Scrum'],
   facts: [
-    { label: 'My role', value: 'Front end, API and database; Scrum Master for Sprint 1' },
     { label: 'Lookup flows', value: 'Name search, typed barcode, simulated photo' },
     { label: 'Demo data', value: '12 seeded products' },
+    { label: 'Public source', value: 'React prototype only' },
   ],
   architecture: [
     'React customer interface',
@@ -512,13 +517,14 @@ const co2Study: CaseStudy = {
       id: 'engineering',
       heading: 'Engineering',
       paragraphs: [
-        'The REST API handles lookups and records timestamped search history, so the React interface only deals with inputs, results and feedback. Seed data makes the demo repeatable. The photo path simulates a result to show how an upload flow would work.',
+        'In the university demo, the REST API handled lookups and recorded timestamped search history. The photo path simulated a result to demonstrate the upload flow.',
+        'The public GitHub repository contains the React prototype. The Spring Boot API and H2 database from the university demo are unavailable in that repository.',
       ],
     },
   ],
   links: [
-    { label: 'View source on GitHub', href: 'https://github.com/Nasim1801/co2-tracker' },
-    { label: 'Watch the demo', href: 'https://youtu.be/2qtJxDQObb4' },
+    co2Prototype,
+    { label: 'Watch the university demo', href: 'https://youtu.be/2qtJxDQObb4' },
   ],
   schemaType: 'SoftwareApplication',
 };
@@ -582,10 +588,10 @@ const caseStudies = [
 export const content = {
   identity: {
     name: 'Nasim Mosayebi',
-    role: 'Software engineer, mobile and full-stack',
-    title: 'Nasim Mosayebi | Software Engineer, Mobile and Full-Stack | London',
+    role: 'Graduate Software Engineer',
+    title: 'Nasim Mosayebi | Graduate Software Engineer · iOS and Mobile | London',
     description:
-      'Nasim Mosayebi is a London software engineer who builds and ships mobile apps end to end: SwiftUI and React Native apps, the Node.js services behind them, and the App Store release.',
+      'Nasim Mosayebi is a Computer Science graduate in London specialising in Swift, SwiftUI and mobile development. Explore two App Store releases and an individual computer vision project.',
     location: 'London',
   },
   nav: [
@@ -603,14 +609,19 @@ export const content = {
   },
   hero: {
     value:
-      'I build and ship mobile apps end to end: SwiftUI and React Native front ends, the Node.js services behind them, and the App Store release in between.',
+      'I build mobile apps with Swift, SwiftUI and React Native. At PathLife Studio, I lead Sumlume’s iOS development and release work and contribute to PathLife.',
     availability: 'Open to graduate and junior roles',
   },
-  /** Achievement badges. Verified facts only: App Store listings, CV grade, CV languages. */
+  /** Achievement badges backed by the App Store listings and CV. */
   achievements: [
     { mark: '2', title: '2 games live', detail: 'on the App Store' },
-    { mark: 'A', title: 'Grade A', detail: 'final-year project' },
-    { mark: '4', title: '4 languages', detail: 'spoken' },
+    { mark: 'A', title: 'Grade A', detail: 'Physio-AI' },
+    { mark: 'BSc', title: 'Computer Science', detail: 'Brunel · 2:1' },
+  ],
+  workEvidence: [
+    { label: 'PathLife on the App Store', href: store.pathlife },
+    { label: 'Sumlume on the App Store', href: store.sumlume },
+    { label: 'Physio-AI source', href: physioSource },
   ],
   levels: [
     { id: 'top', label: 'Start' },
@@ -645,12 +656,12 @@ export const content = {
     {
       slug: 'physio-ai',
       summary:
-        'Real-time exercise feedback from an ordinary webcam. MediaPipe Pose finds 33 landmarks per frame and a Random Forest classifier scores technique with 96.23% accuracy.',
+        'Real-time exercise feedback from an ordinary webcam. A Python service classifies poses, streams feedback over WebSockets and saves session history in SQLite.',
       role: 'Individual project: pose processing, model selection, real-time pipeline, interface',
       stack: ['Python', 'MediaPipe', 'scikit-learn', 'WebSockets', 'SQLite'],
       preview: [physioAiScreens[0]],
       stage: '#22302f',
-      links: [{ label: 'GitHub', href: 'https://github.com/Nasim1801/physio-ai-final' }],
+      links: [{ label: 'GitHub', href: physioSource }],
       hasFullCaseStudy: true,
     },
     {
@@ -669,14 +680,11 @@ export const content = {
       slug: 'co2-tracker',
       name: 'CO2 Tracker',
       kind: 'Team project',
-      summary: 'Carbon-footprint lookup by product name, barcode or photo.',
-      role: 'React front end, Spring Boot API and H2 database. Scrum Master for Sprint 1.',
+      summary: 'Product carbon-footprint lookup in a university demo.',
+      role: 'React interface, Spring Boot API and H2 for the team demo. Scrum Master for Sprint 1.',
       stack: ['React', 'Spring Boot', 'H2'],
       thumbnail: co2TrackerScreens[1],
-      links: [
-        { label: 'GitHub', href: 'https://github.com/Nasim1801/co2-tracker' },
-        { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' },
-      ],
+      links: [co2Prototype, { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' }],
     },
     {
       slug: 'hospital-appointment-system',
@@ -730,7 +738,8 @@ export const content = {
       group: 'Back-end and ML',
       items: [
         { name: 'Node.js and Express', proof: ['pathlife'] },
-        { name: 'Java and Spring Boot', proof: ['co2-tracker', 'hospital-appointment-system'] },
+        { name: 'Java', proof: ['hospital-appointment-system', 'co2-tracker'] },
+        { name: 'Spring Boot', proof: ['co2-tracker'] },
         { name: 'Python', proof: ['physio-ai'] },
         { name: 'SQLite and H2', proof: ['pathlife', 'physio-ai', 'co2-tracker'] },
         { name: 'WebSockets', proof: ['physio-ai'] },
@@ -750,25 +759,25 @@ export const content = {
   ],
   about: {
     sheet: [
-      { label: 'Role', value: 'Software engineer, mobile and full-stack' },
+      { label: 'Focus', value: 'Graduate software engineering, specialising in iOS and mobile' },
       { label: 'Based in', value: 'London' },
       { label: 'Degree', value: 'BSc (Hons) Computer Science, 2:1, Brunel University London' },
       { label: 'Studio', value: 'Founder of PathLife Studio Ltd' },
       { label: 'Languages', value: 'English, Persian, German (B1), Arabic (A1)' },
     ],
     paragraphs: [
-      'I’m a software engineer in London with a 2:1 in Computer Science from Brunel University London. Through PathLife Studio, the company I founded, I take mobile games from design to the App Store and keep them running afterwards.',
+      'I’m a Computer Science graduate from Brunel University London with a 2:1. At PathLife Studio, the company I founded in London, I lead Sumlume’s native iOS build and release work, contribute to PathLife and maintain its support site.',
       'Before computer science I studied Industrial Engineering and worked in medical-device quality assurance and IT support. That is where my habits come from: understand the whole system, write decisions down, test the risky paths first, and keep the person using it in view.',
       'I speak four languages: English, Persian, German and some Arabic. I am looking for a graduate or junior role where I can bring that ownership to an experienced team.',
     ],
   },
   experience: [
     {
-      date: 'Aug 2026 – now',
-      title: 'Founder and software developer',
+      date: 'Aug 2026 – Present',
+      title: 'Founder and Software Developer',
       place: 'PathLife Studio Ltd, London',
       description:
-        'Build and publish iOS games, develop Android versions, and run the web and advertising infrastructure behind them.',
+        'Lead Sumlume’s iOS development and release, contribute to PathLife’s iOS app, rebuild PathLife for Android and maintain its support site.',
     },
     {
       date: 'Apr 2024 – Jun 2026',
@@ -796,7 +805,7 @@ export const content = {
       title: 'IT support assistant',
       place: 'Imam Hossein Hospital and Nedaye Salamat Farsar Alborz, Karaj',
       description:
-        'Two six-month roles: hospital hardware, software and network support, then first-line CRM support, onboarding and account access.',
+        'First-line CRM support, onboarding and account access in 2019, followed by hospital hardware, software and network support in 2020.',
     },
     {
       date: '2018 – 2022, awarded 2024',
@@ -807,7 +816,7 @@ export const content = {
   ],
   contact: {
     title: 'Let’s talk',
-    text: 'I’m looking for a graduate or junior software engineering role in London: mobile, front-end or full-stack. Email is the fastest way to reach me.',
+    text: 'I’m looking for a graduate or junior software engineering role in London, with a focus on iOS and mobile development.',
   },
 } as const;
 

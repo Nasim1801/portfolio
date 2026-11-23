@@ -12,6 +12,7 @@ const themeColours: Record<Theme, string> = { light: '#eef4ff', dark: '#0d0b24' 
 export function Header({ isHome }: { isHome: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const navigationRef = useRef<HTMLElement>(null);
   const [theme, setTheme] = useState<Theme>(() =>
     document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
   );
@@ -42,6 +43,7 @@ export function Header({ isHome }: { isHome: boolean }) {
 
   useEffect(() => {
     if (!menuOpen) return;
+    navigationRef.current?.querySelector('a')?.focus({ preventScroll: true });
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       setMenuOpen(false);
@@ -54,7 +56,7 @@ export function Header({ isHome }: { isHome: boolean }) {
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
-        <a className={styles.logo} href={pageUrl()}>
+        <a className={styles.logo} href={pageUrl()} aria-label="Nasim Mosayebi home">
           <span className={styles.logoMark} aria-hidden="true">
             <i data-tone="1">N</i>
             <i data-tone="3">M</i>
@@ -63,6 +65,7 @@ export function Header({ isHome }: { isHome: boolean }) {
         </a>
 
         <nav
+          ref={navigationRef}
           id="main-navigation"
           className={styles.nav}
           data-open={menuOpen || undefined}

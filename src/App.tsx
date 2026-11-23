@@ -55,7 +55,7 @@ function HomePage() {
   return (
     <>
       <PageMetadata />
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <SelectedWork />
         <Skills />
@@ -70,7 +70,7 @@ function HomePage() {
 
 function NotFoundPage() {
   return (
-    <main id="main-content" className={styles.notFound}>
+    <main id="main-content" tabIndex={-1} className={styles.notFound}>
       <h1>This page isn’t part of the portfolio.</h1>
       <p>The link may be out of date. The home page lists all of my work.</p>
       <a className={styles.buttonPrimary} href={pageUrl()}>
@@ -129,7 +129,9 @@ export default function App() {
       {knownHomeRoute && <ScrollMap />}
       <Suspense
         key={route}
-        fallback={<main id="main-content" className={styles.routeLoading} aria-busy="true" />}
+        fallback={
+          <main id="main-content" tabIndex={-1} className={styles.routeLoading} aria-busy="true" />
+        }
       >
         {study ? (
           <>

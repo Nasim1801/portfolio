@@ -154,6 +154,7 @@ function ProjectCard({ project, index }: { project: FeaturedProject; index: numb
     <article
       className={styles.project}
       id={project.slug}
+      tabIndex={-1}
       aria-labelledby={`${project.slug}-title`}
       data-layout={portrait ? 'portrait' : 'landscape'}
       data-world={project.slug}
@@ -313,15 +314,23 @@ function MoreRow({ project, index }: { project: MoreProject; index: number }) {
 
 export function SelectedWork() {
   return (
-    <section className={styles.section} id="work" aria-labelledby="work-title">
+    <section className={styles.section} id="work" tabIndex={-1} aria-labelledby="work-title">
       <div className={styles.sectionHead}>
         <h2 id="work-title" data-reveal="blur">
           Selected work
         </h2>
-        <p data-reveal="up" style={delay(1)}>
-          Two games live on the App Store, a graded computer-vision system and a game in
-          development. Each links to the full story.
-        </p>
+        <div data-reveal="up" style={delay(1)}>
+          <p>Two App Store releases and a Grade A computer vision project.</p>
+          <ul className={styles.workEvidence}>
+            {content.workEvidence.map(({ label, href }) => (
+              <li key={href}>
+                <ExternalLink href={href} className={styles.textLink}>
+                  {label}
+                </ExternalLink>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div className={styles.projects}>
         {content.featured.map((project, index) => (
@@ -456,7 +465,7 @@ export function Skills() {
 export function About() {
   const { about } = content;
   return (
-    <section className={styles.section} id="about" aria-labelledby="about-title">
+    <section className={styles.section} id="about" tabIndex={-1} aria-labelledby="about-title">
       <div className={styles.about}>
         <div>
           <h2 id="about-title" data-reveal="blur">
@@ -508,7 +517,12 @@ export function Experience() {
   }, []);
 
   return (
-    <section className={styles.section} id="experience" aria-labelledby="experience-title">
+    <section
+      className={styles.section}
+      id="experience"
+      tabIndex={-1}
+      aria-labelledby="experience-title"
+    >
       <div className={styles.sectionHead}>
         <h2 id="experience-title" data-reveal="blur">
           Experience and education
@@ -548,7 +562,7 @@ export function Contact() {
     window.setTimeout(() => setMessage(''), 2600);
   };
   return (
-    <section className={styles.contact} id="contact" aria-labelledby="contact-title">
+    <section className={styles.contact} id="contact" tabIndex={-1} aria-labelledby="contact-title">
       <AmbientTiles
         className={styles.contactCanvas}
         max={12}
@@ -622,7 +636,6 @@ export function Footer() {
       <p>
         Nasim Mosayebi, software engineer in London. Founder of{' '}
         <ExternalLink href={links.studio}>PathLife Studio</ExternalLink>.
-        <span className={styles.footerHint}> Old cheat codes still work here.</span>
       </p>
       <ul>
         <li>
