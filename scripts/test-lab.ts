@@ -17,11 +17,15 @@ assert.equal(isNeighbour(0, 2), false, 'separated tiles should not connect');
 assert.equal(isValidPair(initialPuzzle, 0, 1), true, '4 + 6 should be valid');
 assert.equal(isValidPair(initialPuzzle, 5, 6), true, 'equal 3 tiles should be valid');
 assert.equal(isValidPair(initialPuzzle, 0, 5), false, '4 + 3 should be invalid');
+assert.equal(isValidPair(initialPuzzle, initialPuzzle.length, initialPuzzle.length + 1), false);
+assert.equal(isValidPair(initialPuzzle, -2, -1), false);
+assert.equal(isValidPair(initialPuzzle, 0.5, 1.5), false);
 
 const cleared = clearPair(initialPuzzle, 0, 1);
 assert.equal(cleared[0], null);
 assert.equal(cleared[1], null);
 assert.equal(initialPuzzle[0], 4, 'the source board must remain immutable');
+assert.equal(isValidPair(cleared, 0, 1), false, 'cleared tiles cannot be matched again');
 
 const unchanged = clearPair(initialPuzzle, 0, 5);
 assert.deepEqual(unchanged, [...initialPuzzle], 'an invalid pair must not change the board');

@@ -24,6 +24,23 @@ function StudySection({ section, study }: { section: CaseStudySection; study: Ca
             ))}
           </ul>
         )}
+        {section.links && (
+          <ul>
+            {section.links.map(({ label, href }) => (
+              <li key={href}>
+                {href.startsWith('https:') ? (
+                  <ExternalLink href={href} className={styles.textLink}>
+                    {label}
+                  </ExternalLink>
+                ) : (
+                  <a href={pageUrl(href)} className={styles.textLink}>
+                    {label}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
         {section.id === 'architecture' && (
           <>
             <ol className={styles.flow} aria-label={`${study.name} system flow`}>
@@ -126,6 +143,11 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
                     {label}
                   </a>
                 ),
+              )}
+              {study.sections.some(({ id }) => id === 'verification') && (
+                <a className={styles.buttonSecondary} href="#architecture">
+                  Engineering evidence
+                </a>
               )}
             </div>
           )}

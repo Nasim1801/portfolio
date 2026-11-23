@@ -83,11 +83,11 @@ The static build creates indexable HTML entry points for:
 
 ## Interaction and browser QA
 
-`npm run test:lab` validates the Sumlume demonstration rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It also verifies images, alt text, overflow, headings, failed requests, JavaScript errors, the mobile menu, the hero level-select stage, the make-10 demo (matching, mismatch and arrow-key focus), skill links, fragment deep links, CV download, theme persistence, screenshot controls and both Lab interactions. Set `PORTFOLIO_AXE_PATH` to a local copy of axe-core to run accessibility scans at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
+`npm run test:lab` validates the portfolio puzzle rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It checks images, layout, keyboard paths, same-origin links and fragments, all three CV downloads, the evidence jump links, gallery controls and both Lab interactions. The pinned axe-core package runs at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds and deploys on every push to `main`. GitHub Pages must use **GitHub Actions** as its source.
+`.github/workflows/deploy.yml` runs lint, Lab rule tests, the TypeScript build and browser QA on pull requests targeting `main` and on pushes to `main`. Pages upload and deployment require a passing build on `main`. GitHub Pages uses **GitHub Actions** as its source. Third-party destinations are checked separately from the same-origin link gate.
 
 Production URL: [nasim1801.github.io/portfolio](https://nasim1801.github.io/portfolio/)
 

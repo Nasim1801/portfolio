@@ -34,6 +34,7 @@ export interface CaseStudySection {
   lead?: string;
   paragraphs?: string[];
   bullets?: string[];
+  links?: LinkItem[];
 }
 
 export interface CaseStudy {
@@ -53,8 +54,6 @@ export interface CaseStudy {
   sections: CaseStudySection[];
   links: LinkItem[];
   schemaType: 'VideoGame' | 'SoftwareApplication';
-  /** Owner should review sections drafted from documented facts. */
-  draftedSections?: string[];
 }
 
 export interface FeaturedProject {
@@ -86,6 +85,13 @@ const store = {
   sumlume: 'https://apps.apple.com/gb/app/sumlume-number-match/id6799957684',
 };
 const physioSource = 'https://github.com/Nasim1801/physio-ai-final';
+const physioRevision = `${physioSource}/blob/7dc8dbd9a4b72e7e145393d2a6cb8fc516b89f42`;
+export const physioEvaluation = {
+  academicAccuracy: '96.23%',
+  scope:
+    'One participant. After augmentation, some training and test rows in the local rerun came from the same source rows.',
+};
+const portfolioFiles = 'https://github.com/Nasim1801/portfolio/blob/main';
 const co2Prototype = {
   label: 'React prototype on GitHub',
   href: 'https://github.com/Nasim1801/co2-tracker',
@@ -123,68 +129,53 @@ const pathLifeStudy: CaseStudy = {
     { label: 'Publisher', value: 'PathLife Studio Ltd' },
   ],
   architecture: [
-    'SwiftUI game for iOS',
-    'Year, education, career and life-event systems',
-    'React Native and TypeScript rebuild for Android, with Zustand state',
-    'Node.js, Express and SQLite support site on Railway behind Cloudflare',
+    'SwiftUI dashboard applies a year or choice',
+    'The updated character becomes the current session',
+    'Foundation encodes the character to one local save slot',
+    'At launch, the session loads the saved character if it can be decoded',
   ],
   sections: [
     {
       id: 'problem',
-      heading: 'Problem',
-      lead: 'PathLife follows one character a year at a time. Education, career, relationships and random life events all read and change the same character, so a decision made at 18 has to make sense at 40.',
+      heading: 'Problem and constraints',
       paragraphs: [
-        'That makes the game a state problem more than a screen problem. It also had to get through App Store review, which rejected it under Guideline 1.5 because the app needed a working support website.',
+        'A year advance can change several parts of a life at once. Resuming a life should restore the character at the last save point, including the consequences of the choices already made.',
       ],
     },
     {
-      id: 'constraints',
-      heading: 'Constraints',
-      bullets: [
-        'The iOS game is already published, so the Android version has to reproduce its rules and feel without reusing its Swift code.',
-        'App Store review requires a working support URL, a correct App Tracking Transparency prompt and in-app purchases that behave in the sandbox.',
-        'The studio domain has to serve an app-ads.txt file that the ad networks can verify.',
-      ],
-    },
-    {
-      id: 'architecture',
-      heading: 'Architecture',
+      id: 'responsibility',
+      heading: 'My responsibility',
       paragraphs: [
-        'Screens are designed in Figma and built natively in SwiftUI for iOS. The Android version is a separate React Native and TypeScript app. The support site is a small Node.js and Express service with an SQLite database, deployed on Railway behind Cloudflare.',
+        'I contributed SwiftUI screens and game logic, built the support site that cleared App Store review, and am rebuilding the Android version. The save flow below describes the team implementation. The available history supports my project contribution, with individual ownership of this module unverified.',
       ],
     },
     {
       id: 'decisions',
-      heading: 'Key decisions',
-      bullets: [
-        'Rebuild Android in React Native and TypeScript rather than wrap the iOS code. Data models, year advance, education, careers and life events are translated one system at a time.',
-        'Manage Android game state with Zustand, so the year, career, education and event systems work from shared character state.',
-        'Treat the support website as production software: an admin dashboard and rate limiting from the start, and the same service now hosts app-ads.txt for ad-network verification.',
+      heading: 'Technical decision',
+      paragraphs: [
+        'Persist a complete character snapshot at a save point. This keeps Continue simple because the app restores a single record. The trade-off is that model changes need compatible decoding and older-save fixtures, since a decode failure can make the saved life unavailable.',
       ],
     },
     {
-      id: 'challenges',
-      heading: 'Challenges',
+      id: 'architecture',
+      heading: 'Implementation evidence',
       paragraphs: [
-        'The Guideline 1.5 rejection blocked the release until a real support site existed, so I designed, built and deployed one. Release work also meant getting the App Tracking Transparency prompt right and testing in-app purchases in the sandbox.',
-        'On Android the hard part is consistency: translating the data models and migrating the game’s images and sounds so both versions feel like the same product.',
+        'In the inspected SwiftUI development snapshot, the dashboard hands the updated character to an observable session. The save layer encodes it as JSON and replaces one local slot. The load path decodes that slot when there is a saved life.',
+      ],
+    },
+    {
+      id: 'verification',
+      heading: 'Testing and verification',
+      paragraphs: [
+        'A separate Swift harness ran the inspected save layer against a synthetic Codable fixture. An empty slot, save and load, replacement, and deletion passed in one process.',
+        'To check the released app, use a fresh life on a test device. Advance one year, finish any pending choice, record the resulting age and visible state, then quit and relaunch. Continue should restore the same life and state.',
       ],
     },
     {
       id: 'outcome',
-      heading: 'Outcome',
-      bullets: [
-        'PathLife 2.1.3 is live on the UK App Store, published by PathLife Studio Ltd.',
-        'The support site at pathlifestudio.com resolved the rejection and now also serves app-ads.txt.',
-        'The Android rebuild is in progress. It is not on Google Play yet.',
-      ],
-    },
-    {
-      id: 'improve',
-      heading: 'What I’d improve',
-      bullets: [
-        'Write automated tests for the year-advance and life-event rules before porting more systems, so iOS and Android can be checked against the same cases.',
-        'Plan store requirements (support URL, privacy prompts, purchase testing) at the start of a project instead of meeting them at review.',
+      heading: 'Result and limitations',
+      paragraphs: [
+        'The public iOS release is verifiable on the App Store. The source walkthrough covers a local 2.2 development snapshot. The Swift probe covers the storage layer in isolation. The release-level restart procedure and migration from older saves remain to be verified.',
       ],
     },
   ],
@@ -193,7 +184,6 @@ const pathLifeStudy: CaseStudy = {
     { label: 'Visit pathlifestudio.com', href: 'https://pathlifestudio.com' },
   ],
   schemaType: 'VideoGame',
-  draftedSections: ['decisions', 'improve'],
 };
 
 const sumlumeStudy: CaseStudy = {
@@ -216,52 +206,65 @@ const sumlumeStudy: CaseStudy = {
     { label: 'Android', value: 'In development' },
   ],
   architecture: [
-    'SwiftUI interface',
-    'Rule-driven puzzle board',
-    'Session and progression state',
-    'App Store release',
+    'Read two positions and their tile values',
+    'Reject missing or cleared tiles and disallowed positions',
+    'Apply equal-number or make-10 rule',
+    'Return an updated board without changing the input',
   ],
   sections: [
     {
       id: 'product',
-      heading: 'Product',
-      lead: 'One clear rule: match identical numbers or two numbers that add up to 10. Each pair clears space and changes the next move.',
+      heading: 'Problem and constraints',
       paragraphs: [
-        'The goal was a board that is readable at a glance, with Classic games, Daily Challenges, achievements, statistics and collectible profile items to bring players back.',
+        'The game’s core rule is simple to explain. Two selected numbers can match when they are equal or total 10. The portfolio’s compact playground models that rule with a smaller board and its own adjacency rule.',
       ],
     },
     {
       id: 'role',
-      heading: 'My role',
+      heading: 'My responsibility',
       paragraphs: [
-        'The published iPhone and iPad version is built natively with SwiftUI. A native Android version is being developed in Kotlin and is not yet on Google Play.',
-      ],
-      bullets: [
-        'Design a dense puzzle grid that stays clear on every Apple screen size.',
-        'Keep the core rules identical while building platform-native interfaces.',
-        'Keep release labels honest across the published iOS and unreleased Android versions.',
+        'I lead Sumlume’s product design, native SwiftUI build and App Store release. The checked code and tests below belong to the public portfolio playground.',
       ],
     },
     {
-      id: 'systems',
-      heading: 'Game systems',
+      id: 'decision',
+      heading: 'Technical decision',
       paragraphs: [
-        'The board evaluates equal-number and make-10 pairs. Hint, Undo and Add Numbers help players recover from a difficult board without removing the need to plan ahead.',
-        'Daily Challenges, experience, achievements, personal records, leaderboards, animal avatars and decorative frames turn a short puzzle loop into visible long-term progress.',
+        'The playground separates pair validation from the interface. Position and value checks run before clearing tiles. Returning a new board keeps an invalid move from changing game state and makes the rule testable without rendering the UI.',
       ],
     },
     {
-      id: 'release',
-      heading: 'Release',
+      id: 'architecture',
+      heading: 'Implementation evidence',
       paragraphs: [
-        'Version 2.0.0 shipped on 16 November 2026. It refreshed the visual system, expanded progression, improved layouts across iPhone and iPad and included stability and accessibility fixes. The app also includes a Premium purchase and restore flow.',
+        'Review found a playground edge case. Two adjacent positions past the end of the board could both return undefined and pass the equality check. The validator now requires a number in both cells before it compares them.',
+      ],
+      links: [
+        {
+          label: 'Review the portfolio rule code',
+          href: `${portfolioFiles}/src/lab/sumlumeEngine.ts`,
+        },
       ],
     },
     {
-      id: 'lessons',
-      heading: 'What I learned',
+      id: 'verification',
+      heading: 'Testing and verification',
       paragraphs: [
-        'In a puzzle game, visual polish and software structure cannot be separated. A small change to tile size, hierarchy or feedback changes how quickly a player can see the next move.',
+        'Rule tests exercise equal numbers, make-10 pairs, disallowed positions, already-cleared tiles and invalid indexes. They also check that the input board is preserved. In the Engineering Lab, clear the starting 4 and 6, then reset and confirm the board returns to its starting state.',
+      ],
+      links: [
+        { label: 'Play the Engineering Lab board', href: 'lab/#sumlume-lab-title' },
+        {
+          label: 'Review the rule regression tests',
+          href: `${portfolioFiles}/scripts/test-lab.ts`,
+        },
+      ],
+    },
+    {
+      id: 'outcome',
+      heading: 'Result and limitations',
+      paragraphs: [
+        'The iPhone and iPad release is live on the App Store. The reproduced defect and passing regression apply to the TypeScript playground. The game’s Swift implementation, undo and save recovery remain outside this public verification.',
       ],
     },
   ],
@@ -286,77 +289,73 @@ const physioStudy: CaseStudy = {
   stack: ['Python', 'MediaPipe Pose', 'scikit-learn', 'JavaScript', 'WebSockets', 'SQLite'],
   facts: [
     { label: 'Result', value: 'Grade A, BSc Computer Science' },
-    { label: 'Reported project result', value: 'Random Forest, 96.23% on the project dataset' },
+    {
+      label: 'Reported academic frame accuracy',
+      value: `${physioEvaluation.academicAccuracy} (Random Forest). ${physioEvaluation.scope}`,
+    },
     { label: 'Input', value: '33 pose landmarks per frame from a standard webcam' },
-    { label: 'Evaluation', value: 'Confusion matrices and ROC analysis' },
+    { label: 'Academic test set', value: '7,153 frame rows' },
   ],
   architecture: [
-    'Webcam video',
-    'MediaPipe Pose: 33 landmarks per frame',
-    'Pose embeddings',
-    'Random Forest classifier',
-    'WebSocket stream to the JavaScript interface',
-    'SQLite session history',
+    'MediaPipe extracts body landmarks from webcam frames',
+    'Python builds 24-feature pose embeddings and classifies squat form',
+    'Results return to the JavaScript interface over WebSockets',
+    'SQLite stores session history',
   ],
   sections: [
     {
       id: 'problem',
-      heading: 'Problem',
-      lead: 'Most physiotherapy exercises are done at home, with nobody watching technique. Physio-AI asks whether an ordinary webcam can give useful feedback in the moment.',
-    },
-    {
-      id: 'constraints',
-      heading: 'Constraints',
-      bullets: [
-        'A standard webcam and ordinary hardware. No depth camera or wearable sensors.',
-        'Feedback has to arrive while the user is still moving, so the whole pipeline runs in real time.',
-        'An individual final-year project: one person responsible for data, model, back end and interface.',
+      heading: 'Problem and constraints',
+      paragraphs: [
+        'The project asked whether an ordinary webcam could give timely feedback on squat form. The research prototype used recordings from one person and classified four types of squat form.',
       ],
     },
     {
-      id: 'architecture',
-      heading: 'Architecture',
+      id: 'responsibility',
+      heading: 'My responsibility',
       paragraphs: [
-        'MediaPipe Pose extracts 33 body landmarks from each frame. I turned those landmarks into pose embeddings, classified them with scikit-learn, and streamed results from the Python back end to a JavaScript interface over WebSockets. Sessions are stored in SQLite so the interface can show progress over time, not only a live score.',
+        'For my individual final-year project I built pose processing, compared classifiers, implemented the browser and WebSocket feedback pipeline, and added session history.',
       ],
     },
     {
       id: 'decisions',
-      heading: 'Key decisions',
-      bullets: [
-        'Classify landmarks, not pixels. Pose embeddings made the same features usable across several machine-learning approaches.',
-        'Compare models before choosing one. I trained several classifiers and chose the Random Forest, judged on confusion matrices and ROC analysis rather than one headline number.',
-        'Build the whole system, not a notebook: live capture, classification, feedback, persistence and a progress dashboard.',
+      heading: 'Technical decision',
+      paragraphs: [
+        'I used pose features so different classifiers could be compared on the same representation and the browser could receive a compact feedback result. The dissertation selected Random Forest after augmentation. The result depends on how the augmented frames were split.',
       ],
     },
     {
-      id: 'challenges',
-      heading: 'Challenges',
+      id: 'architecture',
+      heading: 'Implementation evidence',
       paragraphs: [
-        'The model is only one part of the result. Landmark quality, embedding design, streaming latency, confidence thresholds and interface clarity all decide whether the feedback is useful. The interface shows repetitions, accuracy, joint performance and corrective messages so the user can understand what the system sees.',
+        'The public Python server handles the live browser stream and keeps session state. The separate retraining entry point consumes a labelled pose-feature CSV. Keeping these paths separate lets reviewers inspect the browser pipeline and the model experiment independently.',
+      ],
+      links: [
+        { label: 'Review the WebSocket server', href: `${physioRevision}/ws_server.py` },
+        {
+          label: 'Review the augmentation and retraining script',
+          href: `${physioRevision}/retrain_with_augmentation.py`,
+        },
+      ],
+    },
+    {
+      id: 'verification',
+      heading: 'Testing and verification',
+      paragraphs: [
+        'A local rerun used the archived feature CSV and the public retraining script. The script augments before an 80/20 stratified random row split. The dissertation describes a temporal split. Of the 7,153 test rows in the rerun, 3,390 traced back to source rows also represented in training. Random Forest scored 96.24% on that split.',
       ],
     },
     {
       id: 'outcome',
-      heading: 'Outcome',
-      bullets: [
-        'Graded A as my BSc Computer Science final-year project at Brunel University London.',
-        'The project reported 96.23% classification accuracy for the Random Forest on its own dataset.',
-        'Extended with fatigue detection, confidence-based visual feedback, session history and a progress dashboard.',
-      ],
-    },
-    {
-      id: 'improve',
-      heading: 'What I’d improve',
-      bullets: [
-        'Test with more people, exercises and camera positions. Accuracy on the project dataset does not show how the system behaves for every body or room.',
-        'Measure end-to-end latency from frame to feedback and report it alongside accuracy.',
+      heading: 'Result and limitations',
+      paragraphs: [
+        `The dissertation reports ${physioEvaluation.academicAccuracy} frame accuracy. Exact reproduction remains unverified. The one-participant dataset and the rerun’s overlap leave accuracy on new people and independent recording sessions unverified.`,
+        'The archived confusion matrix was reconstructed from rounded recall and class counts. The ROC curves used synthetic scores. These plots are illustrative, and empirical confusion counts and AUC remain unverified.',
       ],
     },
   ],
   links: [{ label: 'View source on GitHub', href: physioSource }],
   schemaType: 'SoftwareApplication',
-  draftedSections: ['improve'],
 };
 
 const pawLifeStudy: CaseStudy = {
@@ -492,7 +491,7 @@ const co2Study: CaseStudy = {
   tone: 'done',
   summary:
     'Look up estimated product carbon footprints by name or typed barcode. GitHub contains the React prototype.',
-  role: 'For the university demo, I built the React customer interface, Spring Boot REST API and H2 persistence. I designed the customer page in Figma and was Scrum Master for Sprint 1.',
+  role: 'For the university team demo, I built the React customer interface and contributed the product lookup and search-history integration in Spring Boot and H2. I designed the customer page in Figma and was Scrum Master for Sprint 1.',
   media: co2TrackerScreens,
   frame: 'browser',
   stack: ['React', 'Spring Boot', 'REST', 'H2', 'JPA', 'Figma', 'Scrum'],
@@ -502,23 +501,52 @@ const co2Study: CaseStudy = {
     { label: 'Public source', value: 'React prototype only' },
   ],
   architecture: [
-    'React customer interface',
-    'Spring Boot REST API',
-    'JPA repositories',
-    'H2 database and search history',
+    'Customer supplies a product name or typed barcode',
+    'Spring Boot controller chooses the matching lookup',
+    'JPA queries seeded H2 product records',
+    'The team service records timestamped search history',
   ],
   sections: [
     {
       id: 'product',
-      heading: 'Product',
-      lead: 'Customers look up an estimated carbon footprint by product name or typed barcode. Both flows return the matching product and its emissions figure from the demonstration dataset.',
+      heading: 'Problem and constraints',
+      paragraphs: [
+        'The university demo let customers look up estimated carbon footprints from a seeded catalogue. The photo flow simulated a result. Barcode lookup used typed input.',
+      ],
     },
     {
-      id: 'engineering',
-      heading: 'Engineering',
+      id: 'responsibility',
+      heading: 'My responsibility',
       paragraphs: [
-        'In the university demo, the REST API handled lookups and recorded timestamped search history. The photo path simulated a result to demonstrate the upload flow.',
-        'The public GitHub repository contains the React prototype. The Spring Boot API and H2 database from the university demo are unavailable in that repository.',
+        'I built the React customer interface and worked on the Spring Boot lookup and H2 history integration. My coursework branch documents the name, barcode and upload flows. This was a team submission.',
+      ],
+    },
+    {
+      id: 'decision',
+      heading: 'Technical decision',
+      paragraphs: [
+        'The controller used case-insensitive exact names to support multiple seeded matches and a separate barcode lookup for one product. This keeps the small catalogue predictable. A partial name does not make a good search in this version.',
+      ],
+    },
+    {
+      id: 'architecture',
+      heading: 'Implementation evidence',
+      paragraphs: [
+        'The publicly linked React snapshot shows the inputs and interaction prompts. The authorised local university checkout contains the Spring Boot service, the JPA repositories and timestamped H2 search-history logic.',
+      ],
+    },
+    {
+      id: 'verification',
+      heading: 'Testing and verification',
+      paragraphs: [
+        'With the university service bound to localhost and an in-memory H2 database, the catalogue returned 12 records. A mixed-case Laptop search returned three results and a known barcode returned one. Unrecognised names and barcodes both returned HTTP 404.',
+      ],
+    },
+    {
+      id: 'outcome',
+      heading: 'Result and limitations',
+      paragraphs: [
+        'The API observations apply to the university backend in a local test. The public repository provides the interface prototype, and the video shows the team demonstration. The backend is outside the public repository and team source stays with the coursework checkout.',
       ],
     },
   ],
@@ -681,7 +709,7 @@ export const content = {
       name: 'CO2 Tracker',
       kind: 'Team project',
       summary: 'Product carbon-footprint lookup in a university demo.',
-      role: 'React interface, Spring Boot API and H2 for the team demo. Scrum Master for Sprint 1.',
+      role: 'React interface and contributions to the team’s Spring Boot lookup and H2 search history. Scrum Master for Sprint 1.',
       stack: ['React', 'Spring Boot', 'H2'],
       thumbnail: co2TrackerScreens[1],
       links: [co2Prototype, { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' }],
