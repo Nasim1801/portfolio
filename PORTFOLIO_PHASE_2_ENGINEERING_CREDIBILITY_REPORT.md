@@ -14,7 +14,7 @@ The candidate’s documented contribution covers SwiftUI screens, game logic, th
 
 ## Sumlume
 
-The public evidence supports the App Store release and the portfolio’s make-10 playground. The publicly available native Swift implementation and native test records were unavailable. The studio product page opened during the review, and the local browser demo script examined during discovery was absent from the live studio URL. The case therefore uses the public portfolio playground for code evidence.
+The public evidence supports the App Store release and the portfolio’s make-10 playground. Native Swift source and test records were unavailable for this review. The studio product page opened during the review, and the local browser demo script examined during discovery was absent from the live studio URL. The case therefore uses the public portfolio playground for code evidence.
 
 Before the Phase 2 fix, asking the playground to match indexes 20 and 21 on a 20-cell board returned true. Both lookups were undefined and fell through to the equality branch. The rule now requires a numeric value in both cells before evaluating adjacency and matching. The regression suite covers missing, negative, fractional and already-cleared indexes alongside valid equal and make-10 pairs. Browser verification clears 4 and 6, resets the board and checks both tiles return. These are portfolio behaviours. Native Undo, recovery and daily challenge persistence remain unverified. [Public iOS listing](https://apps.apple.com/gb/app/sumlume-number-match/id6799957684) · [Engineering Lab](https://nasim1801.github.io/portfolio/lab/)
 
