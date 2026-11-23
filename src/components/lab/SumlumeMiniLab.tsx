@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   clearPair,
   initialPuzzle,
@@ -15,16 +15,23 @@ const idleFeedback: Feedback = {
   message: 'Select two neighbouring tiles with the same number or a total of 10.',
 };
 
-function nextIndex(index: number, key: string, boardLength: number) {
-  const row = Math.floor(index / puzzleColumns);
-  const column = index % puzzleColumns;
-  if (key === 'ArrowLeft') return row * puzzleColumns + Math.max(0, column - 1);
-  if (key === 'ArrowRight') return row * puzzleColumns + Math.min(puzzleColumns - 1, column + 1);
-  if (key === 'ArrowUp') return Math.max(0, row - 1) * puzzleColumns + column;
-  if (key === 'ArrowDown') {
-    return (
-      Math.min(Math.floor((boardLength - 1) / puzzleColumns), row + 1) * puzzleColumns + column
-    );
+const arrows: Record<string, [number, number]> = {
+  ArrowLeft: [0, -1],
+  ArrowRight: [0, 1],
+  ArrowUp: [-1, 0],
+  ArrowDown: [1, 0],
+};
+
+function nextIndex(index: number, direction: [number, number], board: readonly TileValue[]) {
+  const [rowStep, columnStep] = direction;
+  const rows = Math.ceil(board.length / puzzleColumns);
+  let row = Math.floor(index / puzzleColumns) + rowStep;
+  let column = (index % puzzleColumns) + columnStep;
+  while (row >= 0 && row < rows && column >= 0 && column < puzzleColumns) {
+    const target = row * puzzleColumns + column;
+    if (typeof board[target] === 'number') return target;
+    row += rowStep;
+    column += columnStep;
   }
   return index;
 }
@@ -34,7 +41,18 @@ export function SumlumeMiniLab() {
   const [selected, setSelected] = useState<number | null>(null);
   const [matches, setMatches] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>(idleFeedback);
+  const [focused, setFocused] = useState(0);
+  const pendingFocus = useRef<number>(null);
+  const resetButton = useRef<HTMLButtonElement>(null);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  useEffect(() => {
+    const target = pendingFocus.current;
+    if (target === null) return;
+    pendingFocus.current = null;
+    if (target === -1) resetButton.current?.focus();
+    else buttonRefs.current[target]?.focus();
+  }, [board]);
 
   const chooseTile = (index: number) => {
     if (board[index] === null) return;
@@ -52,7 +70,12 @@ export function SumlumeMiniLab() {
     if (isValidPair(board, selected, index)) {
       const firstValue = board[selected];
       const secondValue = board[index];
-      setBoard(clearPair(board, selected, index));
+      const next = clearPair(board, selected, index);
+      const successor = next.findIndex((value, position) => position > index && value !== null);
+      const target = successor >= 0 ? successor : next.findIndex((value) => value !== null);
+      setFocused(target);
+      pendingFocus.current = target;
+      setBoard(next);
       setMatches((value) => value + 1);
       setFeedback({
         kind: 'success',
@@ -74,7 +97,8 @@ export function SumlumeMiniLab() {
     setSelected(null);
     setMatches(0);
     setFeedback(idleFeedback);
-    buttonRefs.current[0]?.focus();
+    setFocused(0);
+    pendingFocus.current = 0;
   };
 
   return (
@@ -109,11 +133,14 @@ export function SumlumeMiniLab() {
                     : `Tile ${index + 1}, number ${value}`
                 }
                 aria-pressed={selected === index}
+                tabIndex={focused === index ? 0 : -1}
+                onFocus={() => setFocused(index)}
                 onClick={() => chooseTile(index)}
                 onKeyDown={(event) => {
-                  if (!event.key.startsWith('Arrow')) return;
+                  const direction = arrows[event.key];
+                  if (!direction) return;
                   event.preventDefault();
-                  const target = nextIndex(index, event.key, board.length);
+                  const target = nextIndex(index, direction, board);
                   buttonRefs.current[target]?.focus();
                 }}
               >
@@ -125,7 +152,7 @@ export function SumlumeMiniLab() {
             <p className={styles[feedback.kind]} aria-live="polite">
               {feedback.message}
             </p>
-            <button type="button" className={styles.resetButton} onClick={reset}>
+            <button ref={resetButton} type="button" className={styles.resetButton} onClick={reset}>
               Reset board
             </button>
           </div>

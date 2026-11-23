@@ -1,0 +1,889 @@
+{
+  "checks": [
+    {
+      "route": "Home",
+      "width": 320,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 320,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 320,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 320,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 320,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 320,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 320,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 320,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 320,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 360,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 360,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 360,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 360,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 360,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 360,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 360,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 360,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 360,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 390,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 390,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 390,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 390,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 390,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 390,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 390,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 390,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 390,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 768,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 768,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 768,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 768,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 768,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 768,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 768,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 768,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 768,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1024,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1024,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1024,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1024,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1024,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1024,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1024,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1024,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1024,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1440,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1440,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1440,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1440,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1440,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1440,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1440,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1440,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1440,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1920,
+      "theme": "light",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1920,
+      "theme": "light",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1920,
+      "theme": "light",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1920,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1920,
+      "theme": "light",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1920,
+      "theme": "light",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1920,
+      "theme": "light",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1920,
+      "theme": "light",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1920,
+      "theme": "light",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 320,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 320,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 320,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 320,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 320,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 320,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 320,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 320,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 320,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 360,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 360,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 360,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 360,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 360,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 360,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 360,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 360,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 360,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 390,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 390,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 390,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 390,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 390,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 390,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 390,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 390,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 390,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 768,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 768,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 768,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 768,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 768,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 768,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 768,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 768,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 768,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1024,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1024,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1440,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1440,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    },
+    {
+      "route": "Home",
+      "width": 1920,
+      "theme": "dark",
+      "images": 12,
+      "resources": 19
+    },
+    {
+      "route": "lab/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 0,
+      "resources": 6
+    },
+    {
+      "route": "projects/sumlume/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 8,
+      "resources": 14
+    },
+    {
+      "route": "projects/pathlife/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/physio-ai/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 7,
+      "resources": 13
+    },
+    {
+      "route": "projects/pawlife/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 9,
+      "resources": 15
+    },
+    {
+      "route": "projects/portfolio/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 1,
+      "resources": 7
+    },
+    {
+      "route": "projects/co2-tracker/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 5,
+      "resources": 11
+    },
+    {
+      "route": "projects/hospital-appointment-system/",
+      "width": 1920,
+      "theme": "dark",
+      "images": 6,
+      "resources": 12
+    }
+  ],
+  "axeScans": 36,
+  "internalLinksChecked": 172,
+  "failures": []
+}

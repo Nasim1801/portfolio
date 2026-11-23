@@ -1,23 +1,9 @@
-import { useEffect } from 'react';
 import { pageUrl } from '../utils/links';
 import { PosePipelineLab } from './lab/PosePipelineLab';
 import { SumlumeMiniLab } from './lab/SumlumeMiniLab';
 import styles from '../styles/lab.module.css';
 
 export function EngineeringLabPage() {
-  useEffect(() => {
-    const title = 'Engineering Lab | Nasim Mosayebi';
-    const description =
-      'Playable React and interactive system demonstrations by London software engineer Nasim Mosayebi.';
-    const url = 'https://nasim1801.github.io/portfolio/lab/';
-    document.title = title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content', url);
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', url);
-  }, []);
-
   return (
     <main id="main-content" tabIndex={-1} className={styles.labPage}>
       <header className={styles.labHero}>
@@ -44,8 +30,15 @@ export function EngineeringLabPage() {
         </div>
       </header>
 
-      <SumlumeMiniLab />
-      <PosePipelineLab />
+      <p className={styles.noScript}>
+        The live controls require JavaScript. Read the project case studies for the{' '}
+        <a href={pageUrl('projects/sumlume/#architecture')}>number-matching rules</a> and the{' '}
+        <a href={pageUrl('projects/physio-ai/#architecture')}>pose pipeline</a>.
+      </p>
+      <div data-enhanced>
+        <SumlumeMiniLab />
+        <PosePipelineLab />
+      </div>
 
       <section className={styles.labClosing}>
         <h2>How this site was built</h2>

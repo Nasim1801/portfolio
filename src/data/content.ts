@@ -15,6 +15,7 @@ import {
   pathLifeScreens,
   pawLifeScreens,
   physioAiScreens,
+  portraitCover,
   portfolioScreen,
   sumlumeScreens,
 } from './screens';
@@ -63,21 +64,16 @@ export interface FeaturedProject {
   stack: string[];
   /** Two screens for the card. The first is in front. */
   preview: MediaItem[];
-  /** Stage colour behind the screenshots, chosen from the product artwork. */
-  stage: string;
   links: LinkItem[];
-  hasFullCaseStudy?: boolean;
 }
 
 export interface MoreProject {
   slug: string;
   name: string;
-  kind: string;
   summary: string;
   role: string;
   stack: string[];
   thumbnail: MediaItem;
-  links: LinkItem[];
 }
 
 const store = {
@@ -336,6 +332,10 @@ const physioStudy: CaseStudy = {
           label: 'Review the augmentation and retraining script',
           href: `${physioRevision}/retrain_with_augmentation.py`,
         },
+        {
+          label: 'Read the reproduction notes',
+          href: `${portfolioFiles}/docs/physio-ai/README.md`,
+        },
       ],
     },
     {
@@ -428,21 +428,21 @@ const portfolioStudy: CaseStudy = {
   status: 'Live on GitHub Pages',
   tone: 'live',
   summary:
-    'A static React portfolio with a playable make-10 board, animated project worlds, nine page routes and automated browser checks.',
+    'A static React and TypeScript portfolio with nine pre-rendered pages, interactive demonstrations and automated accessibility and browser checks.',
   role: 'I designed and built it: visual system, components, content model, accessibility, image pipeline, metadata, tests and deployment.',
   media: [portfolioScreen],
   frame: 'browser',
   stack: ['React', 'TypeScript', 'Vite', 'CSS Modules', 'Playwright', 'GitHub Actions'],
   facts: [
-    { label: 'Routes', value: '9 static pages with their own metadata' },
-    { label: 'Browser checks', value: '360 to 1920 px, light and dark' },
+    { label: 'Routes', value: '9 pre-rendered pages with route-specific metadata' },
+    { label: 'Browser checks', value: '320 to 1920 px, light and dark' },
     { label: 'Deployment', value: 'GitHub Actions to GitHub Pages' },
   ],
   architecture: [
     'Typed content and media data',
     'React components and CSS Modules',
     'Pure, tested puzzle rules',
-    'Static route generation for metadata and deep links',
+    'Build-time React rendering with route-specific metadata',
     'Playwright checks and GitHub Pages release',
   ],
   sections: [
@@ -455,7 +455,7 @@ const portfolioStudy: CaseStudy = {
       id: 'design',
       heading: 'Design',
       paragraphs: [
-        'The site is designed as a game world around engineering content. The palette comes from the games’ own art, each featured project has its own colour world, the hero opens with a level-select stage that rotates through the four featured projects, and the Sumlume project includes a playable make-10 board built on the game’s rule. Motion is hand-written CSS and a little canvas, with a calm version for visitors who prefer reduced motion.',
+        'The homepage introduces my role and puts shipped apps beside a public computer vision project. Full-size galleries keep authentic screenshots inspectable. The project index and case studies share the same typography, surface and focus styles.',
       ],
     },
     {
@@ -463,16 +463,31 @@ const portfolioStudy: CaseStudy = {
       heading: 'Engineering',
       bullets: [
         'Project facts, screenshots and skills live in typed data files, so the compiler checks the content structure.',
-        'The puzzle rules are pure TypeScript functions with their own tests, shared by the Sumlume demo on the home page and the Engineering Lab.',
-        'A build step generates WebP variants at display size, and a second step writes a static HTML page for every route.',
-        'A small client router swaps pages in place, so the View Transitions API can morph a project title from the home page into its case study. Every route still exists as a static file.',
+        'The Engineering Lab separates its pure TypeScript puzzle rules from React and covers invalid indexes, match rules and progress with unit tests.',
+        'The media pipeline generates responsive WebP variants from source images. A second build step renders React into static HTML with a canonical URL and social card for each route.',
+        'Native links handle page navigation and history. React hydrates interactive controls from a route-specific chunk. Project text, source links, screenshots and CV downloads are available before JavaScript executes.',
+      ],
+      links: [
+        {
+          label: 'Read the static build script',
+          href: `${portfolioFiles}/scripts/generate-static-routes.mjs`,
+        },
+        { label: 'Inspect the browser tests', href: `${portfolioFiles}/scripts/qa-portfolio.ts` },
+        {
+          label: 'Inspect the puzzle rules and tests',
+          href: `${portfolioFiles}/scripts/test-lab.ts`,
+        },
+        {
+          label: 'Review the Pages release workflow',
+          href: `${portfolioFiles}/.github/workflows/deploy.yml`,
+        },
       ],
     },
     {
       id: 'accessibility',
       heading: 'Accessibility and performance',
       paragraphs: [
-        'The site includes a skip link, keyboard navigation for the project selector and galleries, and support for reduced motion. Playwright checks cover keyboard paths and layout in light and dark mode.',
+        'The site includes a skip link, keyboard gallery controls, native modal focus management and reduced motion. Playwright and axe check layout and accessibility in both themes; GitHub Actions runs the checks before Pages publication.',
       ],
     },
   ],
@@ -616,11 +631,9 @@ const caseStudies = [
 export const content = {
   identity: {
     name: 'Nasim Mosayebi',
-    role: 'Graduate Software Engineer',
     title: 'Nasim Mosayebi | Graduate Software Engineer · iOS and Mobile | London',
     description:
       'Nasim Mosayebi is a Computer Science graduate in London specialising in Swift, SwiftUI and mobile development. Explore two App Store releases and an individual computer vision project.',
-    location: 'London',
   },
   nav: [
     { label: 'Work', href: '#work' },
@@ -635,30 +648,6 @@ export const content = {
     email: 'n.mosayebee@gmail.com',
     cv: 'Nasim-Mosayebi-CV.pdf',
   },
-  hero: {
-    value:
-      'I build mobile apps with Swift, SwiftUI and React Native. At PathLife Studio, I lead Sumlume’s iOS development and release work and contribute to PathLife.',
-    availability: 'Open to graduate and junior roles',
-  },
-  /** Achievement badges backed by the App Store listings and CV. */
-  achievements: [
-    { mark: '2', title: '2 games live', detail: 'on the App Store' },
-    { mark: 'A', title: 'Grade A', detail: 'Physio-AI' },
-    { mark: 'BSc', title: 'Computer Science', detail: 'Brunel · 2:1' },
-  ],
-  workEvidence: [
-    { label: 'PathLife on the App Store', href: store.pathlife },
-    { label: 'Sumlume on the App Store', href: store.sumlume },
-    { label: 'Physio-AI source', href: physioSource },
-  ],
-  levels: [
-    { id: 'top', label: 'Start' },
-    { id: 'work', label: 'Work' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'about', label: 'About' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'contact', label: 'Contact' },
-  ],
   featured: [
     {
       slug: 'pathlife',
@@ -666,10 +655,8 @@ export const content = {
         'A life simulation where every year brings new choices. I worked on the iOS game, I am rebuilding it for Android, and I built the support site that got it through App Store review.',
       role: 'iOS game logic and SwiftUI interfaces, Android rebuild, support platform',
       stack: ['SwiftUI', 'React Native', 'TypeScript', 'Node.js', 'SQLite'],
-      preview: [pathLifeScreens[0], pathLifeScreens[1]],
-      stage: '#cfe4f7',
+      preview: [portraitCover(pathLifeScreens[0]), portraitCover(pathLifeScreens[1])],
       links: [{ label: 'App Store', href: store.pathlife }],
-      hasFullCaseStudy: true,
     },
     {
       slug: 'sumlume',
@@ -677,8 +664,7 @@ export const content = {
         'A number puzzle: clear pairs that match or make 10, with daily challenges, achievements and personal records. Version 2.0.0 shipped in November 2026.',
       role: 'Product design, native iOS build and release',
       stack: ['Swift', 'SwiftUI'],
-      preview: [sumlumeScreens[0], sumlumeScreens[1]],
-      stage: '#2b49b8',
+      preview: [portraitCover(sumlumeScreens[0]), portraitCover(sumlumeScreens[1])],
       links: [{ label: 'App Store', href: store.sumlume }],
     },
     {
@@ -688,56 +674,33 @@ export const content = {
       role: 'Individual project: pose processing, model selection, real-time pipeline, interface',
       stack: ['Python', 'MediaPipe', 'scikit-learn', 'WebSockets', 'SQLite'],
       preview: [physioAiScreens[0]],
-      stage: '#22302f',
       links: [{ label: 'GitHub', href: physioSource }],
-      hasFullCaseStudy: true,
-    },
-    {
-      slug: 'pawlife',
-      summary:
-        'A pet life simulation with personalities, story events and minigames, driven by a custom event engine and persistent state.',
-      role: 'Design and development from scratch',
-      stack: ['React Native', 'Expo', 'TypeScript', 'Zustand'],
-      preview: [pawLifeScreens[0], pawLifeScreens[1]],
-      stage: '#f1dcb8',
-      links: [],
     },
   ] satisfies FeaturedProject[],
   more: [
     {
       slug: 'co2-tracker',
       name: 'CO2 Tracker',
-      kind: 'Team project',
       summary: 'Product carbon-footprint lookup in a university demo.',
       role: 'React interface and contributions to the team’s Spring Boot lookup and H2 search history. Scrum Master for Sprint 1.',
       stack: ['React', 'Spring Boot', 'H2'],
       thumbnail: co2TrackerScreens[1],
-      links: [co2Prototype, { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' }],
     },
     {
       slug: 'hospital-appointment-system',
       name: 'Hospital Appointment System',
-      kind: 'Team project',
       summary: 'Desktop booking for patients and staff.',
       role: 'Booking module in Java and Swing, with JUnit tests.',
       stack: ['Java', 'Swing', 'JUnit'],
       thumbnail: hospitalScreens[1],
-      links: [
-        {
-          label: 'GitHub',
-          href: 'https://github.com/Nasim1801/hospital-appointment-system',
-        },
-      ],
     },
     {
       slug: 'portfolio',
       name: 'This portfolio',
-      kind: 'Personal project',
       summary: 'Static React site with a playable puzzle and automated browser checks.',
       role: 'Design, build, tests and deployment.',
       stack: ['React', 'TypeScript', 'Playwright'],
       thumbnail: portfolioScreen,
-      links: [{ label: 'GitHub', href: 'https://github.com/Nasim1801/portfolio' }],
     },
   ] satisfies MoreProject[],
   caseStudies,
@@ -786,17 +749,9 @@ export const content = {
     },
   ],
   about: {
-    sheet: [
-      { label: 'Focus', value: 'Graduate software engineering, specialising in iOS and mobile' },
-      { label: 'Based in', value: 'London' },
-      { label: 'Degree', value: 'BSc (Hons) Computer Science, 2:1, Brunel University London' },
-      { label: 'Studio', value: 'Founder of PathLife Studio Ltd' },
-      { label: 'Languages', value: 'English, Persian, German (B1), Arabic (A1)' },
-    ],
     paragraphs: [
       'I’m a Computer Science graduate from Brunel University London with a 2:1. At PathLife Studio, the company I founded in London, I lead Sumlume’s native iOS build and release work, contribute to PathLife and maintain its support site.',
       'Before computer science I studied Industrial Engineering and worked in medical-device quality assurance and IT support. That is where my habits come from: understand the whole system, write decisions down, test the risky paths first, and keep the person using it in view.',
-      'I speak four languages: English, Persian, German and some Arabic. I am looking for a graduate or junior role where I can bring that ownership to an experienced team.',
     ],
   },
   experience: [
@@ -843,7 +798,6 @@ export const content = {
     },
   ],
   contact: {
-    title: 'Let’s talk',
     text: 'I’m looking for a graduate or junior software engineering role in London, with a focus on iOS and mobile development.',
   },
 } as const;

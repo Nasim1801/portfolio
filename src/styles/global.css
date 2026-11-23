@@ -1,87 +1,53 @@
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/bricolage-grotesque-latin-variable.woff2') format('woff2');
+  font-style: normal;
   font-weight: 200 800;
-  font-stretch: 100%;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
   font-display: swap;
 }
 
-/*
- * V6 design tokens.
- * The palette comes from the games: PathLife's sky, blossom and gold,
- * and Sumlume's tile colours. Each featured project has its own "world":
- * an accent plus three ambient glow colours the page shifts into.
- */
 :root {
   color-scheme: light;
-  --bg: #eef4ff;
-  --surface: #ffffff;
-  --surface-2: #dfe9fb;
-  --ink: #14113a;
-  --ink-2: #47456f;
-  --line: #cbd6ee;
-  --line-strong: #8f9bc2;
-  --accent: #4a3bd6;
-  --accent-ink: #ffffff;
-  --accent-soft: #e4e0ff;
-  --focus: #4a3bd6;
-  --success: #116a44;
-  --warning: #9b3412;
-  --gold: #ffc94a;
-
-  --tile-ink: #14113a;
-  --tile-1: #ffd465;
-  --tile-2: #9fe8c9;
-  --tile-3: #bfcbff;
-  --tile-4: #ffbcd3;
-  --tile-5: #e3ceff;
-
-  /* World glow colours (studio default). */
-  --w-g1: #ffc6de;
-  --w-g2: #ffe3a3;
-  --w-g3: #b4d8ff;
-  --w-accent: #4a3bd6;
-
-  --shadow-1: 0 1px 2px #14113a14, 0 10px 24px -12px #14113a40;
-  --shadow-2: 0 2px 4px #14113a14, 0 34px 60px -28px #14113a66;
-  --shadow-pop: 0 6px 0 #14113a;
+  --bg: #f5f6f0;
+  --surface: #fdfef9;
+  --surface-2: #e9eee5;
+  --ink: #17241f;
+  --ink-2: #495a51;
+  --line: #ced9ce;
+  --line-strong: #7d9484;
+  --accent: #206348;
+  --accent-ink: #fff;
+  --accent-soft: #dceee0;
+  --focus: #176342;
+  --success: #216144;
+  --warning: #874817;
+  --panel: #152b23;
+  --panel-ink: #f6fcf2;
+  --panel-muted: #b9d1c2;
+  --lime: #d3facb;
+  --mint-strong: #a8e9b8;
+  --panel-line: #486456;
 
   --font: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --serif: 'Instrument Serif', Georgia, serif;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --gutter: clamp(1rem, 4.5vw, 4rem);
+  --max: 76rem;
+  --header: 4.625rem;
+  --radius: 0.75rem;
+  --radius-lg: 1.5rem;
+  --shadow: 0 0.5rem 1.5rem #182a2010;
+  --shadow-large: 0 1rem 2.5rem #182a2020;
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
 
-  /* Spacing scale (4 px base). */
-  --s-1: 0.25rem;
-  --s-2: 0.5rem;
-  --s-3: 0.75rem;
-  --s-4: 1rem;
-  --s-5: 1.5rem;
-  --s-6: 2rem;
-  --s-7: 3rem;
-  --s-8: 4rem;
-  --s-9: 6rem;
-  --s-10: 8rem;
-
-  /* Type scale (major third). */
-  --fs-sm: 0.875rem;
-  --fs-base: 1.0625rem;
-  --fs-md: 1.25rem;
-  --fs-lg: 1.5625rem;
-  --fs-xl: 1.953rem;
-  --fs-2xl: clamp(2rem, 4vw, 2.75rem);
-  --fs-3xl: clamp(2.4rem, 5.6vw, 4.2rem);
-  --fs-display: clamp(3.1rem, 8.6vw, 7.5rem);
-
-  --radius-sm: 6px;
-  --radius: 12px;
-  --radius-lg: 26px;
-  --gutter: clamp(1rem, 4vw, 3rem);
-  --max: 1240px;
-  --header: 68px;
-
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-spring: cubic-bezier(0.3, 1.5, 0.5, 1);
-
-  /* Aliases kept for the Engineering Lab and pose demo styles. */
+  /* Shared tokens used by the Lab. */
   --paper: var(--bg);
   --paper-elevated: var(--surface);
   --paper-soft: var(--surface-2);
@@ -90,9 +56,6 @@
   --signal-contrast: var(--accent-ink);
   --green: var(--success);
   --gold-bright: var(--focus);
-  --lime: var(--tile-1);
-  --shadow: var(--shadow-1);
-  --shadow-large: var(--shadow-2);
   --display: var(--font);
   --body: var(--font);
   --site-width: var(--max);
@@ -100,141 +63,22 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #0d0b24;
-  --surface: #17143a;
-  --surface-2: #231f55;
-  --ink: #f3f0ff;
-  --ink-2: #b7b2de;
-  --line: #2f2b66;
-  --line-strong: #5d58a6;
-  --accent: #b9afff;
-  --accent-ink: #0d0b24;
-  --accent-soft: #2a2468;
-  --focus: #ffd465;
-  --success: #8fe0b5;
-  --warning: #ffab8f;
-  --w-g1: #5a1f55;
-  --w-g2: #4d3a0e;
-  --w-g3: #143c6e;
-  --w-accent: #b9afff;
-  --shadow-1: 0 1px 2px #0006, 0 10px 24px -12px #000c;
-  --shadow-2: 0 2px 4px #0006, 0 34px 60px -28px #000;
-  --shadow-pop: 0 6px 0 #000;
-}
-
-/* ---------- Project worlds ---------- */
-
-[data-world='pathlife'] {
-  --accent: #1668c7;
-  --accent-soft: #d8eaff;
-  --focus: #1668c7;
-}
-[data-world='sumlume'] {
-  --accent: #2b49b8;
-  --accent-soft: #dfe5ff;
-  --focus: #2b49b8;
-}
-[data-world='physio-ai'] {
-  --accent: #0b6b5d;
-  --accent-soft: #d3f3ea;
-  --focus: #0b6b5d;
-}
-[data-world='pawlife'] {
-  --accent: #a3470d;
-  --accent-soft: #ffe7cf;
-  --focus: #a3470d;
-}
-:root[data-theme='dark'] [data-world='pathlife'] {
-  --accent: #8cc8ff;
-  --accent-soft: #12365e;
-  --focus: #ffd465;
-}
-:root[data-theme='dark'] [data-world='sumlume'] {
-  --accent: #a6b6ff;
-  --accent-soft: #232f78;
-  --focus: #ffd465;
-}
-:root[data-theme='dark'] [data-world='physio-ai'] {
-  --accent: #7fe3c8;
-  --accent-soft: #0e4439;
-  --focus: #ffd465;
-}
-:root[data-theme='dark'] [data-world='pawlife'] {
-  --accent: #ffc37d;
-  --accent-soft: #55300a;
-  --focus: #ffd465;
-}
-
-/* The page-level world drives only the ambient layer and the XP bar. */
-:root[data-page-world='pathlife'] {
-  --w-g1: #a6d5ff;
-  --w-g2: #ffc0dc;
-  --w-g3: #ffe5a6;
-  --w-accent: #1668c7;
-}
-:root[data-page-world='sumlume'] {
-  --w-g1: #b3c1ff;
-  --w-g2: #ffe59e;
-  --w-g3: #a6e8cb;
-  --w-accent: #2b49b8;
-}
-:root[data-page-world='physio-ai'] {
-  --w-g1: #a4ecd8;
-  --w-g2: #c2ecff;
-  --w-g3: #dcf6ae;
-  --w-accent: #0b6b5d;
-}
-:root[data-page-world='pawlife'] {
-  --w-g1: #ffd6a3;
-  --w-g2: #ffc7b5;
-  --w-g3: #f6e6aa;
-  --w-accent: #a3470d;
-}
-:root[data-theme='dark'][data-page-world='pathlife'] {
-  --w-g1: #124c86;
-  --w-g2: #5e2054;
-  --w-g3: #4a3a0e;
-  --w-accent: #8cc8ff;
-}
-:root[data-theme='dark'][data-page-world='sumlume'] {
-  --w-g1: #22338f;
-  --w-g2: #4f3d0c;
-  --w-g3: #0f4a39;
-  --w-accent: #a6b6ff;
-}
-:root[data-theme='dark'][data-page-world='physio-ai'] {
-  --w-g1: #0c4d42;
-  --w-g2: #103c56;
-  --w-g3: #2f4710;
-  --w-accent: #7fe3c8;
-}
-:root[data-theme='dark'][data-page-world='pawlife'] {
-  --w-g1: #5c3508;
-  --w-g2: #5c2418;
-  --w-g3: #4a3f10;
-  --w-accent: #ffc37d;
-}
-
-/* Registered so the ambient layer can tween between worlds. */
-@property --g1 {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-@property --g2 {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-@property --g3 {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-@property --xp {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
+  --bg: #18211e;
+  --surface: #202c27;
+  --surface-2: #263a30;
+  --ink: #f2f8eb;
+  --ink-2: #bdcec2;
+  --line: #43584a;
+  --line-strong: #7e9d8a;
+  --accent: #aaebbc;
+  --accent-ink: #14241a;
+  --accent-soft: #284737;
+  --focus: #baf3b8;
+  --success: #ace5bb;
+  --warning: #ffd6a6;
+  --panel: #11261c;
+  --shadow: 0 0.5rem 1.5rem #0003;
+  --shadow-large: 0 1rem 2.5rem #0005;
 }
 
 *,
@@ -243,51 +87,30 @@
   box-sizing: border-box;
 }
 html {
-  scroll-padding-top: calc(var(--header) + var(--s-4));
+  scroll-padding-top: calc(var(--header) + 1rem);
   -webkit-text-size-adjust: 100%;
 }
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
 body {
-  min-width: 320px;
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 400 var(--fs-base) / 1.6 var(--font);
+  font: 400 1.0625rem / 1.55 var(--font);
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
-}
-/* Film grain over everything, for texture. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .3 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-:root[data-theme='dark'] body::after {
-  opacity: 0.12;
 }
 h1,
 h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 650;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-weight: 680;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 p {
   margin: 0;
-  text-wrap: pretty;
 }
 button,
 input,
@@ -300,7 +123,7 @@ button {
 }
 a {
   color: inherit;
-  text-underline-offset: 0.2em;
+  text-underline-offset: 0.24em;
   text-decoration-thickness: 1px;
 }
 img,
@@ -314,98 +137,27 @@ img {
   height: auto;
 }
 ::selection {
-  background: var(--tile-1);
-  color: var(--tile-ink);
+  background: #b7efbe;
+  color: #17241f;
 }
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
-  border-radius: 4px;
 }
-main:focus {
+main:focus,
+[tabindex='-1']:focus {
   outline: none;
 }
-
-/* ---------- Scroll reveals ----------
- * Content is visible by default. Only when the script has confirmed it can
- * reveal things (html.fx) do unrevealed elements start hidden, and never
- * when the visitor prefers reduced motion.
- */
-@media (prefers-reduced-motion: no-preference) {
-  html.fx [data-reveal] {
-    transition:
-      opacity 700ms var(--ease-out),
-      transform 800ms var(--ease-out),
-      filter 700ms var(--ease-out);
-    transition-delay: calc(var(--d, 0) * 70ms);
-  }
-  html.fx [data-reveal]:not([data-shown]) {
-    opacity: 0;
-  }
-  html.fx [data-reveal='up']:not([data-shown]) {
-    transform: translateY(36px);
-  }
-  html.fx [data-reveal='left']:not([data-shown]) {
-    transform: translateX(-60px) rotate(-2deg);
-  }
-  html.fx [data-reveal='right']:not([data-shown]) {
-    transform: translateX(60px);
-  }
-  html.fx [data-reveal='pop']:not([data-shown]) {
-    transform: scale(0.6) rotate(-8deg);
-  }
-  html.fx [data-reveal='pop'][data-shown] {
-    transition-timing-function: var(--ease-out), var(--ease-spring), var(--ease-out);
-  }
-  html.fx [data-reveal='tilt']:not([data-shown]) {
-    transform: perspective(900px) rotateX(18deg) translateY(50px) scale(0.94);
-    transform-origin: 50% 100%;
-  }
-  html.fx [data-reveal='blur']:not([data-shown]) {
-    transform: translateY(14px);
-    filter: blur(10px);
-  }
+html:not([data-js]) [data-enhanced] {
+  display: none;
+}
+html:not([data-js]) {
+  scroll-padding-top: 1rem;
 }
 
-/* ---------- Page transitions (View Transitions API) ---------- */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
-    animation: vt-out 260ms var(--ease-out) both;
-  }
-  ::view-transition-new(root) {
-    animation: vt-in 420ms var(--ease-out) both;
-  }
-  html[data-vt='theme']::view-transition-old(root) {
-    animation: none;
-    z-index: 0;
-  }
-  html[data-vt='theme']::view-transition-new(root) {
-    animation: vt-theme 620ms var(--ease-out) both;
-    z-index: 1;
-  }
-  ::view-transition-group(*) {
-    animation-duration: 480ms;
-    animation-timing-function: var(--ease-out);
-  }
-}
-@keyframes vt-out {
-  to {
-    opacity: 0;
-    transform: scale(0.97) translateY(-12px);
-  }
-}
-@keyframes vt-in {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-  }
-}
-@keyframes vt-theme {
-  from {
-    clip-path: circle(0 at var(--vt-x, 90%) var(--vt-y, 4%));
-  }
-  to {
-    clip-path: circle(150vmax at var(--vt-x, 90%) var(--vt-y, 4%));
+@media (max-width: 760px) {
+  :root {
+    --header: 4rem;
   }
 }
 
@@ -417,12 +169,5 @@ main:focus {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
-  }
-}
-@media print {
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
   }
 }

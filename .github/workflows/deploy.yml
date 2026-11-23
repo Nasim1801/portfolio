@@ -30,9 +30,11 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
+      - name: Type-check
+        run: npm run typecheck
       - name: Test Lab rules
         run: npm run test:lab
-      - name: Validate TypeScript and build
+      - name: Build production site
         run: npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium

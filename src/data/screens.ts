@@ -30,6 +30,19 @@ function portrait(
   };
 }
 
+/** A smaller display pair for cropped homepage covers. The original remains in the gallery. */
+export function portraitCover(item: ScreenshotAsset): ScreenshotAsset {
+  const width = 540;
+  return {
+    ...item,
+    src: item.smallSrc ?? item.src,
+    smallSrc: item.src.replace(/\.webp$/, '-320.webp'),
+    smallWidth: 320,
+    width,
+    height: Math.round((item.height / item.width) * width),
+  };
+}
+
 export const sumlumeScreens: ScreenshotAsset[] = [
   portrait(
     'assets/sumlume/classic',
@@ -186,7 +199,7 @@ export const physioAiScreens: ScreenshotAsset[] = [
     smallSrc: 'assets/physio-ai/01-live-squat-960.webp',
     smallWidth: 960,
     thumbnailSrc: 'assets/physio-ai/01-live-squat-160.webp',
-    alt: 'Physio-AI live squat session showing tracked pose landmarks, eleven repetitions and 100% session accuracy',
+    alt: 'Physio-AI live squat session showing tracked pose landmarks, an eleven-repetition counter and the session feedback panel',
     width: 1179,
     height: 529,
   },
@@ -252,7 +265,7 @@ export const portfolioScreen: ScreenshotAsset = {
   smallWidth: 960,
   thumbnailSrc: 'assets/portfolio/01-home-160.webp',
   label: 'Homepage',
-  alt: 'Nasim Mosayebi’s portfolio homepage with the Graduate Software Engineer title, CV download and PathLife preview',
+  alt: 'Nasim Mosayebi’s V4 portfolio homepage with a software engineering introduction, CV download and project index',
   width: 1600,
   height: 1000,
 };
