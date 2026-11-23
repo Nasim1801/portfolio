@@ -29,7 +29,7 @@ export const routes = [
     path: 'lab',
     title: `Engineering Lab | ${owner}`,
     description:
-      'A playable TypeScript number puzzle and an interactive visualisation of the Physio-AI pose pipeline.',
+      'Play PathLife, Sumlume and PawLife browser demos, and explore the Physio-AI pose pipeline.',
     name: 'Engineering Lab',
     type: 'WebPage',
     socialImage: 'social/lab.png',

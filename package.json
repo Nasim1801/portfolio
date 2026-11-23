@@ -11,7 +11,7 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --check .",
     "format:write": "prettier --write .",
-    "test:lab": "node --import tsx scripts/test-lab.ts",
+    "test:lab": "node --import tsx scripts/test-lab.ts && node --import tsx scripts/test-life-demos.ts",
     "qa": "tsx scripts/qa-portfolio.ts",
     "review": "tsx scripts/review-capture.ts",
     "capture:design": "node scripts/capture-design.mjs",

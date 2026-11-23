@@ -91,11 +91,19 @@ export function PosePipelineLab() {
   const showSkeleton = stage >= 1;
 
   return (
-    <section className={`${styles.exhibit} ${styles.poseExhibit}`} aria-labelledby="pose-lab-title">
+    <section
+      id="physio-ai-demo"
+      tabIndex={-1}
+      className={`${styles.exhibit} ${styles.poseExhibit}`}
+      aria-labelledby="pose-lab-title"
+    >
       <div className={styles.exhibitHeader}>
         <div>
           <p className={styles.labIndex}>Physio-AI</p>
           <h2 id="pose-lab-title">Trace a pose through the pipeline</h2>
+          <p className={styles.pipelineHelp}>
+            Pick a stage, then use the depth slider to see how the pose and joint angles change.
+          </p>
         </div>
         <span className={styles.simulationChip}>Visual simulation</span>
       </div>
@@ -240,6 +248,17 @@ export function PosePipelineLab() {
             camera inference in the portfolio.
           </small>
           <a href="../projects/physio-ai/">Inspect the Physio-AI case study</a>
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={() => {
+              setStage(1);
+              setDepth(58);
+              tabRefs.current[1]?.focus();
+            }}
+          >
+            Reset pose demo
+          </button>
         </div>
       </div>
     </section>
