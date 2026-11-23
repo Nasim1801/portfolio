@@ -13,6 +13,14 @@ function percent(value: number) {
   return Math.min(100, Math.max(0, value));
 }
 
+type LifeRecord = {
+  age: number;
+  choice: string;
+  savings: number;
+  happiness: number;
+  friendship: number;
+};
+
 type LifeState = {
   phase: 'ready' | 'choice' | 'outcome' | 'complete';
   year: number;
@@ -22,6 +30,7 @@ type LifeState = {
   career: string;
   studied: boolean;
   note: string;
+  history: readonly LifeRecord[];
 };
 
 export const initialLife: LifeState = {
@@ -33,6 +42,7 @@ export const initialLife: LifeState = {
   career: 'Leaving school',
   studied: false,
   note: '',
+  history: [],
 };
 
 export const lifeChapters: readonly Chapter<LifeState>[] = [
@@ -128,12 +138,23 @@ export function lifeReducer(life: LifeState, action: LifeAction): LifeState {
   if (action.type === 'reset') return initialLife;
   if (action.type === 'start' && life.phase === 'ready') return { ...life, phase: 'choice' };
   if (action.type === 'choose' && life.phase === 'choice') {
-    const next = { ...life, ...lifeChapters[life.year].choices[action.index].apply(life) };
+    const choice = lifeChapters[life.year].choices[action.index];
+    const next = { ...life, ...choice.apply(life) };
+    const happiness = percent(next.happiness);
+    const friendship = percent(next.friendship);
+    const record = {
+      age: 18 + life.year,
+      choice: choice.label,
+      savings: next.savings - life.savings,
+      happiness: happiness - life.happiness,
+      friendship: friendship - life.friendship,
+    };
     return {
       ...next,
-      happiness: percent(next.happiness),
-      friendship: percent(next.friendship),
+      happiness,
+      friendship,
       phase: 'outcome',
+      history: [...life.history, record],
     };
   }
   if (action.type === 'advance' && life.phase === 'outcome') {
@@ -141,129 +162,4 @@ export function lifeReducer(life: LifeState, action: LifeAction): LifeState {
     return { ...life, year, phase: year === lifeChapters.length ? 'complete' : 'choice' };
   }
   return life;
-}
-
-type CareState = {
-  phase: 'ready' | 'playing' | 'complete';
-  turn: number;
-  fullness: number;
-  energy: number;
-  bond: number;
-  note: string;
-};
-
-export const initialCare: CareState = {
-  phase: 'ready',
-  turn: 0,
-  fullness: 38,
-  energy: 60,
-  bond: 42,
-  note: '',
-};
-
-export const careChapters: readonly Chapter<CareState>[] = [
-  {
-    title: 'Morning with Bella',
-    situation: 'Bella is curious and ready to play, but her breakfast bowl is empty.',
-    choices: [
-      {
-        label: 'Serve breakfast',
-        apply: (dog) => ({
-          fullness: dog.fullness + 40,
-          energy: dog.energy + 14,
-          bond: dog.bond + 7,
-          note: 'Bella finishes breakfast and has more energy for her afternoon.',
-        }),
-      },
-      {
-        label: 'Play fetch',
-        apply: (dog) => ({
-          fullness: dog.fullness - 11,
-          energy: dog.energy - 22,
-          bond: dog.bond + 15,
-          note: 'Bella loves the attention. Fetch brings you closer, but she’s tired and still hungry.',
-        }),
-      },
-    ],
-  },
-  {
-    title: 'An afternoon together',
-    situation: 'A neighbour invites you to the park. Check Bella’s energy before you decide.',
-    choices: [
-      {
-        label: 'Visit the park',
-        apply: (dog) =>
-          dog.energy >= 55
-            ? {
-                fullness: dog.fullness - 15,
-                energy: dog.energy - 18,
-                bond: dog.bond + 19,
-                note: 'Bella has energy for the outing. She explores and keeps coming back to check in with you.',
-              }
-            : {
-                fullness: dog.fullness - 8,
-                energy: dog.energy - 12,
-                bond: dog.bond + 3,
-                note: 'Bella tires quickly, so you cut the visit short and head home together.',
-              },
-      },
-      {
-        label: 'Offer a snack and rest',
-        apply: (dog) => ({
-          fullness: dog.fullness + 28,
-          energy: dog.energy + 24,
-          bond: dog.bond + 6,
-          note: 'A snack and a nap help Bella recover. She settles near you.',
-        }),
-      },
-    ],
-  },
-  {
-    title: 'A sudden thunderstorm',
-    situation: 'The first clap of thunder startles Bella. How will you help her settle?',
-    choices: [
-      {
-        label: 'Sit with Bella',
-        apply: (dog) =>
-          dog.bond >= 65
-            ? {
-                energy: dog.energy - 6,
-                bond: dog.bond + 18,
-                note: 'Bella hears your familiar voice and settles beside you as the storm passes.',
-              }
-            : {
-                energy: dog.energy - 10,
-                bond: dog.bond + 8,
-                note: 'Bella needs a little time to relax. She eventually settles near you.',
-              },
-      },
-      {
-        label: 'Make a quiet den',
-        apply: (dog) => ({
-          energy: dog.energy + 10,
-          bond: dog.bond + 10,
-          note: 'Bella finds a place to rest while the thunder passes. She emerges calmer and more rested.',
-        }),
-      },
-    ],
-  },
-];
-
-type CareAction = { type: 'start' | 'reset' } | { type: 'choose'; index: ChoiceIndex };
-
-export function careReducer(dog: CareState, action: CareAction): CareState {
-  if (action.type === 'reset') return initialCare;
-  if (action.type === 'start' && dog.phase === 'ready') return { ...dog, phase: 'playing' };
-  if (action.type !== 'choose' || dog.phase !== 'playing') return dog;
-
-  const next = { ...dog, ...careChapters[dog.turn].choices[action.index].apply(dog) };
-  const turn = dog.turn + 1;
-  return {
-    ...next,
-    turn,
-    phase: turn === careChapters.length ? 'complete' : 'playing',
-    fullness: percent(next.fullness),
-    energy: percent(next.energy),
-    bond: percent(next.bond),
-  };
 }
