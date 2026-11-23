@@ -94,7 +94,12 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
           </div>
         </header>
 
-        <section className={styles.studyMedia} aria-label={`${study.name} screenshots`}>
+        <section
+          id="screenshots"
+          tabIndex={-1}
+          className={styles.studyMedia}
+          aria-label={`${study.name} screenshots`}
+        >
           <Gallery media={study.media} frame={study.frame} projectName={study.name} />
         </section>
         <div className={styles.studyRole}>

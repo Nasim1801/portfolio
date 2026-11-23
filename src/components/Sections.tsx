@@ -25,21 +25,16 @@ function FeatureCard({
     >
       <a
         className={styles.cover}
-        href={href}
-        aria-label={`See ${study.name} screenshots in the case study`}
+        href={`${href}#screenshots`}
+        data-project-artwork
+        aria-label={`Open ${study.name} screenshot gallery`}
       >
         <MediaImage
           item={project.preview[0]}
-          className={styles.coverPrimary}
-          sizes={landscape ? '(max-width: 720px) 90vw, 560px' : '(max-width: 720px) 40vw, 280px'}
+          sizes={landscape ? '(max-width: 760px) 90vw, 560px' : '(max-width: 460px) 45vw, 196px'}
         />
         {project.preview[1] && (
-          <MediaImage
-            item={project.preview[1]}
-            className={styles.coverSecondary}
-            decorative
-            sizes="(max-width: 720px) 37vw, 220px"
-          />
+          <MediaImage item={project.preview[1]} decorative sizes="(max-width: 460px) 37vw, 160px" />
         )}
       </a>
       <div className={styles.cardBody}>
@@ -71,16 +66,21 @@ function FeatureCard({
 
 function SupportingCard({ study }: { study: CaseStudy }) {
   const project = content.more.find(({ slug }) => slug === study.slug);
-  const thumbnail =
-    study.slug === 'pawlife'
-      ? (study.icon ?? study.media[0])
-      : (project?.thumbnail ?? study.media[0]);
+  const thumbnail = project?.thumbnail ?? study.media[0];
+  const icon = study.slug === 'pawlife' ? study.icon : undefined;
+  const href = pageUrl(`projects/${study.slug}/`);
   const link = study.links[0];
   return (
     <article id={study.slug} tabIndex={-1} className={styles.supportCard} data-project={study.slug}>
-      <div className={styles.supportImage}>
-        <MediaImage item={thumbnail} sizes="(max-width: 720px) 88vw, 390px" />
-      </div>
+      <a
+        className={styles.supportImage}
+        href={`${href}#screenshots`}
+        data-project-artwork
+        aria-label={`Open ${study.name} screenshot gallery`}
+      >
+        <MediaImage item={thumbnail} sizes={icon ? '120px' : '(max-width: 760px) 84vw, 410px'} />
+        {icon && <MediaImage item={icon} className={styles.supportIcon} decorative sizes="72px" />}
+      </a>
       <div className={styles.supportBody}>
         <StatusChip status={study.status} tone={study.tone} />
         <h4>{project?.name ?? study.name}</h4>
@@ -95,7 +95,7 @@ function SupportingCard({ study }: { study: CaseStudy }) {
         <div className={styles.supportLinks}>
           <a
             className={styles.textLink}
-            href={pageUrl(`projects/${study.slug}/`)}
+            href={href}
             aria-label={`Read the case study for ${study.name}`}
           >
             Case study

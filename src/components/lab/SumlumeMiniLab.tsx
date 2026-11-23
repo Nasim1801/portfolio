@@ -102,7 +102,12 @@ export function SumlumeMiniLab() {
   };
 
   return (
-    <section className={styles.exhibit} aria-labelledby="sumlume-lab-title">
+    <section
+      id="sumlume-demo"
+      tabIndex={-1}
+      className={styles.exhibit}
+      aria-labelledby="sumlume-lab-title"
+    >
       <div className={styles.exhibitHeader}>
         <div>
           <p className={styles.labIndex}>Sumlume rules</p>

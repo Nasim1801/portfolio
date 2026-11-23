@@ -226,11 +226,9 @@ export function Gallery({
                   Previous
                 </button>
               )}
-              {landscape && (
-                <button type="button" onClick={() => setZoomed(!zoomed)}>
-                  {zoomed ? 'Fit image' : 'Zoom in'}
-                </button>
-              )}
+              <button type="button" onClick={() => setZoomed(!zoomed)}>
+                {zoomed ? 'Fit image' : 'Zoom in'}
+              </button>
               <a href={assetUrl(image.src)} target="_blank" rel="noopener noreferrer">
                 Open original
               </a>

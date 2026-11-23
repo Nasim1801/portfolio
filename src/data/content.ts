@@ -697,7 +697,7 @@ export const content = {
     {
       slug: 'portfolio',
       name: 'This portfolio',
-      summary: 'Static React site with a playable puzzle and automated browser checks.',
+      summary: 'Static React site with interactive demos and automated browser checks.',
       role: 'Design, build, tests and deployment.',
       stack: ['React', 'TypeScript', 'Playwright'],
       thumbnail: portfolioScreen,

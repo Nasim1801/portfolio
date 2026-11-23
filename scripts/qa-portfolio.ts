@@ -91,6 +91,25 @@ try {
           const menu = document
             .querySelector('header button[aria-controls]')
             ?.getBoundingClientRect();
+          const covers = [...document.querySelectorAll('[data-project-artwork]')];
+          const pipeline = document.querySelector('[aria-label="Physio-AI pipeline stages"]');
+          const croppedArtwork = covers.flatMap((cover) => {
+            const frame = cover.getBoundingClientRect();
+            return [...cover.querySelectorAll('img')]
+              .filter((image) => {
+                const box = image.getBoundingClientRect();
+                const original = image.naturalWidth / image.naturalHeight;
+                const distorted = Math.abs(Math.log(box.width / box.height / original)) > 0.02;
+                return (
+                  distorted ||
+                  box.top < frame.top - 1 ||
+                  box.bottom > frame.bottom + 1 ||
+                  box.left < frame.left - 1 ||
+                  box.right > frame.right + 1
+                );
+              })
+              .map((image) => image.getAttribute('src'));
+          });
           return {
             mastheadSingleRow:
               !brand ||
@@ -104,12 +123,18 @@ try {
             overflow: document.documentElement.scrollWidth - innerWidth,
             headings: document.querySelectorAll('h1').length,
             resources: performance.getEntriesByType('resource').length,
+            covers: covers.length,
+            croppedArtwork,
+            pipelineOverflow: pipeline ? pipeline.scrollWidth - pipeline.clientWidth : 0,
           };
         });
         if (
           metrics.overflow > 0 ||
           metrics.headings !== 1 ||
           metrics.missingImages.length ||
+          metrics.croppedArtwork.length ||
+          metrics.pipelineOverflow > 1 ||
+          (!route && metrics.covers !== 7) ||
           !metrics.mastheadSingleRow
         ) {
           failures.push(`${label}: ${JSON.stringify(metrics)}`);
@@ -469,7 +494,74 @@ try {
   assert.equal(await screenshot.getAttribute('data-zoomed'), null);
   await page.keyboard.press('Escape');
 
+  await visit(page);
+  await page.getByRole('link', { name: 'Open PathLife screenshot gallery' }).press('Enter');
+  await page.waitForURL('**/projects/pathlife/#screenshots');
+  const pathGallery = page.getByRole('region', { name: 'PathLife screenshots' });
+  await pathGallery.getByRole('link', { name: /View full size/ }).press('Enter');
+  const portrait = page.getByRole('dialog');
+  await portrait.getByRole('button', { name: 'Zoom in' }).click();
+  assert.match(
+    (await portrait.getByRole('link', { name: 'Open original' }).getAttribute('href')) ?? '',
+    /dashboard\.webp$/,
+  );
+  const printViewport = portrait.getByRole('region', { name: 'Screenshot' });
+  await printViewport.focus();
+  await page.keyboard.press('ArrowDown');
+  await page.waitForFunction(() => (document.querySelector('[data-zoomed]')?.scrollTop ?? 0) > 0);
+  await page.keyboard.press('Escape');
+  assert.ok(
+    await pathGallery
+      .getByRole('link', { name: /View full size/ })
+      .evaluate((el) => el === document.activeElement),
+  );
+
   await visit(page, 'lab/');
+  const demoPicker = page.getByRole('navigation', { name: 'Choose a demo' });
+  await demoPicker.getByRole('link', { name: /PathLife/ }).press('Enter');
+  await page.waitForURL('**/lab/#pathlife-demo');
+  const life = page.getByRole('region', { name: 'Make three years count' });
+  await life.getByRole('button', { name: 'Start life' }).press('Enter');
+  assert.ok(
+    await life
+      .getByRole('heading', { name: 'Your first step' })
+      .evaluate((el) => el === document.activeElement),
+  );
+  await life.getByRole('button', { name: 'Enrol in training' }).click();
+  assert.match(await life.getByRole('status').innerText(), /£400 for training/);
+  await life.getByRole('button', { name: 'Advance one year' }).click();
+  assert.ok(await life.getByRole('heading', { name: 'The rent goes up' }).isVisible());
+  await life.getByRole('button', { name: 'Move in with a friend' }).click();
+  await life.getByRole('button', { name: 'Advance one year' }).click();
+  await life.getByRole('button', { name: 'Apply for the skilled role' }).click();
+  assert.ok(await life.getByText('Skilled employee', { exact: true }).isVisible());
+  await life.getByRole('button', { name: 'Advance one year' }).click();
+  assert.ok(await life.getByRole('heading', { name: 'Three years complete' }).isVisible());
+  await life.getByRole('button', { name: 'Restart PathLife' }).click();
+  assert.ok(await life.getByRole('button', { name: 'Start life' }).isVisible());
+  assert.ok(await life.getByText('£1,200', { exact: true }).isVisible());
+
+  await demoPicker.getByRole('link', { name: /PawLife/ }).tap();
+  await page.waitForURL('**/lab/#pawlife-demo');
+  const paw = page.getByRole('region', { name: 'Spend a day with Bella' });
+  await paw.getByRole('button', { name: 'Start care' }).tap();
+  await paw.getByRole('button', { name: 'Serve breakfast' }).tap();
+  assert.ok(await paw.getByText('78%', { exact: true }).isVisible());
+  await paw.getByRole('button', { name: 'Visit the park' }).tap();
+  assert.ok(await paw.getByRole('heading', { name: 'A sudden thunderstorm' }).isVisible());
+  await paw.getByRole('button', { name: 'Sit with Bella' }).tap();
+  assert.match(await paw.getByRole('status').innerText(), /familiar voice/);
+  assert.ok(await paw.getByRole('heading', { name: 'Time to settle in' }).isVisible());
+  await paw.getByRole('button', { name: 'Restart PawLife' }).tap();
+  assert.ok(
+    await paw
+      .getByRole('heading', { name: 'Meet Bella' })
+      .evaluate((el) => el === document.activeElement),
+  );
+  assert.ok(await paw.getByText('38%', { exact: true }).isVisible());
+
+  await demoPicker.getByRole('link', { name: /Sumlume/ }).press('Enter');
+  await page.waitForURL('**/lab/#sumlume-demo');
   const firstTile = page.getByRole('button', { name: 'Tile 1, number 4' });
   const secondTile = page.getByRole('button', { name: 'Tile 2, number 6' });
   await firstTile.focus();
@@ -491,6 +583,8 @@ try {
   await page.waitForFunction(
     () => document.activeElement?.getAttribute('aria-label') === 'Tile 1, number 4',
   );
+  await demoPicker.getByRole('link', { name: /Physio-AI/ }).press('Enter');
+  await page.waitForURL('**/lab/#physio-ai-demo');
   await page.getByRole('tab', { name: /random forest/i }).click();
   assert.equal(
     await page.getByRole('tab', { name: /random forest/i }).getAttribute('aria-selected'),
@@ -500,6 +594,9 @@ try {
   assert.match(await labAcademicResult.innerText(), academicResultContext);
   await page.locator('input[type="range"]').fill('74');
   assert.equal(await page.locator('input[type="range"]').inputValue(), '74');
+  await page.getByRole('button', { name: 'Reset pose demo' }).press('Enter');
+  assert.equal(await page.locator('input[type="range"]').inputValue(), '58');
+  assert.equal(await page.getByRole('tab', { selected: true }).getAttribute('id'), 'pose-stage-1');
   await context.close();
 } finally {
   await browser.close();
