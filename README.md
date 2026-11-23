@@ -1,94 +1,44 @@
 # Nasim Mosayebi portfolio
 
-Portfolio of Nasim Mosayebi, a London-based Computer Science graduate specialising in iOS and mobile development. Built with React, TypeScript, Vite and CSS Modules. The output is fully static and deploys to GitHub Pages under `/portfolio/`.
+A React and TypeScript portfolio for a London software engineering graduate specialising in iOS and mobile. Vite builds static HTML and assets for GitHub Pages under `/portfolio/`. See the [V4 design and engineering report](PORTFOLIO_V4_DESIGN_ENGINEERING_REPORT.md) for the visual comparison, measurements and evidence boundaries.
 
-V5 is documented in `AUDIT-V5.md` (findings and fixes) and `CHANGELOG-V5.md`. V6, the game-world redesign, is summarised in `CHANGELOG-V6.md`, the V7 hero change in `CHANGELOG-V7.md` the V8 themed objects in `CHANGELOG-V8.md` and the V9 calmer object layer in `CHANGELOG-V9.md`.
-
-## Run locally
+## Develop and verify
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Production checks:
-
 ```bash
 npm run lint
-npm run format
+npm run typecheck
 npm run test:lab
 npm run build
+npx playwright install chromium
 npm run preview
 # In a second terminal
 npm run qa
-REVIEW_PREFIX=v5-after npm run review
+npm run capture:design
 ```
 
-`npm run qa` uses Playwright's Chromium (`npx playwright install chromium`) or the browser in `PORTFOLIO_CHROME`. `npm run review:moments` captures the site mid-interaction as `review/v6-moment-*.png` and records `review/v6-scroll.webm` (needs `npx playwright install ffmpeg`). `npm run review` writes full-page screenshots at 1440 and 390 px in both themes, plus a JSON report of links, contrast, tap targets, headings and transfer size, to `review/`.
+The production preview is at `http://127.0.0.1:4173/portfolio/`. Set `PORTFOLIO_CHROME` to use an existing Chrome executable or `PORTFOLIO_QA_URL` to test a different base URL. `capture:design` writes 1440 and 390 px viewport images for every route and two full-home images. `REVIEW_PREFIX`, `REVIEW_OUTPUT`, `REVIEW_THEME` and `REVIEW_ROUTES` control its output. The earlier `npm run review` also captures page-level contrast and resource diagnostics.
 
-The production preview is served at `http://127.0.0.1:4173/portfolio/`. Keep it running before `npm run qa`.
+## Content and media
 
-## Edit content
+- Edit project facts, links, role descriptions and the skill evidence map in `src/data/content.ts`. Case studies carry attribution and verification boundaries next to the evidence.
+- Edit screenshot paths, dimensions and alternative text in `src/data/screens.ts`. The project keeps real app captures and the production artwork used on the App Store. Record new provenance in `ASSET-AUDIT-V4.md`.
+- Run `npm run prepare:assets -- --game pathlife dashboard /absolute/path/to/capture.png` to import an authorised phone capture. Landscape PNG originals live in `media-src/`. The build generates WebP display and thumbnail variants in `public/assets/`.
+- The CV source is `Nasim-Mosayebi-CV.docx` and downloads serve `public/Nasim-Mosayebi-CV.pdf`.
 
-Verified portfolio copy, project facts, experience, links and the skill-to-project evidence map live in the typed data file:
+## Architecture and Pages
 
-```text
-src/data/content.ts
-```
+- `src/routes.tsx` resolves the homepage, seven case studies, the Engineering Lab and the not-found page. Native links handle URL history and fragments.
+- `src/entry-static.tsx` and `scripts/generate-static-routes.mjs` render those React pages with Vite and React DOM Server during the build. The same route modules hydrate in the browser to activate controls. Project text, source links, original-image links, navigation and CV downloads are present in the built HTML.
+- Each indexable route has a title, description, canonical URL, 1200 × 630 PNG social card and JSON-LD. The route data generates the sitemap. GitHub Pages receives the pre-rendered `404.html` and static directory from the same build.
+- `src/styles/global.css` defines the theme and typography tokens. CSS Modules scope the site and Lab layout. `Media.tsx` implements responsive images and the keyboard-accessible gallery. `src/lab/sumlumeEngine.ts` holds the tested TypeScript game rules.
 
-Screenshot paths, dimensions and alt text live in:
+## Release checks
 
-```text
-src/data/screens.ts
-```
+The Pages workflow runs lint, strict type checking, puzzle tests, a production build and Chromium checks. The browser matrix covers all nine routes at 320, 360, 390, 768, 1024, 1440 and 1920 px in light and dark mode. It checks axe at 390 and 1440 px, fragment and route navigation, no-JavaScript pages, metadata, all three CV downloads and interactive controls. Deployment runs after the build and browser checks pass on `main`. Third-party destinations are checked separately.
 
-Display media is stored under `public/assets/`. Run `npm run prepare:assets -- --game pathlife dashboard /absolute/path/to/capture.png` to import a verified game image. Update its dimensions, label and alt text in `src/data/screens.ts` and its provenance in `ASSET-AUDIT-V4.md`.
-
-PNG originals for landscape screenshots live in `media-src/` and are not deployed. The build writes full-size, 960 px and 160 px WebP variants of each into `public/assets/`, skipping files that are already up to date.
-
-Edit the CV in `Nasim-Mosayebi-CV.docx` and export it to `public/Nasim-Mosayebi-CV.pdf`, retaining the existing filename for download links.
-
-## Main architecture
-
-- `src/components/Hero.tsx`: identity, animated name, achievement badges and calls to action.
-- `src/components/LevelSelect.tsx`: the hero "Choose a level" stage that rotates through the four featured projects (tab list, swipe, tilt, pause).
-- `src/components/MakeTenBoard.tsx`: the playable make-10 demo shown inside the Sumlume project (roving focus, live status, win screen).
-- `src/fx/`: hand-written motion. `effects.ts` (scroll reveals with a safety net, project colour worlds, tile bursts, Konami code, view-transition helper), `router.ts` (in-place navigation so pages can morph), `AmbientTiles.tsx` (a capped, evenly spaced layer of background objects that keep to their own slots, avoid text and controls, pause off screen and swap sets with the hero level), `glyphs.ts` (the per-project object sets, drawn as vector shapes and cached as sprites), `useTilt.ts` (3D tilt) and `ScrollMap.tsx` (XP bar and level map).
-- `src/lab/sumlumeEngine.ts`: pure puzzle rules shared by the hero board and the Lab, tested by `scripts/test-lab.ts`.
-- `src/components/Sections.tsx`: featured projects, more work, skills, about, experience, contact and footer.
-- `src/components/CaseStudyPage.tsx`: case-study layout (at-a-glance facts, gallery, section navigation).
-- `src/components/Media.tsx`: responsive images, device frames, swipeable gallery and full-size dialog.
-- `src/components/lab/`: the Engineering Lab exhibits.
-- `src/utils/links.ts`: base-path helpers and `scrollToHash`, which makes `#fragment` links land after React renders.
-- `src/styles/global.css`: design tokens (colour, spacing and type scales) for both themes.
-- `src/styles/site.module.css`: site components. `src/styles/lab.module.css`: the Lab.
-
-## Routes and SEO
-
-The static build creates indexable HTML entry points for:
-
-```text
-/portfolio/
-/portfolio/lab/
-/portfolio/projects/sumlume/
-/portfolio/projects/pathlife/
-/portfolio/projects/physio-ai/
-/portfolio/projects/pawlife/
-/portfolio/projects/portfolio/
-/portfolio/projects/co2-tracker/
-/portfolio/projects/hospital-appointment-system/
-```
-
-`scripts/generate-static-routes.mjs` generates route-specific titles, descriptions, canonical URLs, social metadata and structured data, plus the GitHub Pages fallback. Update that script and `public/sitemap.xml` when adding a route.
-
-## Interaction and browser QA
-
-`npm run test:lab` validates the portfolio puzzle rules without the UI. `npm run qa` checks all nine routes at 360, 390, 768, 1440 and 1920 pixels in light and dark mode. It checks images, layout, keyboard paths, same-origin links and fragments, all three CV downloads, the evidence jump links, gallery controls and both Lab interactions. The pinned axe-core package runs at 390 and 1440 pixels. Set `PORTFOLIO_CHROME` to use another Chrome executable.
-
-## Deploy
-
-`.github/workflows/deploy.yml` runs lint, Lab rule tests, the TypeScript build and browser QA on pull requests targeting `main` and on pushes to `main`. Pages upload and deployment require a passing build on `main`. GitHub Pages uses **GitHub Actions** as its source. Third-party destinations are checked separately from the same-origin link gate.
-
-Production URL: [nasim1801.github.io/portfolio](https://nasim1801.github.io/portfolio/)
-
-No server or environment variables are required.
+Production is hosted on GitHub Pages. [Live portfolio](https://nasim1801.github.io/portfolio/)

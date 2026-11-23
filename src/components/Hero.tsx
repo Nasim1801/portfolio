@@ -1,99 +1,73 @@
-import { useCallback, useState, type CSSProperties } from 'react';
-import { content } from '../data/content';
-import { AmbientTiles } from '../fx/AmbientTiles';
-import type { AmbientSet } from '../fx/glyphs';
-import { assetUrl } from '../utils/links';
-import { LevelSelect } from './LevelSelect';
+import { content, findCaseStudy } from '../data/content';
+import { assetUrl, pageUrl } from '../utils/links';
+import { DocumentIcon } from './Icons';
+import { MediaImage } from './Media';
 import styles from '../styles/site.module.css';
 
-function AnimatedName({ name }: { name: string }) {
-  let index = 0;
-  return (
-    <h1 id="hero-title" className={styles.heroName} aria-label={name} data-no-tiles>
-      {name.split(' ').map((word) => (
-        <span key={word} className={styles.heroWord} aria-hidden="true">
-          {[...word].map((letter) => {
-            const i = index++;
-            return (
-              <span key={i} className={styles.heroLetter} style={{ '--i': i } as CSSProperties}>
-                {letter}
-              </span>
-            );
-          })}
-        </span>
-      ))}
-    </h1>
-  );
-}
+const projectIndex = [
+  { slug: 'pathlife', category: 'iOS simulation', evidence: 'App Store' },
+  { slug: 'sumlume', category: 'Native SwiftUI puzzle', evidence: 'App Store' },
+  { slug: 'physio-ai', category: 'Real-time computer vision', evidence: 'Public code' },
+] as const;
 
 export function Hero() {
-  const { identity, hero, links, achievements } = content;
-  // The drifting objects behind the hero belong to the project on the stage.
-  const [level, setLevel] = useState<AmbientSet>('pathlife');
-  const onLevel = useCallback((slug: string) => setLevel(slug as AmbientSet), []);
   return (
-    <section className={styles.hero} id="top" aria-labelledby="hero-title">
-      <AmbientTiles
-        className={styles.heroCanvas}
-        max={16}
-        clearTop={76}
-        avoid="[data-no-tiles]"
-        set={level}
-      />
-      <div className={styles.heroInner}>
-        <div className={styles.heroCopy}>
-          <AnimatedName name={identity.name} />
-          <p className={styles.heroRole} data-no-tiles style={{ '--i': 0 } as CSSProperties}>
-            {identity.role}
-          </p>
-          <p className={styles.heroValue} data-no-tiles style={{ '--i': 1 } as CSSProperties}>
-            {hero.value}
-          </p>
-          <div className={styles.heroActions} data-no-tiles style={{ '--i': 2 } as CSSProperties}>
-            <a className={styles.buttonPrimary} href="#work">
-              View work
-            </a>
-            <a className={styles.buttonSecondary} href={assetUrl(links.cv)} download>
-              Download CV <span className={styles.buttonNote}>PDF</span>
-            </a>
-            <a className={styles.buttonQuiet} href="#contact">
-              Contact
-            </a>
-          </div>
-          <ul
-            className={styles.heroMeta}
-            data-no-tiles
-            aria-label="Location and availability"
-            style={{ '--i': 3 } as CSSProperties}
-          >
-            <li>
-              <span className={styles.dot} data-tone="2" aria-hidden="true" />
-              Based in {identity.location}
-            </li>
-            <li>
-              <span className={styles.dot} data-tone="1" aria-hidden="true" />
-              {hero.availability}
-            </li>
-          </ul>
-          <ul className={styles.badges} data-no-tiles aria-label="Highlights">
-            {achievements.map((badge, index) => (
-              <li key={badge.title} style={{ '--i': index } as CSSProperties}>
-                <span className={styles.badgeIcon} data-tone={index + 1} aria-hidden="true">
-                  {badge.mark}
-                </span>
-                <span>
-                  <strong>{badge.title}</strong>
-                  <span>{badge.detail}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+    <section id="top" className={styles.hero} aria-labelledby="home-title">
+      <div className={styles.heroContent}>
+        <p className={styles.eyebrow}>
+          {content.identity.name} <span>London, UK</span>
+        </p>
+        <h1 id="home-title" aria-label="Software engineer">
+          Software <em>engineer.</em>
+        </h1>
+        <p className={styles.heroLead}>
+          I ship iOS apps with SwiftUI and build mobile and web software with React and TypeScript.
+        </p>
+        <p className={styles.availability}>Open to graduate and junior roles</p>
+        <div className={styles.heroActions}>
+          <a href="#work" className={styles.buttonPrimary}>
+            View work
+          </a>
+          <a href={assetUrl(content.links.cv)} className={styles.buttonSecondary} download>
+            <DocumentIcon /> Download CV
+          </a>
+          <a href="#contact" className={styles.textLink}>
+            Contact
+          </a>
         </div>
-        <LevelSelect onLevel={onLevel} />
       </div>
-      <a className={styles.scrollCue} data-no-tiles href="#work" aria-hidden="true" tabIndex={-1}>
-        <span />
-      </a>
+
+      <nav className={styles.projectIndex} aria-labelledby="project-index-title">
+        <header>
+          <h2 id="project-index-title">Project index</h2>
+          <p>Two App Store releases</p>
+        </header>
+        <ul>
+          {projectIndex.map(({ slug, category, evidence }) => {
+            const study = findCaseStudy(slug);
+            if (!study) return null;
+            return (
+              <li key={slug}>
+                <a href={pageUrl(`projects/${slug}/`)}>
+                  {study.icon ? (
+                    <MediaImage item={study.icon} decorative sizes="56px" eager />
+                  ) : (
+                    <MediaImage item={study.media[0]} decorative thumbnail eager />
+                  )}
+                  <span className={styles.indexTitle}>
+                    <strong>{study.name}</strong>
+                    <span>{category}</span>
+                  </span>
+                  <span className={styles.indexEvidence}>{evidence}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <a className={styles.indexLab} href={pageUrl('lab/')}>
+          Explore the Engineering Lab
+        </a>
+      </nav>
     </section>
   );
 }

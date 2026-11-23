@@ -103,6 +103,7 @@ async function importGameScreenshot(game, stem, original) {
       .webp({ quality: 83, effort: 6 })
       .toFile(`${output}-540.webp`),
     image.clone().resize({ width: 112 }).webp({ quality: 74 }).toFile(`${output}-112.webp`),
+    image.clone().resize({ width: 320 }).webp({ quality: 76 }).toFile(`${output}-320.webp`),
   ]);
   console.log(
     `${game}/${stem}: ${dimensions.width} × ${dimensions.height}. Update the matching entry in src/data/screens.ts.`,
@@ -113,4 +114,15 @@ if (process.argv[2] === '--game') {
   await importGameScreenshot(...process.argv.slice(3));
 } else {
   await walk(sourceRoot);
+  // These cropped covers use the approved store masters and a narrower transfer size.
+  await Promise.all(
+    ['pathlife/dashboard', 'pathlife/decisions', 'sumlume/classic', 'sumlume/home'].map((stem) =>
+      write(
+        path.join(assetsRoot, `${stem}.webp`),
+        path.join(assetsRoot, `${stem}-320.webp`),
+        320,
+        76,
+      ),
+    ),
+  );
 }

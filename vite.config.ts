@@ -6,6 +6,7 @@ export default defineConfig({
   base: '/portfolio/',
   build: {
     target: 'es2022',
+    manifest: true,
     sourcemap: false,
   },
 });

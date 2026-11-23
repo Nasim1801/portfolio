@@ -80,27 +80,3 @@ export function MailIcon(props: IconProps) {
     </svg>
   );
 }
-
-export function PauseIcon(props: IconProps) {
-  return (
-    <svg {...baseProps} {...props}>
-      <path d="M8 5v14M16 5v14" />
-    </svg>
-  );
-}
-
-export function PlayIcon(props: IconProps) {
-  return (
-    <svg {...baseProps} {...props}>
-      <path d="M7 5v14l12-7Z" />
-    </svg>
-  );
-}
-
-export function ArrowDownIcon(props: IconProps) {
-  return (
-    <svg {...baseProps} {...props}>
-      <path d="M12 5v14M6 13l6 6 6-6" />
-    </svg>
-  );
-}

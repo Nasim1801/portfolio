@@ -1,109 +1,99 @@
 import { useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import { content } from '../data/content';
 import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './Icons';
-import { withTransition } from '../fx/effects';
 import { assetUrl, homeUrl, pageUrl } from '../utils/links';
 import styles from '../styles/site.module.css';
 
-type Theme = 'light' | 'dark';
-const themeColours: Record<Theme, string> = { light: '#eef4ff', dark: '#0d0b24' };
+const themeColours = { light: '#f5f6f0', dark: '#18211e' } as const;
 
-export function Header({ isHome }: { isHome: boolean }) {
+export function Header({ route }: { route: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const navigationRef = useRef<HTMLElement>(null);
-  const [theme, setTheme] = useState<Theme>(() =>
-    document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
-  );
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const navigation = useRef<HTMLElement>(null);
 
-  const themeButtonRef = useRef<HTMLButtonElement>(null);
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+  function toggleTheme() {
     const root = document.documentElement;
-    // The new theme grows out of the toggle button as a circle.
-    const rect = themeButtonRef.current?.getBoundingClientRect();
-    if (rect) {
-      root.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`);
-      root.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`);
-    }
-    withTransition(() => {
-      flushSync(() => setTheme(nextTheme));
-      root.dataset.theme = nextTheme;
-      document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute('content', themeColours[nextTheme]);
-    }, 'theme');
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColours[next]);
     try {
-      localStorage.setItem('nm-theme', nextTheme);
+      localStorage.setItem('nm-theme', next);
     } catch {
-      // The theme still switches when storage is unavailable.
+      // Keep the active theme when storage is unavailable.
     }
-  };
+  }
 
   useEffect(() => {
     if (!menuOpen) return;
-    navigationRef.current?.querySelector('a')?.focus({ preventScroll: true });
-    const closeOnEscape = (event: KeyboardEvent) => {
+    navigation.current?.querySelector('a')?.focus();
+    const close = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       setMenuOpen(false);
-      menuButtonRef.current?.focus();
+      menuButton.current?.focus();
     };
-    window.addEventListener('keydown', closeOnEscape);
-    return () => window.removeEventListener('keydown', closeOnEscape);
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
   }, [menuOpen]);
+
+  function followLink(event: React.MouseEvent<HTMLAnchorElement>) {
+    setMenuOpen(false);
+    if (!menuOpen) return;
+    const href = event.currentTarget.getAttribute('href');
+    if (href?.startsWith('#'))
+      document.getElementById(href.slice(1))?.focus({ preventScroll: true });
+  }
 
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
         <a className={styles.logo} href={pageUrl()} aria-label="Nasim Mosayebi home">
           <span className={styles.logoMark} aria-hidden="true">
-            <i data-tone="1">N</i>
-            <i data-tone="3">M</i>
+            NM
           </span>
-          <span className={styles.logoName}>Nasim Mosayebi</span>
+          <span className={styles.logoName}>{content.identity.name}</span>
         </a>
-
         <nav
-          ref={navigationRef}
+          ref={navigation}
           id="main-navigation"
           className={styles.nav}
           data-open={menuOpen || undefined}
           aria-label="Main"
         >
           <ul>
-            {content.nav.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={isHome ? item.href : homeUrl(item.href)}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {item.label}
+            {content.nav.map(({ label, href }) => (
+              <li key={href}>
+                <a href={route === '' ? href : homeUrl(href)} onClick={followLink}>
+                  {label}
                 </a>
               </li>
             ))}
+            <li>
+              <a href={pageUrl('lab/')} aria-current={route === 'lab' ? 'page' : undefined}>
+                Engineering Lab
+              </a>
+            </li>
           </ul>
         </nav>
-
         <div className={styles.headerActions}>
           <a className={styles.headerCv} href={assetUrl(content.links.cv)} download>
-            CV
-            <span className={styles.srOnly}> (PDF download)</span>
+            CV <span className={styles.srOnly}>(PDF download)</span>
           </a>
           <button
-            ref={themeButtonRef}
+            data-enhanced
             className={`${styles.iconButton} ${styles.themeButton}`}
             type="button"
             onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            aria-label="Toggle colour theme"
           >
-            <span key={theme}>{theme === 'dark' ? <SunIcon /> : <MoonIcon />}</span>
+            <MoonIcon className={styles.moon} />
+            <SunIcon className={styles.sun} />
           </button>
           <button
-            ref={menuButtonRef}
+            data-enhanced
+            ref={menuButton}
             className={`${styles.iconButton} ${styles.menuButton}`}
             type="button"
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-controls="main-navigation"
             aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}

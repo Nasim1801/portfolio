@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { MediaItem, FrameType } from '../data/content';
+import type { FrameType, MediaItem } from '../data/content';
 import { assetUrl } from '../utils/links';
 import { CloseIcon } from './Icons';
 import styles from '../styles/site.module.css';
@@ -8,6 +8,7 @@ export function MediaImage({
   item,
   className,
   priority = false,
+  eager = false,
   decorative = false,
   fullSize = false,
   thumbnail = false,
@@ -16,6 +17,7 @@ export function MediaImage({
   item: MediaItem;
   className?: string;
   priority?: boolean;
+  eager?: boolean;
   decorative?: boolean;
   fullSize?: boolean;
   thumbnail?: boolean;
@@ -42,41 +44,11 @@ export function MediaImage({
       alt={decorative ? '' : item.alt}
       width={item.width}
       height={item.height}
-      loading={priority ? 'eager' : 'lazy'}
-      fetchPriority={priority ? 'high' : 'auto'}
+      loading={eager || priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : undefined}
       decoding="async"
       onError={() => setFailedSrc(item.src)}
     />
-  );
-}
-
-export function DeviceFrame({
-  item,
-  frame,
-  address,
-  title,
-  priority = false,
-  sizes,
-}: {
-  item: MediaItem;
-  frame: FrameType;
-  address?: string;
-  title?: string;
-  priority?: boolean;
-  sizes?: string;
-}) {
-  return (
-    <div className={styles.deviceFrame} data-frame={frame}>
-      {(frame === 'browser' || frame === 'desktop' || frame === 'terminal') && (
-        <div className={styles.deviceBar} aria-hidden="true">
-          <i />
-          <i />
-          <i />
-          <span>{address ?? title}</span>
-        </div>
-      )}
-      <MediaImage item={item} priority={priority} sizes={sizes} />
-    </div>
   );
 }
 
@@ -84,24 +56,21 @@ export function Gallery({
   media,
   frame,
   projectName,
-  title,
-  priority = false,
 }: {
   media: MediaItem[];
   frame: FrameType;
   projectName: string;
-  title?: string;
-  priority?: boolean;
 }) {
   const [active, setActive] = useState(0);
   const [opened, setOpened] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
+  const trigger = useRef<HTMLAnchorElement>(null);
   const close = useRef<HTMLButtonElement>(null);
-  const suppressClick = useRef(false);
-  const touch = useRef<{ x: number; y: number } | null>(null);
+  const scrollArea = useRef<HTMLDivElement>(null);
   const image = media[active];
   const hasSlides = media.length > 1;
+  const landscape = frame === 'browser' || frame === 'desktop' || frame === 'terminal';
 
   useEffect(() => {
     if (!opened) return;
@@ -113,77 +82,58 @@ export function Gallery({
     };
   }, [opened]);
 
+  useEffect(() => {
+    scrollArea.current?.scrollTo(0, 0);
+  }, [active, zoomed]);
+
   if (!image) return null;
 
   function move(direction: number) {
     setActive((index) => (index + direction + media.length) % media.length);
   }
 
-  function openViewer() {
-    dialog.current?.showModal();
-    setOpened(true);
-  }
-
   return (
-    <div className={styles.gallery} data-frame={frame}>
-      <div
-        className={styles.galleryStage}
-        onTouchStart={(event) => {
-          suppressClick.current = false;
-          const point = event.touches[0];
-          touch.current = point ? { x: point.clientX, y: point.clientY } : null;
-        }}
-        onTouchEnd={(event) => {
-          const point = event.changedTouches[0];
-          const start = touch.current;
-          touch.current = null;
-          if (!hasSlides || !point || !start) return;
-          const x = point.clientX - start.x;
-          const y = point.clientY - start.y;
-          if (Math.abs(x) > 45 && Math.abs(x) > Math.abs(y) * 1.4) {
-            suppressClick.current = true;
-            move(x > 0 ? -1 : 1);
-          }
-        }}
-      >
-        {hasSlides && (frame === 'phone' || frame === 'print') && (
-          <div className={styles.gallerySecondary} aria-hidden="true">
-            <DeviceFrame item={media[(active + 1) % media.length]} frame={frame} title={title} />
-          </div>
-        )}
-        <button
+    <figure className={styles.gallery} data-frame={frame}>
+      <div className={styles.galleryStage}>
+        <a
           ref={trigger}
+          href={assetUrl(image.src)}
           className={styles.galleryMain}
-          type="button"
           onClick={(event) => {
-            if (suppressClick.current && event.detail > 0) {
-              suppressClick.current = false;
+            if (
+              event.metaKey ||
+              event.ctrlKey ||
+              event.shiftKey ||
+              event.altKey ||
+              !dialog.current?.showModal
+            )
               return;
-            }
-            openViewer();
+            event.preventDefault();
+            dialog.current.showModal();
+            setOpened(true);
           }}
           aria-label={`View full size. ${image.alt}`}
         >
-          <div key={image.src} className={styles.galleryImage}>
-            <DeviceFrame
-              item={image}
-              frame={frame}
-              title={title}
-              priority={priority && active === 0}
-              sizes={
-                frame === 'phone' || frame === 'print'
-                  ? undefined
-                  : '(max-width: 900px) 92vw, 760px'
-              }
-            />
-          </div>
+          <MediaImage
+            key={image.src}
+            className={styles.galleryImage}
+            item={image}
+            priority={active === 0}
+            eager
+            sizes={landscape ? '(max-width: 760px) 92vw, 640px' : '(max-width: 420px) 47vw, 240px'}
+          />
           <span className={styles.expandHint}>View full size</span>
-        </button>
+        </a>
       </div>
 
-      <div className={styles.galleryToolbar} aria-label={`${projectName} screenshot controls`}>
+      <figcaption className={styles.galleryToolbar}>
         {hasSlides && (
-          <button type="button" onClick={() => move(-1)} aria-label="Previous screenshot">
+          <button
+            data-enhanced
+            type="button"
+            onClick={() => move(-1)}
+            aria-label="Previous screenshot"
+          >
             ‹
           </button>
         )}
@@ -196,26 +146,31 @@ export function Gallery({
           )}
         </p>
         {hasSlides && (
-          <button type="button" onClick={() => move(1)} aria-label="Next screenshot">
+          <button data-enhanced type="button" onClick={() => move(1)} aria-label="Next screenshot">
             ›
           </button>
         )}
-      </div>
+      </figcaption>
 
       {hasSlides && (
-        <div className={styles.thumbnails} aria-label={`${projectName} screenshots`}>
+        <ul className={styles.thumbnails} aria-label={`More ${projectName} screenshots`}>
           {media.map((item, index) => (
-            <button
-              type="button"
-              key={item.src}
-              aria-current={index === active ? 'true' : undefined}
-              onClick={() => setActive(index)}
-              aria-label={`Show ${item.label ?? item.alt}`}
-            >
-              <MediaImage item={item} decorative thumbnail sizes="56px" />
-            </button>
+            <li key={item.src}>
+              <a
+                href={assetUrl(item.src)}
+                aria-current={index === active ? 'true' : undefined}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  setActive(index);
+                }}
+                aria-label={`Show ${item.label ?? item.alt}`}
+              >
+                <MediaImage item={item} decorative thumbnail sizes="56px" />
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       <dialog
@@ -227,30 +182,53 @@ export function Gallery({
         }}
         onClose={() => {
           setOpened(false);
+          setZoomed(false);
           trigger.current?.focus();
         }}
         onKeyDown={(event) => {
-          if (!hasSlides || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return;
+          if (
+            event.target === scrollArea.current ||
+            !hasSlides ||
+            (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
+          )
+            return;
           event.preventDefault();
           move(event.key === 'ArrowLeft' ? -1 : 1);
         }}
       >
         {opened && (
           <div className={styles.lightboxInner}>
-            <button
-              ref={close}
-              type="button"
-              className={styles.lightboxClose}
-              onClick={() => dialog.current?.close()}
-              aria-label="Close screenshot"
+            <header className={styles.lightboxHeader}>
+              <p aria-live="polite">{image.label ?? projectName}</p>
+              <button
+                ref={close}
+                type="button"
+                className={styles.iconButton}
+                onClick={() => dialog.current?.close()}
+                aria-label="Close screenshot"
+              >
+                <CloseIcon />
+              </button>
+            </header>
+            <div
+              ref={scrollArea}
+              className={styles.lightboxViewport}
+              data-zoomed={zoomed || undefined}
+              tabIndex={zoomed ? 0 : undefined}
+              role="region"
+              aria-label="Screenshot"
             >
-              <CloseIcon />
-            </button>
-            <MediaImage item={image} className={styles.lightboxImage} fullSize priority />
+              <MediaImage item={image} className={styles.lightboxImage} fullSize eager />
+            </div>
             <div className={styles.lightboxControls}>
               {hasSlides && (
                 <button type="button" onClick={() => move(-1)}>
                   Previous
+                </button>
+              )}
+              {landscape && (
+                <button type="button" onClick={() => setZoomed(!zoomed)}>
+                  {zoomed ? 'Fit image' : 'Zoom in'}
                 </button>
               )}
               <a href={assetUrl(image.src)} target="_blank" rel="noopener noreferrer">
@@ -262,12 +240,9 @@ export function Gallery({
                 </button>
               )}
             </div>
-            <p className={styles.srOnly} aria-live="polite">
-              {image.alt}
-            </p>
           </div>
         )}
       </dialog>
-    </div>
+    </figure>
   );
 }

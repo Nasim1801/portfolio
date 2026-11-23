@@ -240,10 +240,6 @@ try {
           .filter((node) => node.ratio < node.required);
         const slug = route.split('/').filter(Boolean).at(-1) || 'home';
         if (slug === 'home' || process.env.REVIEW_ALL_SCREENSHOTS) {
-          // Full-page captures repeat fixed elements mid-page. Pin them to the top instead.
-          await page.addStyleTag({
-            content: 'header, a[href="#main-content"] { position: absolute !important; }',
-          });
           await page.screenshot({
             path: `${outputDirectory}/${prefix}-${slug === 'home' ? '' : `${slug}-`}${width}-${theme}.png`,
             fullPage: true,

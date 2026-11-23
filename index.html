@@ -3,49 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#eef4ff" />
+    <meta name="theme-color" content="#f5f6f0" />
     <meta name="color-scheme" content="light dark" />
-    <meta
-      name="description"
-      content="Nasim Mosayebi is a Computer Science graduate in London specialising in Swift, SwiftUI and mobile development. Explore two App Store releases and an individual computer vision project."
-    />
-    <meta
-      property="og:title"
-      content="Nasim Mosayebi | Graduate Software Engineer · iOS and Mobile | London"
-    />
-    <meta
-      property="og:description"
-      content="Two App Store releases and a Grade A computer vision project. Open to graduate and junior software engineering roles in London."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_GB" />
-    <meta property="og:site_name" content="Nasim Mosayebi" />
-    <meta property="og:url" content="https://nasim1801.github.io/portfolio/" />
-    <meta property="og:image" content="https://nasim1801.github.io/portfolio/og-cover.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta
-      property="og:image:alt"
-      content="Nasim Mosayebi, graduate software engineer in London specialising in iOS and mobile development"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Nasim Mosayebi | Graduate Software Engineer · iOS and Mobile | London"
-    />
-    <meta
-      name="twitter:description"
-      content="Two App Store releases and a Grade A computer vision project. Open to graduate and junior software engineering roles in London."
-    />
-    <meta name="twitter:image" content="https://nasim1801.github.io/portfolio/og-cover.png" />
-    <meta
-      name="twitter:image:alt"
-      content="Nasim Mosayebi, graduate software engineer in London specialising in iOS and mobile development"
-    />
     <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
     <link rel="manifest" href="%BASE_URL%site.webmanifest" />
-    <link rel="canonical" href="https://nasim1801.github.io/portfolio/" />
     <link
       rel="preload"
       href="%BASE_URL%fonts/bricolage-grotesque-latin-variable.woff2"
@@ -68,72 +30,17 @@
               ? 'dark'
               : 'light';
         document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.js = '';
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', theme === 'dark' ? '#0d0b24' : '#eef4ff');
+          ?.setAttribute('content', theme === 'dark' ? '#18211e' : '#f5f6f0');
       })();
     </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Nasim Mosayebi",
-        "url": "https://nasim1801.github.io/portfolio/",
-        "jobTitle": "Software Engineer",
-        "knowsLanguage": ["en", "fa", "de", "ar"],
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "London",
-          "addressCountry": "GB"
-        },
-        "email": "mailto:n.mosayebee@gmail.com",
-        "sameAs": [
-          "https://github.com/Nasim1801",
-          "https://www.linkedin.com/in/nasim-mosayebi",
-          "https://pathlifestudio.com"
-        ],
-        "worksFor": {
-          "@type": "Organization",
-          "name": "PathLife Studio Ltd"
-        },
-        "alumniOf": {
-          "@type": "CollegeOrUniversity",
-          "name": "Brunel University London"
-        },
-        "knowsAbout": [
-          "SwiftUI",
-          "React Native",
-          "Swift",
-          "TypeScript",
-          "Node.js",
-          "Java",
-          "Spring Boot",
-          "Python",
-          "Computer vision",
-          "Machine learning"
-        ]
-      }
-    </script>
-    <title>Nasim Mosayebi | Graduate Software Engineer · iOS and Mobile | London</title>
+    <title>Nasim Mosayebi | Graduate Software Engineer</title>
+    <!--page-metadata-->
   </head>
   <body>
     <div id="root"></div>
-    <noscript>
-      <main style="max-width: 40rem; margin: 4rem auto; padding: 0 1rem; font-family: system-ui">
-        <h1>Nasim Mosayebi</h1>
-        <p>
-          Graduate software engineer in London specialising in Swift, SwiftUI and mobile
-          development. Open to graduate and junior roles.
-        </p>
-        <ul>
-          <li><a href="mailto:n.mosayebee@gmail.com">n.mosayebee@gmail.com</a></li>
-          <li><a href="https://www.linkedin.com/in/nasim-mosayebi">LinkedIn</a></li>
-          <li><a href="https://github.com/Nasim1801">GitHub</a></li>
-          <li><a href="%BASE_URL%Nasim-Mosayebi-CV.pdf">Download CV (PDF)</a></li>
-        </ul>
-        <p>This portfolio needs JavaScript for its project pages and interactive board.</p>
-      </main>
-    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

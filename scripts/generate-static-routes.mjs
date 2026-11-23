@@ -1,139 +1,172 @@
-import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import sharp from 'sharp';
+import { build } from 'vite';
 
-const outputDirectory = resolve('dist');
-const source = await readFile(resolve(outputDirectory, 'index.html'), 'utf8');
-const siteUrl = 'https://nasim1801.github.io/portfolio/';
+const output = resolve('dist');
+const serverOutput = resolve('node_modules/.portfolio-prerender');
+const source = await readFile(resolve(output, 'index.html'), 'utf8');
+await build({
+  build: {
+    ssr: 'src/entry-static.tsx',
+    outDir: serverOutput,
+    emptyOutDir: true,
+    manifest: false,
+    ssrManifest: false,
+  },
+  configFile: resolve('vite.config.ts'),
+});
 
-const routes = [
-  {
-    slug: 'sumlume',
-    path: 'projects/sumlume',
-    name: 'Sumlume',
-    title: 'Sumlume Case Study | Nasim Mosayebi',
-    description:
-      'How Nasim Mosayebi built and released Sumlume, a native SwiftUI number puzzle for iPhone and iPad that is live on the App Store.',
-    image: 'assets/sumlume/classic.webp',
-    type: 'VideoGame',
-  },
-  {
-    slug: 'pathlife',
-    path: 'projects/pathlife',
-    name: 'PathLife',
-    title: 'PathLife Case Study | Nasim Mosayebi',
-    description:
-      'PathLife case study: problem, constraints, architecture, key decisions and outcome for a live iOS life simulation, its React Native Android rebuild and its Node.js support platform.',
-    image: 'assets/pathlife/dashboard.webp',
-    type: 'VideoGame',
-  },
-  {
-    slug: 'physio-ai',
-    path: 'projects/physio-ai',
-    name: 'Physio-AI',
-    title: 'Physio-AI Case Study | Nasim Mosayebi',
-    description:
-      'Physio-AI is a Grade A final-year project on real-time exercise feedback using MediaPipe Pose, scikit-learn and WebSockets.',
-    image: 'assets/physio-ai/01-live-squat.webp',
-    type: 'SoftwareApplication',
-  },
-  {
-    slug: 'pawlife',
-    path: 'projects/pawlife',
-    name: 'PawLife',
-    title: 'PawLife Case Study | Nasim Mosayebi',
-    description:
-      'Engineering case study for PawLife, an in-development React Native pet-life simulation with a custom event engine and persistent progression.',
-    image: 'assets/pawlife/home.webp',
-    type: 'VideoGame',
-  },
-  {
-    slug: 'portfolio',
-    path: 'projects/portfolio',
-    name: 'This Portfolio',
-    title: 'This Portfolio Case Study | Nasim Mosayebi',
-    description:
-      'How Nasim Mosayebi designed and built this static React and TypeScript portfolio: typed content, a tested puzzle engine, an image pipeline, route metadata and automated browser checks.',
-    image: 'assets/portfolio/01-home.webp',
-    type: 'SoftwareApplication',
-  },
-  {
-    slug: 'co2-tracker',
-    path: 'projects/co2-tracker',
-    name: 'CO2 Tracker',
-    title: 'CO2 Tracker Case Study | Nasim Mosayebi',
-    description:
-      'A university team demo for product carbon-footprint lookup. The public repository contains the React interface prototype.',
-    image: 'assets/co2-tracker/01-customer-page.webp',
-    type: 'SoftwareApplication',
-  },
-  {
-    slug: 'hospital-appointment-system',
-    path: 'projects/hospital-appointment-system',
-    name: 'Hospital Appointment System',
-    title: 'Hospital Appointment System Case Study | Nasim Mosayebi',
-    description:
-      'A Java Swing booking module with JUnit evidence from a Brunel University London team project.',
-    image: 'assets/hospital/01-login.webp',
-    type: 'SoftwareApplication',
-  },
-  {
-    slug: 'lab',
-    path: 'lab',
-    name: 'Engineering Lab',
-    title: 'Engineering Lab | Nasim Mosayebi',
-    description:
-      'Playable React and interactive system demonstrations by London software engineer Nasim Mosayebi.',
-    image: 'og-cover.png',
-    type: 'WebPage',
-  },
-];
+const { profile, render, routes, siteUrl } = await import(
+  pathToFileURL(resolve(serverOutput, 'entry-static.js')).href
+);
+const manifest = JSON.parse(await readFile(resolve(output, '.vite/manifest.json'), 'utf8'));
+const base = new URL(siteUrl).pathname;
+const labCss = manifest['src/components/EngineeringLabPage.tsx']?.css ?? [];
 
-function replaceMeta(html, selector, value) {
-  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = new RegExp(`(<meta[^>]+${escaped}[^>]+content=")[^"]*(")`, 'i');
-  return html.replace(pattern, `$1${value}$2`);
+function escape(value) {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[character],
+  );
+}
+
+function metadata(route, url) {
+  const image = new URL(route.socialImage, siteUrl).href;
+  const alt = `${route.name} · ${route.label}`;
+  const schema = route.path
+    ? {
+        '@context': 'https://schema.org',
+        '@type': route.type,
+        name: route.name,
+        url,
+        image,
+        description: route.description,
+        author: profile,
+      }
+    : { '@context': 'https://schema.org', '@type': route.type, url, mainEntity: profile };
+
+  const tag = (attribute, name, content) =>
+    `<meta ${attribute}="${name}" content="${escape(content)}">`;
+  const shared = {
+    title: route.title,
+    description: route.description,
+    image,
+    'image:alt': alt,
+  };
+  return [
+    `<link rel="canonical" href="${escape(url)}">`,
+    tag('name', 'description', route.description),
+    tag('property', 'og:type', route.path ? 'website' : 'profile'),
+    tag('property', 'og:url', url),
+    tag('property', 'og:locale', 'en_GB'),
+    tag('property', 'og:site_name', profile.name),
+    tag('property', 'og:image:width', '1200'),
+    tag('property', 'og:image:height', '630'),
+    tag('name', 'twitter:card', 'summary_large_image'),
+    ...Object.entries(shared).flatMap(([key, value]) => [
+      tag('property', `og:${key}`, value),
+      tag('name', `twitter:${key}`, value),
+    ]),
+    `<script type="application/ld+json">${JSON.stringify(schema).replaceAll('<', '\\u003c')}</script>`,
+  ].join('\n    ');
+}
+
+function page(title, head, body) {
+  return source
+    .replace(/<title>[^<]*<\/title>/, () => `<title>${escape(title)}</title>`)
+    .replace('<!--page-metadata-->', () => head)
+    .replace('<div id="root"></div>', () => `<div id="root">${body}</div>`);
+}
+
+async function write(path, data) {
+  const destination = resolve(output, path);
+  await mkdir(dirname(destination), { recursive: true });
+  await writeFile(destination, data);
+}
+
+async function socialCard(route) {
+  const words = route.name.split(' ');
+  const lines = [];
+  for (const word of words) {
+    const previous = lines.at(-1);
+    if (previous && previous.length + word.length < 21) lines[lines.length - 1] += ` ${word}`;
+    else lines.push(word);
+  }
+  const title = lines
+    .map(
+      (line, index) =>
+        `<text x="74" y="${268 + index * 68}" fill="#f6fcf2" font-size="59" font-weight="700">${escape(line)}</text>`,
+    )
+    .join('');
+  const graphic = Buffer.from(`
+    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+        <path d="M28 0H0V28" fill="none" stroke="#446455" stroke-width="1"/>
+      </pattern></defs>
+      <rect width="1200" height="630" fill="#152b23"/>
+      <rect x="700" width="500" height="630" fill="url(#grid)"/>
+      <path d="M74 140H643M74 493H643" stroke="#648674"/>
+      <g font-family="sans-serif">
+        <text x="74" y="108" fill="#d3facb" font-size="22" font-weight="700">NASIM MOSAYEBI / PORTFOLIO</text>
+        ${title}
+        <text x="74" y="451" fill="#d3facb" font-size="24">${escape(route.label)}</text>
+        ${route.preview ? '' : '<text x="870" y="355" fill="#d3facb" font-size="130" font-weight="700">NM</text>'}
+      </g>
+    </svg>`);
+  const overlays = [];
+  if (route.preview) {
+    const image = await sharp(resolve(output, route.preview))
+      .resize(400, 400, { fit: 'inside' })
+      .png()
+      .toBuffer({ resolveWithObject: true });
+    overlays.push({
+      input: image.data,
+      left: Math.round(950 - image.info.width / 2),
+      top: Math.round(315 - image.info.height / 2),
+    });
+  }
+  await write(route.socialImage, await sharp(graphic).composite(overlays).png().toBuffer());
 }
 
 for (const route of routes) {
-  const routeUrl = `${siteUrl}${route.path}/`;
-  const imageUrl = `${siteUrl}${route.image}`;
-  let html = source
-    .replace(/<link\s+data-home-preload[^>]*>\s*/g, '')
-    .replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`);
-  html = replaceMeta(html, 'name="description"', route.description);
-  html = replaceMeta(html, 'property="og:title"', route.title);
-  html = replaceMeta(html, 'property="og:description"', route.description);
-  html = replaceMeta(html, 'property="og:url"', routeUrl);
-  html = replaceMeta(html, 'property="og:image"', imageUrl);
-  html = replaceMeta(html, 'name="twitter:title"', route.title);
-  html = replaceMeta(html, 'name="twitter:description"', route.description);
-  html = replaceMeta(html, 'name="twitter:image"', imageUrl);
-  html = html.replace(
-    /<link rel="canonical" href="[^"]*"\s*\/?>/,
-    `<link rel="canonical" href="${routeUrl}" />`,
+  const url = route.path ? `${siteUrl}${route.path}/` : siteUrl;
+  const extraHead = [
+    ...(route.path === 'lab'
+      ? labCss.map((file) => `<link rel="stylesheet" href="${base}${file}">`)
+      : []),
+    ...(!route.path
+      ? [
+          `<link rel="preload" href="${base}fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin>`,
+        ]
+      : []),
+  ].join('\n    ');
+  const html = page(
+    route.title,
+    `${metadata(route, url)}\n    ${extraHead}`,
+    await render(route.path),
   );
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': route.type,
-    name: route.name,
-    url: routeUrl,
-    image: imageUrl,
-    description: route.description,
-    author: {
-      '@type': 'Person',
-      name: 'Nasim Mosayebi',
-      url: siteUrl,
-    },
-  };
-  html = html.replace(
-    '</head>',
-    `    <script id="static-page-schema" type="application/ld+json">${JSON.stringify(schema)}</script>\n  </head>`,
-  );
-
-  const directory = resolve(outputDirectory, route.path);
-  await mkdir(directory, { recursive: true });
-  await writeFile(resolve(directory, 'index.html'), html);
+  await write(route.path ? `${route.path}/index.html` : 'index.html', html);
+  await socialCard(route);
 }
 
-await copyFile(resolve(outputDirectory, 'index.html'), resolve(outputDirectory, '404.html'));
+await write(
+  '404.html',
+  page(
+    'Page unavailable | Nasim Mosayebi',
+    '<meta name="robots" content="noindex">',
+    await render('404.html'),
+  ),
+);
+await write(
+  'sitemap.xml',
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(({ path }) => `  <url><loc>${siteUrl}${path ? `${path}/` : ''}</loc></url>`).join('\n')}\n</urlset>\n`,
+);

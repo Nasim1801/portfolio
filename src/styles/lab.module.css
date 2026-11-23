@@ -3,7 +3,7 @@
   --lab-mint: var(--green);
   position: relative;
   min-height: 100vh;
-  padding-top: var(--header);
+  padding-top: clamp(1.25rem, 4vw, 3rem);
   overflow: clip;
   background: var(--paper);
 }
@@ -625,4 +625,13 @@
   .numberTile {
     transition: none;
   }
+}
+
+.noScript {
+  width: min(var(--site-width), calc(100% - 2 * var(--gutter)));
+  margin: 1rem auto;
+}
+
+:global(html[data-js]) .noScript {
+  display: none;
 }

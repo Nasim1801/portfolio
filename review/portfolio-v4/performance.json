@@ -1,0 +1,278 @@
+{
+  "lighthouseVersion": "12.8.2",
+  "environment": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+  "config": {
+    "formFactor": "mobile",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "throttlingMethod": "simulate",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    }
+  },
+  "before": {
+    "home": {
+      "scores": {
+        "performance": 92,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 3232.178,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1504.683,
+      "transferBytes": 559711,
+      "individualRuns": [
+        {
+          "scores": {
+            "performance": 91,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 3238.897,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 115.5,
+          "firstContentfulPaintMs": 1533.265,
+          "transferBytes": 559711
+        },
+        {
+          "scores": {
+            "performance": 93,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 3232.178,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 0,
+          "firstContentfulPaintMs": 1354.785,
+          "transferBytes": 559711
+        },
+        {
+          "scores": {
+            "performance": 92,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 3232.024,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 0,
+          "firstContentfulPaintMs": 1504.683,
+          "transferBytes": 559711
+        }
+      ]
+    },
+    "pathlife": {
+      "scores": {
+        "performance": 94,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2932.097,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1580.914,
+      "transferBytes": 304191
+    },
+    "physio-ai": {
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2559.188,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1356.126,
+      "transferBytes": 226191
+    },
+    "lab": {
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2403.217,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1577.681,
+      "transferBytes": 205646
+    }
+  },
+  "after": {
+    "home": {
+      "scores": {
+        "performance": 94,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2939.452,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1433.71,
+      "transferBytes": 440744,
+      "individualRuns": [
+        {
+          "scores": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 2939.522,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 0,
+          "firstContentfulPaintMs": 1433.768,
+          "transferBytes": 440744
+        },
+        {
+          "scores": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 2939.164,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 0,
+          "firstContentfulPaintMs": 1433.47,
+          "transferBytes": 440744
+        },
+        {
+          "scores": {
+            "performance": 94,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "largestContentfulPaintMs": 2939.452,
+          "cumulativeLayoutShift": 0,
+          "totalBlockingTimeMs": 0,
+          "firstContentfulPaintMs": 1433.71,
+          "transferBytes": 440744
+        }
+      ]
+    },
+    "pathlife": {
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2563.979,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1433.315,
+      "transferBytes": 282036
+    },
+    "sumlume": {
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2565.21,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1434.341,
+      "transferBytes": 281904
+    },
+    "physio-ai": {
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2338.047,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1432.872,
+      "transferBytes": 204244
+    },
+    "pawlife": {
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2415.559,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1434.632,
+      "transferBytes": 246527
+    },
+    "portfolio": {
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2263.305,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1432.754,
+      "transferBytes": 210167
+    },
+    "co2-tracker": {
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2189.154,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1433.462,
+      "transferBytes": 199111
+    },
+    "hospital-appointment-system": {
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2338.709,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1433.091,
+      "transferBytes": 202708
+    },
+    "lab": {
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "largestContentfulPaintMs": 2128.136,
+      "cumulativeLayoutShift": 0,
+      "totalBlockingTimeMs": 0,
+      "firstContentfulPaintMs": 1590.113,
+      "transferBytes": 183504
+    }
+  }
+}

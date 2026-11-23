@@ -1,201 +1,130 @@
-import { useEffect, useState, type CSSProperties } from 'react';
-import { content, type CaseStudy, type CaseStudySection } from '../data/content';
+import { content, physioEvaluation, type CaseStudy, type CaseStudySection } from '../data/content';
 import { homeUrl, pageUrl } from '../utils/links';
 import { Gallery, MediaImage } from './Media';
-import { PoseTracker } from './PoseTracker';
-import { ExternalLink, StatusChip, Tags } from './Sections';
+import { ProjectLink, StatusChip, Tags } from './ProjectDetails';
 import styles from '../styles/site.module.css';
 
 function StudySection({ section, study }: { section: CaseStudySection; study: CaseStudy }) {
   return (
     <section id={section.id} className={styles.studySection} aria-labelledby={`${section.id}-h`}>
-      <h2 id={`${section.id}-h`} data-reveal="left">
-        {section.heading}
-      </h2>
-      <div className={styles.studyText} data-reveal="up" style={{ '--d': 1 } as CSSProperties}>
-        {section.lead && <p className={styles.studyLead}>{section.lead}</p>}
-        {section.paragraphs?.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-        {section.bullets && (
-          <ul>
-            {section.bullets.map((bullet) => (
-              <li key={bullet}>{bullet}</li>
+      <h2 id={`${section.id}-h`}>{section.heading}</h2>
+      {section.lead && <p className={styles.studyLead}>{section.lead}</p>}
+      {section.paragraphs?.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+      {section.id === 'architecture' && (
+        <>
+          <ol className={styles.flow} aria-label={`${study.name} system flow`}>
+            {study.architecture.map((item) => (
+              <li key={item}>{item}</li>
             ))}
-          </ul>
-        )}
-        {section.links && (
-          <ul>
-            {section.links.map(({ label, href }) => (
-              <li key={href}>
-                {href.startsWith('https:') ? (
-                  <ExternalLink href={href} className={styles.textLink}>
-                    {label}
-                  </ExternalLink>
-                ) : (
-                  <a href={pageUrl(href)} className={styles.textLink}>
-                    {label}
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-        {section.id === 'architecture' && (
-          <>
-            <ol className={styles.flow} aria-label={`${study.name} system flow`}>
-              {study.architecture.map((item, index) => (
-                <li key={item} data-reveal="left" style={{ '--d': index * 2 } as CSSProperties}>
-                  {item}
-                </li>
-              ))}
-            </ol>
-            {study.slug === 'physio-ai' && (
-              <div className={styles.casePose}>
-                <PoseTracker />
-              </div>
-            )}
-          </>
-        )}
-      </div>
+          </ol>
+          {study.slug === 'physio-ai' && (
+            <div className={styles.evidenceNote}>
+              <p>
+                <strong>{physioEvaluation.academicAccuracy}</strong> reported academic frame
+                accuracy (Random Forest). {physioEvaluation.scope}
+              </p>
+              <a className={styles.textLink} href={pageUrl('lab/#pose-lab-title')}>
+                Explore the illustrative pose pipeline
+              </a>
+            </div>
+          )}
+        </>
+      )}
+      {section.bullets && (
+        <ul>
+          {section.bullets.map((bullet) => (
+            <li key={bullet}>{bullet}</li>
+          ))}
+        </ul>
+      )}
+      {section.links && (
+        <ul className={styles.evidenceLinks}>
+          {section.links.map((link) => (
+            <li key={link.href}>
+              <ProjectLink className={styles.textLink} link={link} />
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
 
 export function CaseStudyPage({ study }: { study: CaseStudy }) {
   const studies = content.caseStudies;
-  const current = studies.findIndex((item) => item.slug === study.slug);
+  const current = studies.findIndex(({ slug }) => slug === study.slug);
   const next = studies[(current + 1) % studies.length];
-  const hasArchitectureSection = study.sections.some((section) => section.id === 'architecture');
-  const sections: CaseStudySection[] = hasArchitectureSection
+  const sections: CaseStudySection[] = study.sections.some(({ id }) => id === 'architecture')
     ? study.sections
     : [...study.sections, { id: 'architecture', heading: 'Architecture' }];
 
-  // Highlight the section being read in the side navigation.
-  const [reading, setReading] = useState(sections[0]?.id);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setReading(entry.target.id);
-      },
-      { rootMargin: '-30% 0px -60% 0px' },
-    );
-    document
-      .querySelectorAll(`.${styles.studySection}`)
-      .forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, [study.slug]);
-
   return (
-    <main
-      id="main-content"
-      tabIndex={-1}
-      className={styles.study}
-      data-project={study.slug}
-      data-world={study.slug}
-    >
+    <main id="main-content" tabIndex={-1} className={styles.study} data-project={study.slug}>
       <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
         <ol>
           <li>
-            <a href={homeUrl('#work')}>Work</a>
+            <a href={homeUrl('#work')}>Selected work</a>
           </li>
           <li aria-current="page">{study.name}</li>
         </ol>
       </nav>
 
-      <header className={styles.studyHero}>
-        <div className={styles.studyIntro}>
-          <div className={styles.projectTitle}>
-            {study.icon && (
-              <MediaImage
-                item={study.icon}
-                className={styles.projectIcon}
-                decorative
-                sizes="56px"
-              />
-            )}
-            <div>
-              <h1 style={{ viewTransitionName: `title-${study.slug}` } as CSSProperties}>
-                {study.name}
-              </h1>
-              <p className={styles.projectKind}>{study.kind}</p>
-            </div>
-          </div>
+      <div className={styles.studyHero}>
+        <header className={styles.studyIntro}>
           <StatusChip status={study.status} tone={study.tone} />
+          <div className={styles.studyTitle}>
+            {study.icon && <MediaImage item={study.icon} decorative sizes="64px" eager />}
+            <h1>{study.name}</h1>
+          </div>
+          <p className={styles.studyKind}>{study.kind}</p>
           <p className={styles.studySummary}>{study.summary}</p>
-          {study.links.length > 0 && (
-            <div className={styles.projectLinks}>
-              {study.links.map(({ label, href }, index) =>
-                href.startsWith('https:') ? (
-                  <ExternalLink
-                    key={href}
-                    href={href}
-                    className={index === 0 ? styles.buttonPrimary : styles.buttonSecondary}
-                  >
-                    {label}
-                  </ExternalLink>
-                ) : (
-                  <a
-                    key={href}
-                    href={pageUrl(href)}
-                    className={index === 0 ? styles.buttonPrimary : styles.buttonSecondary}
-                  >
-                    {label}
-                  </a>
-                ),
-              )}
-              {study.sections.some(({ id }) => id === 'verification') && (
-                <a className={styles.buttonSecondary} href="#architecture">
-                  Engineering evidence
-                </a>
-              )}
-            </div>
-          )}
+          <div className={styles.projectLinks}>
+            {study.links.map((link, index) => (
+              <ProjectLink
+                key={link.href}
+                link={link}
+                className={index === 0 ? styles.buttonPrimary : styles.buttonSecondary}
+              />
+            ))}
+            <a className={styles.textLink} href="#architecture">
+              Engineering evidence
+            </a>
+          </div>
+        </header>
+
+        <section className={styles.studyMedia} aria-label={`${study.name} screenshots`}>
+          <Gallery media={study.media} frame={study.frame} projectName={study.name} />
+        </section>
+        <div className={styles.studyRole}>
+          <h2>My contribution</h2>
+          <p>{study.role}</p>
         </div>
+      </div>
 
-        <dl className={styles.glance} aria-label="At a glance" data-reveal="tilt">
-          <div>
-            <dt>My role</dt>
-            <dd>{study.role}</dd>
+      <dl className={styles.glance} aria-label="At a glance">
+        {study.facts.map(({ label, value }) => (
+          <div key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
           </div>
-          {study.facts.map((fact) => (
-            <div key={fact.label}>
-              <dt>{fact.label}</dt>
-              <dd>{fact.value}</dd>
-            </div>
-          ))}
-          <div>
-            <dt>Built with</dt>
-            <dd>
-              <Tags items={study.stack} label={`${study.name} technology`} />
-            </dd>
-          </div>
-        </dl>
-      </header>
-
-      <section
-        className={styles.studyMedia}
-        aria-label={`${study.name} screenshots`}
-        data-reveal="up"
-        data-world={study.slug}
-      >
-        <Gallery
-          media={study.media}
-          frame={study.frame}
-          projectName={study.name}
-          title={study.name}
-          priority
-        />
-      </section>
+        ))}
+        <div>
+          <dt>Built with</dt>
+          <dd>
+            <Tags items={study.stack} label={`${study.name} technology`} />
+          </dd>
+        </div>
+      </dl>
 
       <div className={styles.studyBody}>
         <nav className={styles.studyNav} aria-label="Sections">
+          <p>In this case study</p>
           <ol>
-            {sections.map((section) => (
-              <li key={section.id}>
-                <a href={`#${section.id}`} aria-current={reading === section.id || undefined}>
-                  {section.heading}
-                </a>
+            {sections.map(({ id, heading }) => (
+              <li key={id}>
+                <a href={`#${id}`}>{heading}</a>
               </li>
             ))}
           </ol>
@@ -207,11 +136,13 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
         </div>
       </div>
 
-      <nav className={styles.nextStudy} aria-label="Next project">
-        <p>Next project</p>
-        <a href={pageUrl(`projects/${next.slug}/`)}>
-          <strong>{next.name}</strong>
-          <span>{next.kind}</span>
+      <nav className={styles.nextStudy} aria-label="Related projects">
+        <div>
+          <p>Next project</p>
+          <a href={pageUrl(`projects/${next.slug}/`)}>{next.name}</a>
+        </div>
+        <a className={styles.buttonSecondary} href={homeUrl('#work')}>
+          All projects
         </a>
       </nav>
     </main>
