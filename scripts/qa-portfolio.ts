@@ -520,7 +520,7 @@ try {
   const demoPicker = page.getByRole('navigation', { name: 'Choose a demo' });
   await demoPicker.getByRole('link', { name: /PathLife/ }).press('Enter');
   await page.waitForURL('**/lab/#pathlife-demo');
-  const life = page.getByRole('region', { name: 'Make three years count' });
+  const life = page.getByRole('region', { name: 'PathLife', exact: true });
   await life.getByRole('button', { name: 'Start life' }).press('Enter');
   assert.ok(
     await life
@@ -529,36 +529,55 @@ try {
   );
   await life.getByRole('button', { name: 'Enrol in training' }).click();
   assert.match(await life.getByRole('status').innerText(), /£400 for training/);
-  await life.getByRole('button', { name: 'Advance one year' }).click();
+  await life.getByRole('button', { name: /Age Up/ }).click();
   assert.ok(await life.getByRole('heading', { name: 'The rent goes up' }).isVisible());
   await life.getByRole('button', { name: 'Move in with a friend' }).click();
-  await life.getByRole('button', { name: 'Advance one year' }).click();
+  await life.getByRole('button', { name: /Age Up/ }).click();
   await life.getByRole('button', { name: 'Apply for the skilled role' }).click();
-  assert.ok(await life.getByText('Skilled employee', { exact: true }).isVisible());
-  await life.getByRole('button', { name: 'Advance one year' }).click();
+  assert.ok(await life.getByText(/Skilled employee.*Age 20/).isVisible());
+  await life.getByRole('button', { name: /Age Up/ }).click();
   assert.ok(await life.getByRole('heading', { name: 'Three years complete' }).isVisible());
+  await life.locator('summary').filter({ hasText: 'Life log' }).click();
+  assert.ok(await life.getByText('Move in with a friend', { exact: false }).isVisible());
   await life.getByRole('button', { name: 'Restart PathLife' }).click();
   assert.ok(await life.getByRole('button', { name: 'Start life' }).isVisible());
   assert.ok(await life.getByText('£1,200', { exact: true }).isVisible());
 
   await demoPicker.getByRole('link', { name: /PawLife/ }).tap();
   await page.waitForURL('**/lab/#pawlife-demo');
-  const paw = page.getByRole('region', { name: 'Spend a day with Bella' });
-  await paw.getByRole('button', { name: 'Start care' }).tap();
-  await paw.getByRole('button', { name: 'Serve breakfast' }).tap();
-  assert.ok(await paw.getByText('78%', { exact: true }).isVisible());
-  await paw.getByRole('button', { name: 'Visit the park' }).tap();
+  const paw = page.getByRole('region', { name: 'PawLife', exact: true });
+  const care = (name: string) => paw.getByRole('button', { name, exact: true }).tap();
+  assert.ok(await paw.getByRole('img', { name: /Bella on the rug/ }).isVisible());
+  await care('Start care');
+  await care('Feed');
+  await care('Serve a warm meal');
+  assert.ok(await paw.getByText('74%', { exact: true }).isVisible());
+  assert.ok(await paw.getByText('Eating', { exact: true }).isVisible());
+  await care('Next moment');
+  await care('Play');
+  await care('Throw the ball');
+  assert.match(await paw.getByRole('status').innerText(), /bounds after the ball/);
+  await care('Next moment');
+  await care('Groom');
+  await care('Gentle brush');
+  assert.ok(await paw.getByText('Freshly groomed', { exact: true }).isVisible());
+  await care('See the evening event');
   assert.ok(await paw.getByRole('heading', { name: 'A sudden thunderstorm' }).isVisible());
-  await paw.getByRole('button', { name: 'Sit with Bella' }).tap();
-  assert.match(await paw.getByRole('status').innerText(), /familiar voice/);
+  await care('Sit with Bella');
+  assert.match(await paw.getByRole('status').innerText(), /comes straight to you/);
   assert.ok(await paw.getByRole('heading', { name: 'Time to settle in' }).isVisible());
-  await paw.getByRole('button', { name: 'Restart PawLife' }).tap();
+  await care('Restart PawLife');
   assert.ok(
     await paw
       .getByRole('heading', { name: 'Meet Bella' })
       .evaluate((el) => el === document.activeElement),
   );
   assert.ok(await paw.getByText('38%', { exact: true }).isVisible());
+  await care('Start care');
+  await care('Play');
+  await care('Throw the ball');
+  assert.ok(await paw.getByText('Tired', { exact: true }).isVisible());
+  await care('Restart PawLife');
 
   await demoPicker.getByRole('link', { name: /Sumlume/ }).press('Enter');
   await page.waitForURL('**/lab/#sumlume-demo');
