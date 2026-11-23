@@ -3,20 +3,21 @@ name: Deploy portfolio to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,22 +28,42 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Build
+      - name: Lint
+        run: npm run lint
+      - name: Test Lab rules
+        run: npm run test:lab
+      - name: Validate TypeScript and build
         run: npm run build
-      - name: Set up Pages
-        uses: actions/configure-pages@v5
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify routes, links, CV and accessibility
+        run: |
+          ./node_modules/.bin/vite preview --host 127.0.0.1 --strictPort > /tmp/portfolio-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 15 --retry-connrefused --retry-delay 1 \
+            --max-time 2 http://127.0.0.1:4173/portfolio/ > /dev/null
+          npm run qa
       - name: Upload site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

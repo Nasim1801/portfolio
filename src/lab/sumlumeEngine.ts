@@ -43,7 +43,11 @@ export function isValidPair(
 ) {
   const firstValue = board[first];
   const secondValue = board[second];
-  if (firstValue === null || secondValue === null || !isNeighbour(first, second, columns)) {
+  if (
+    typeof firstValue !== 'number' ||
+    typeof secondValue !== 'number' ||
+    !isNeighbour(first, second, columns)
+  ) {
     return false;
   }
   return isMatch(firstValue, secondValue);

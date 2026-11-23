@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { chromium, type Page } from 'playwright';
 
 const site = process.env.PORTFOLIO_QA_URL ?? 'http://127.0.0.1:4173/portfolio/';
@@ -23,7 +24,11 @@ const viewports = [
   { width: 1920, height: 1080 },
 ];
 const failures: string[] = [];
-const axePath = process.env.PORTFOLIO_AXE_PATH;
+const require = createRequire(import.meta.url);
+const axePath = process.env.PORTFOLIO_AXE_PATH ?? require.resolve('axe-core/axe.min.js');
+const internalPages = new Map<string, { ids: string[]; links: string[] }>();
+let internalLinksChecked = 0;
+let axeScans = 0;
 const cvName = 'Nasim-Mosayebi-CV.pdf';
 const cvUrl = new URL(cvName, site).href;
 // Uses Playwright's bundled Chromium unless PORTFOLIO_CHROME points at another browser.
@@ -98,7 +103,19 @@ try {
         if (theme === 'light') {
           await page.screenshot({ path: `${output}/${slug}-${viewport.width}.png` });
         }
-        if (axePath && (viewport.width === 390 || viewport.width === 1440)) {
+        if (theme === 'light' && viewport.width === 1440) {
+          internalPages.set(
+            page.url(),
+            await page.evaluate(() => ({
+              ids: Array.from(document.querySelectorAll('[id]'), ({ id }) => id),
+              links: Array.from(
+                document.querySelectorAll<HTMLAnchorElement>('a[href]'),
+                ({ href }) => href,
+              ),
+            })),
+          );
+        }
+        if (viewport.width === 390 || viewport.width === 1440) {
           await page.addScriptTag({ path: axePath });
           const violations = await page.evaluate(async () => {
             const api = (
@@ -115,6 +132,7 @@ try {
               elements: nodes.map((node) => node.target),
             }));
           });
+          axeScans += 1;
           if (violations.length) failures.push(`${label}: axe ${JSON.stringify(violations)}`);
         }
         await page.close();
@@ -129,6 +147,32 @@ try {
     reducedMotion: 'reduce',
   });
   const page = await context.newPage();
+  const origin = new URL(site).origin;
+  const staticLinks = new Set<string>();
+  for (const [source, { links }] of internalPages) {
+    for (const href of new Set(links)) {
+      const target = new URL(href);
+      if (target.origin !== origin) continue;
+      const fragment = target.hash.slice(1);
+      target.hash = '';
+      internalLinksChecked += 1;
+      const destination = internalPages.get(target.href);
+      if (destination) {
+        if (fragment && !destination.ids.includes(decodeURIComponent(fragment))) {
+          failures.push(`${source}: missing link target ${href}`);
+        }
+      } else if (target.href.startsWith(site) && /\.[a-z0-9]+$/i.test(target.pathname)) {
+        staticLinks.add(target.href);
+      } else {
+        failures.push(`${source}: unknown internal page ${href}`);
+      }
+    }
+  }
+  for (const url of staticLinks) {
+    const response = await context.request.get(url);
+    if (!response.ok()) failures.push(`HTTP ${response.status()} for ${url}`);
+    await response.dispose();
+  }
   await visit(page);
   await page.keyboard.press('Tab');
   assert.equal(
@@ -277,6 +321,15 @@ try {
   assert.equal(await co2Link(page).getAttribute('href'), publicCo2Source);
   await visit(page, 'projects/co2-tracker/');
   assert.equal(await co2Link(page).getAttribute('href'), publicCo2Source);
+  for (const project of ['pathlife', 'sumlume', 'physio-ai', 'co2-tracker']) {
+    await visit(page, `projects/${project}/`);
+    await page.getByRole('link', { name: 'Engineering evidence', exact: true }).click();
+    assert.equal(new URL(page.url()).hash, '#architecture');
+    assert.equal(
+      await page.getByRole('heading', { name: 'Implementation evidence', exact: true }).count(),
+      1,
+    );
+  }
   await visit(page);
   await page.getByRole('button', { name: /switch to dark mode/i }).click();
   await page.reload();
@@ -458,6 +511,9 @@ try {
   await page.getByRole('button', { name: 'Tile 1, number 4' }).click();
   await page.getByRole('button', { name: 'Tile 2, number 6' }).click();
   assert.equal(await page.getByText(/4 and 6 cleared/i).isVisible(), true);
+  await page.getByRole('button', { name: 'Reset board' }).click();
+  assert.equal(await page.getByRole('button', { name: 'Tile 1, number 4' }).isVisible(), true);
+  assert.equal(await page.getByRole('button', { name: 'Tile 2, number 6' }).isVisible(), true);
   await page.getByRole('tab', { name: /random forest/i }).click();
   assert.equal(
     await page.getByRole('tab', { name: /random forest/i }).getAttribute('aria-selected'),
@@ -468,8 +524,12 @@ try {
   await context.close();
 } finally {
   await browser.close();
-  await writeFile(`${output}/checks.json`, JSON.stringify({ checks: result, failures }, null, 2));
-  console.log(JSON.stringify({ checks: result.length, failures }, null, 2));
+  const coverage = { axeScans, internalLinksChecked };
+  await writeFile(
+    `${output}/checks.json`,
+    JSON.stringify({ checks: result, ...coverage, failures }, null, 2),
+  );
+  console.log(JSON.stringify({ checks: result.length, ...coverage, failures }, null, 2));
 }
 
 assert.deepEqual(failures, []);
