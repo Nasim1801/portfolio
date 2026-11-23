@@ -330,6 +330,17 @@ try {
       1,
     );
   }
+  const academicResultContext = /one participant.*training and test rows.*same source rows/i;
+  await visit(page, 'projects/physio-ai/');
+  const physioSummary = page.locator('dl[aria-label="At a glance"]').getByText(/96\.23%/);
+  await physioSummary.waitFor();
+  assert.match(await physioSummary.innerText(), academicResultContext);
+  const poseAnimation = page
+    .getByRole('region', { name: 'Implementation evidence' })
+    .getByText('96.23%', { exact: true })
+    .locator('..');
+  assert.match(await poseAnimation.innerText(), /reported academic frame accuracy/i);
+  assert.match(await poseAnimation.innerText(), academicResultContext);
   await visit(page);
   await page.getByRole('button', { name: /switch to dark mode/i }).click();
   await page.reload();
@@ -519,6 +530,8 @@ try {
     await page.getByRole('tab', { name: /random forest/i }).getAttribute('aria-selected'),
     'true',
   );
+  const labAcademicResult = page.getByRole('tabpanel').getByText(/96\.23%/);
+  assert.match(await labAcademicResult.innerText(), academicResultContext);
   await page.locator('input[type="range"]').fill('74');
   assert.equal(await page.locator('input[type="range"]').inputValue(), '74');
   await context.close();

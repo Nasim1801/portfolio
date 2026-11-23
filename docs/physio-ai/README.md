@@ -54,7 +54,7 @@ The application setup is intended for a local research demo with dummy accounts.
 
 ## Evaluation and reproducibility
 
-**96.23% is the academic Random Forest result.** The dissertation reports 7,153 test frame rows and Random Forest macro precision, recall and F1 of 0.96, 0.95 and 0.96. The report describes a temporal 80/20 split.
+**96.23% is the reported academic Random Forest frame accuracy.** The recordings came from one person. The local rerun found overlapping source rows across training and test after augmentation. The dissertation describes a temporal 80/20 split and reports 7,153 test frame rows, with Random Forest macro precision, recall and F1 of 0.96, 0.95 and 0.96.
 
 A local review reran the public [augmentation and retraining script](https://github.com/Nasim1801/physio-ai-final/blob/7dc8dbd9a4b72e7e145393d2a6cb8fc516b89f42/retrain_with_augmentation.py) on the archived `augmented_pose_data.csv` with SHA-256 prefix `55f282124113e54f`. This snapshot contains 24,492 labelled rows and 24 pose features per row. The retraining script creates 35,764 rows and uses a stratified random split after augmentation. It produced 28,611 training rows and 7,153 test rows, matching the academic test supports for all four classes.
 
@@ -69,4 +69,4 @@ The local rerun reproduced the class supports and approximate scores. The last a
 
 The recordings came from one person. The archived CSV lacks recording and session identifiers. Tracking the retrain script’s generated rows back to CSV rows showed that 3,390 test rows had an input-row ancestor also represented in training. This counts overlap visible from the row-generation steps. It does not estimate overlap between different rows from one recording.
 
-The archived figure generator reconstructs the displayed confusion matrix from rounded recall and support and uses synthetic scores for its ROC curves. Those figures show illustrations. Empirical confusion counts and AUC require the original predictions or a fresh run that saves them. A stronger evaluation would split by participant or recording before augmentation, preserve group IDs, fit preprocessing on training only and retain predictions with the run configuration.
+The archived figure generator reconstructs the displayed confusion matrix from rounded recall and support and uses synthetic scores for its ROC curves. These plots are illustrative. Empirical confusion counts and AUC require the original predictions or a fresh run that saves them. A stronger evaluation would split by participant or recording before augmentation, preserve group IDs, fit preprocessing on training only and retain predictions with the run configuration.

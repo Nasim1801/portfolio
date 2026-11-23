@@ -1,4 +1,5 @@
 import { useId, useMemo, useRef, useState } from 'react';
+import { physioEvaluation } from '../../data/content';
 import styles from '../../styles/lab.module.css';
 
 type Point = readonly [number, number];
@@ -224,8 +225,10 @@ export function PosePipelineLab() {
               <dd>Random Forest</dd>
             </div>
             <div>
-              <dt>Reported project accuracy</dt>
-              <dd>96.23% on the project dataset</dd>
+              <dt>Reported academic frame accuracy</dt>
+              <dd>
+                {physioEvaluation.academicAccuracy}. {physioEvaluation.scope}
+              </dd>
             </div>
             <div>
               <dt>Input</dt>

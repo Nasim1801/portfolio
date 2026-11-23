@@ -86,6 +86,11 @@ const store = {
 };
 const physioSource = 'https://github.com/Nasim1801/physio-ai-final';
 const physioRevision = `${physioSource}/blob/7dc8dbd9a4b72e7e145393d2a6cb8fc516b89f42`;
+export const physioEvaluation = {
+  academicAccuracy: '96.23%',
+  scope:
+    'One participant. After augmentation, some training and test rows in the local rerun came from the same source rows.',
+};
 const portfolioFiles = 'https://github.com/Nasim1801/portfolio/blob/main';
 const co2Prototype = {
   label: 'React prototype on GitHub',
@@ -284,9 +289,12 @@ const physioStudy: CaseStudy = {
   stack: ['Python', 'MediaPipe Pose', 'scikit-learn', 'JavaScript', 'WebSockets', 'SQLite'],
   facts: [
     { label: 'Result', value: 'Grade A, BSc Computer Science' },
-    { label: 'Reported project result', value: 'Random Forest, 96.23% on the project dataset' },
+    {
+      label: 'Reported academic frame accuracy',
+      value: `${physioEvaluation.academicAccuracy} (Random Forest). ${physioEvaluation.scope}`,
+    },
     { label: 'Input', value: '33 pose landmarks per frame from a standard webcam' },
-    { label: 'Academic test split', value: '7,153 frame rows from one participant' },
+    { label: 'Academic test set', value: '7,153 frame rows' },
   ],
   architecture: [
     'MediaPipe extracts body landmarks from webcam frames',
@@ -334,14 +342,15 @@ const physioStudy: CaseStudy = {
       id: 'verification',
       heading: 'Testing and verification',
       paragraphs: [
-        'A local rerun used the archived augmented-feature CSV and the public retraining script. It created 35,764 rows and evaluated 7,153 held-out frame rows. Random Forest scored 96.24% in that run. The script augments before an 80/20 stratified random row split. The dissertation describes a temporal split.',
+        'A local rerun used the archived feature CSV and the public retraining script. The script augments before an 80/20 stratified random row split. The dissertation describes a temporal split. Of the 7,153 test rows in the rerun, 3,390 traced back to source rows also represented in training. Random Forest scored 96.24% on that split.',
       ],
     },
     {
       id: 'outcome',
       heading: 'Result and limitations',
       paragraphs: [
-        '96.23% is the academic result, and exact reproduction remains unverified. The recordings come from one person. In the rerun, 3,390 test rows shared an input-row ancestor with training. This split cannot establish accuracy for new people or independent recording sessions.',
+        `The dissertation reports ${physioEvaluation.academicAccuracy} frame accuracy. Exact reproduction remains unverified. The one-participant dataset and the rerun’s overlap leave accuracy on new people and independent recording sessions unverified.`,
+        'The archived confusion matrix was reconstructed from rounded recall and class counts. The ROC curves used synthetic scores. These plots are illustrative, and empirical confusion counts and AUC remain unverified.',
       ],
     },
   ],
@@ -482,7 +491,7 @@ const co2Study: CaseStudy = {
   tone: 'done',
   summary:
     'Look up estimated product carbon footprints by name or typed barcode. GitHub contains the React prototype.',
-  role: 'For the university demo, I built the React customer interface, Spring Boot REST API and H2 persistence. I designed the customer page in Figma and was Scrum Master for Sprint 1.',
+  role: 'For the university team demo, I built the React customer interface and contributed the product lookup and search-history integration in Spring Boot and H2. I designed the customer page in Figma and was Scrum Master for Sprint 1.',
   media: co2TrackerScreens,
   frame: 'browser',
   stack: ['React', 'Spring Boot', 'REST', 'H2', 'JPA', 'Figma', 'Scrum'],
@@ -700,7 +709,7 @@ export const content = {
       name: 'CO2 Tracker',
       kind: 'Team project',
       summary: 'Product carbon-footprint lookup in a university demo.',
-      role: 'React interface, Spring Boot API and H2 for the team demo. Scrum Master for Sprint 1.',
+      role: 'React interface and contributions to the team’s Spring Boot lookup and H2 search history. Scrum Master for Sprint 1.',
       stack: ['React', 'Spring Boot', 'H2'],
       thumbnail: co2TrackerScreens[1],
       links: [co2Prototype, { label: 'Demo video', href: 'https://youtu.be/2qtJxDQObb4' }],

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { physioEvaluation } from '../data/content';
 import styles from '../styles/site.module.css';
 
 type Point = readonly [number, number];
@@ -281,9 +282,10 @@ export function PoseTracker({ compact = false }: { compact?: boolean }) {
       <div className={styles.poseMeta}>
         <div>
           <strong>Physio-AI Random Forest</strong>
-          <span>Reported accuracy on the project dataset</span>
+          <span>Reported academic frame accuracy</span>
+          <span>{physioEvaluation.scope}</span>
         </div>
-        <b>96.23%</b>
+        <b>{physioEvaluation.academicAccuracy}</b>
       </div>
     </div>
   );

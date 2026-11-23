@@ -20,7 +20,7 @@ Before the Phase 2 fix, asking the playground to match indexes 20 and 21 on a 20
 
 ## Physio-AI evaluation
 
-The dissertation credits Random Forest with **96.23% frame accuracy** and reports macro precision 0.96, recall 0.95 and F1 0.96 on 7,153 test rows. It describes a temporal 80/20 split. The project used self-recorded squat footage from one participant. The original report’s four class supports are 2,615 correct, 1,138 too deep, 1,317 forward lean and 2,083 shallow.
+The dissertation credits Random Forest with **96.23% frame accuracy** on self-recorded squat footage from one participant. Exact reproduction remains unverified. The local rerun found overlapping source rows across training and test after augmentation. The dissertation describes a temporal 80/20 split and reports macro precision 0.96, recall 0.95 and F1 0.96. The reported class supports total 7,153 test rows (2,615 correct, 1,138 too deep, 1,317 forward lean and 2,083 shallow).
 
 Two archived copies of the augmented feature CSV matched. The file had 24,492 labelled rows, 24 numeric features per row, and SHA-256 prefix `55f282124113e54f`. The archived alternate `data.csv` contained 9,323 rows and is the input for a separate exploratory script. The public retraining script uses the 24,492-row augmented CSV, adds synthetic and perturbed rows, and then performs a seeded, stratified random row split. It generated 35,764 rows, with 28,611 in train and 7,153 in test. All four test supports matched the dissertation. The last perturbation uses unseeded noise, and a historical prediction file, fitted artifact or immutable run record tying the reported score to an exact execution was unavailable. The dissertation’s temporal wording is inconsistent with this matching retraining path. [Public retraining script](https://github.com/Nasim1801/physio-ai-final/blob/7dc8dbd9a4b72e7e145393d2a6cb8fc516b89f42/retrain_with_augmentation.py) · [Exploratory training script](https://github.com/Nasim1801/physio-ai-final/blob/7dc8dbd9a4b72e7e145393d2a6cb8fc516b89f42/train_model.py)
 
@@ -31,7 +31,7 @@ Two archived copies of the augmented feature CSV matched. The file had 24,492 la
 | Logistic regression accuracy                |             81.71% |             81.64% |
 | Random Forest macro precision / recall / F1 | 0.96 / 0.95 / 0.96 | 0.96 / 0.95 / 0.96 |
 
-The rerun used Python 3.11.9, NumPy 2.4.2, pandas 3.0.1 and scikit-learn 1.8.0 on an isolated copy of the public revision. It establishes approximate reproduction with owner-held feature data. The public clone alone lacks the original features and model artifacts.
+Both columns concern the one-participant dataset. The rerun used Python 3.11.9, NumPy 2.4.2, pandas 3.0.1 and scikit-learn 1.8.0 on an isolated copy of the public revision. It reproduced approximate scores with owner-held feature data. The public clone alone lacks the original features and model artifacts.
 
 I tracked the retraining script’s additions back to rows of the archived input CSV. **3,390 of 7,153 test rows** had an input-row ancestor present in training. The CSV has no participant, video or session key, and this count cannot detect other related rows from the same recording. Participants are shared across the experiment because the source is one person. Independent-session performance remains unverified. The archived figure generator builds confusion counts from rounded recall and distributes remaining errors, and draws its ROC curves from synthetic scores. Those visuals cannot establish empirical confusion counts or AUC. A clean follow-up would split recordings or participants before augmentation and preserve row IDs, actual predictions and run provenance.
 
@@ -43,7 +43,7 @@ The public repository exposes the React prototype, and the university checkout c
 
 I built an isolated copy of the authentic team service with Java 21 and Spring Boot 3.4.4. The existing single Spring startup test passed with a Mockito JVM agent in the local environment. A separate HTTP check ran the service on localhost with an in-memory H2 override. The catalogue returned HTTP 200 with 12 products, a mixed-case Laptop search returned HTTP 200 with three rows, a seeded barcode returned HTTP 200 with one Laptop, and unknown names and barcodes both returned HTTP 404. Static review established the timestamped JPA history write. The HTTP assertions cover lookups, and the existing startup test establishes that the Spring context loads. Neither assertion set checks persisted history after a service restart.
 
-For authorised team-checkout holders, run the service with an in-memory H2 override and send `GET /api/products/search?name=lApToP` to localhost. Check status and row count, then repeat with a deliberate missing product. The public case gives the observed outcome and scope. Team source, private URLs, datasets, output records and build artifacts remain outside the review branch.
+For authorised team-checkout holders, run the service with an in-memory H2 override and use the team’s documented product name lookup. Check the status and number of rows for a mixed-case match and a deliberately missing product. Team source, private URLs, datasets, output records and build artifacts remain outside the review branch.
 
 ## Release gate and measured portfolio checks
 
