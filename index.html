@@ -31,6 +31,16 @@
               : 'light';
         document.documentElement.dataset.theme = theme;
         document.documentElement.dataset.js = '';
+        // Expose static navigation if the browser cannot load the entry module.
+        window.addEventListener(
+          'error',
+          ({ target }) => {
+            if (target instanceof HTMLScriptElement && target.type === 'module') {
+              delete document.documentElement.dataset.js;
+            }
+          },
+          true,
+        );
         document
           .querySelector('meta[name="theme-color"]')
           ?.setAttribute('content', theme === 'dark' ? '#18211e' : '#f5f6f0');

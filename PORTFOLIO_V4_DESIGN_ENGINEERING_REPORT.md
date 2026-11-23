@@ -65,7 +65,7 @@ At 390 px the homepage went from approximately 15,099 to 8,712 CSS px in height,
 ## Engineering review
 
 - Native document navigation handles cross-route links, Back, fragments and direct visits. The former client click interception, animated background canvas, repeated autoplay and scroll-related effects were removed. The Lab preserves the puzzle and interactive Physio-AI walkthrough, with keyboard focus moved to an available tile after a match.
-- Build-time React rendering produces nine pages and the GitHub Pages 404. Client entry points hydrate the shared route components and load only the current route chunk. Native links expose content, the CV and original screenshot files with JavaScript disabled. Lab fallback prose points to the corresponding case evidence.
+- Build-time React rendering produces nine pages and the GitHub Pages 404. Client entry points hydrate the shared route components and load only the current route chunk. Native links expose content, the CV and original screenshot files with JavaScript disabled. If the entry module fails to load, the mobile header restores the static navigation links. Lab fallback prose points to the corresponding case evidence.
 - A shared static route list generates canonical URLs, descriptions, title, JSON-LD, Open Graph and Twitter tags, 1200 × 630 social images, and the sitemap. The social cards reuse authentic artwork and preserve the existing home card URL. The 404 has a no-index directive.
 - Typed content and intrinsic media dimensions remain central. The cropped homepage artwork gets smaller WebP variants derived from the store originals. The case galleries retain their higher-resolution images. Offscreen images load lazily. Style and markup are colocated through CSS Modules. The build uses existing React DOM Server, Vite and Sharp dependencies.
 - The release job requires lint, strict type checking, puzzle rules, the production build and browser QA. The deploy job depends on that passing build and is restricted to `main`. Pull requests execute the review gate.
@@ -88,6 +88,8 @@ Lighthouse 12.8.2 ran with Chrome 157 headless on the local production previews 
 
 All nine V4 runs recorded 0 CLS and 0 ms total blocking time. The mobile homepage transferred approximately 441 kB, down from 560 kB in Phase 2. Vite’s gzip estimate for initial homepage JavaScript fell from 101.78 to 88.63 kB, including V4’s two home dependencies. The shared CSS fell from 14.24 to 6.94 kB gzip. Narrower WebP posters gave browsers a smaller choice for the cropped artwork. An alternate paragraph font did not improve the simulated LCP in the trial, so the shipped type system retains the self-hosted body font. Homepage, PathLife and Sumlume simulated LCP remained above 2.5 seconds.
 
+Three additional cold homepage runs after the mobile navigation fallback fix each scored 94 for performance and 100 for accessibility, best practices and SEO. Median LCP was 2.94 seconds, with 0 CLS and 0 ms total blocking time in each run.
+
 With the production preview running, the homepage run can be reproduced with:
 
 ```bash
@@ -103,6 +105,7 @@ Lighthouse runs are lab estimates. Google’s good field thresholds are LCP ≤2
 
 - Lint, strict TypeScript, the existing unit suite and the production build passed. Chromium verified **126 route, width and theme combinations** across all nine routes at 320, 360, 390, 768, 1024, 1440 and 1920 px.
 - **36 axe scans** at 390 and 1440 px with the WCAG 2.2 target-size rule enabled and **172 internal route, fragment and file link checks** passed. The suite checked missing images, horizontal overflow, a single H1, masthead layout, mobile navigation, theme persistence, screenshots, modal zoom and keyboard focus. It also checked no-JavaScript content and metadata for all nine routes and the no-index 404. [Browser results](review/portfolio-v4/browser-checks.json)
+- The mobile regression check aborts the JavaScript entry request, verifies the static navigation is visible, and follows its Work link. Firefox 159 and Playwright WebKit 27.2 smoke checks loaded all nine routes at 390 and 1440 px, with a keyboard and zoom check on the mobile Physio-AI gallery.
 - A separate keyboard walkthrough in the in-app browser verified skip focus, focus on the first menu link after opening, focus return after Escape, and changing the Physio-AI screenshot before closing the dialog. Manual visual review included the 320 px masthead, 390 px light and dark views and desktop cases. The Lab regression checks cover invalid and valid matches, keyboard navigation, focus recovery, clearing/resetting the board and the pose stages.
 
 The test suite gives evidence about tested widths, browser states and keyboard paths. Full WCAG 2.2 AA conformance would require broader assistive-technology and user testing. [WCAG 2.2](https://www.w3.org/TR/WCAG22/)

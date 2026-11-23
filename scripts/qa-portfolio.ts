@@ -367,6 +367,17 @@ try {
   assert.equal(await fallback.locator('meta[name="robots"]').getAttribute('content'), 'noindex');
   await withoutJS.close();
 
+  const interrupted = await context.newPage();
+  await interrupted.route(/\/assets\/index-[^/]+\.js$/, (route) => route.abort());
+  assert.ok((await interrupted.goto(site))?.ok());
+  await interrupted.locator('html:not([data-js])').waitFor({ state: 'attached' });
+  const staticNav = interrupted.getByRole('navigation', { name: 'Main' });
+  assert.ok(await staticNav.isVisible(), 'failed entry module leaves mobile navigation visible');
+  assert.equal(await interrupted.getByRole('button', { name: 'Open navigation' }).count(), 0);
+  await staticNav.getByRole('link', { name: 'Work', exact: true }).click();
+  assert.equal(new URL(interrupted.url()).hash, '#work');
+  await interrupted.close();
+
   const publicCo2Source = 'https://github.com/Nasim1801/co2-tracker';
   const co2Link = (p: Page) => p.getByRole('link', { name: /^React prototype on GitHub/ });
   assert.equal(await co2Link(page).getAttribute('href'), publicCo2Source);
